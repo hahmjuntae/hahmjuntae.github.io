@@ -1,35 +1,372 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { formatDate } from '../lib/format';
+import { sections, parts, endNode, allRefs, statusMeta, updatedAt, type Status } from '../data/roadmap';
 
-const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
-);
-const lead = 'Applied AI Engineer 로 가는 과정을 기록합니다.';
+const order: Status[] = ['done', 'learning', 'pending', 'skip'];
+const partTitle = Object.fromEntries(parts.map((part) => [part.id, part.title]));
+const total = sections.reduce((sum, section) => sum + section.nodes.length, 0);
+const totalHours = parts.reduce((sum, part) => sum + part.hours, 0);
+
+const nodeData = Object.fromEntries([
+  ...sections.flatMap((section) =>
+    section.nodes.map((node) => [
+      node.id,
+      {
+        label: node.label,
+        where: `${partTitle[section.part]} · ${section.title}`,
+        status: node.status,
+        goal: node.goal,
+        todo: node.todo,
+        resources: node.resources,
+        refs: section.refs,
+      },
+    ]),
+  ),
+  [
+    endNode.id,
+    { label: endNode.label, where: '목표', status: endNode.status, goal: endNode.goal, todo: endNode.todo, resources: endNode.resources, refs: endNode.refs, end: true },
+  ],
+]);
+
+const lead = 'Front-end 에서 시작해 Applied AI Engineer 로 끝나는 학습 경로입니다. 노드를 누르면 목표, 할 일, 무료 강의가 열립니다.';
+let sideIndex = 0;
 ---
 
-<Base title="hahmjuntae" description={lead} current="posts">
-  <div class="ds-blog ds-container">
-    <header class="ds-blog__header">
-      <div class="ds-blog__title-row"><h1 class="ds-blog__title">글</h1></div>
-      <p class="ds-blog__lead">{lead}</p>
+<Base title="Applied AI Engineer 로드맵" description={lead}>
+  <div class="ds-page rm">
+    <header class="ds-article__header rm-head">
+      <h1 class="ds-article__title">Applied AI Engineer 로드맵</h1>
+      <p class="ds-article__lead">{lead}</p>
+      <p class="rm-updated ds-tabular">갱신 {updatedAt} · 노드 {total}개 · 주 5시간 3년 기준 {totalHours}시간</p>
     </header>
-    <div class="ds-blog__list-wrap">
-      <div class="ds-blog__list">
+
+    <div class="rm-progress" aria-live="polite">
+      <p class="rm-progress__text ds-tabular"><span data-progress-done>0</span> / {total} 완료 · <span data-progress-pct>0</span>%</p>
+      <div class="rm-progress__bar" aria-hidden="true"><span data-progress-bar></span></div>
+      <ul class="rm-legend" aria-label="상태 범례">
         {
-          posts.map((post) => (
-            <a class="ds-blog-post" href={`/posts/${post.id}/`}>
-              <p class="ds-blog-post__date ds-tabular">{formatDate(post.data.date)}</p>
-              <h2 class="ds-blog-post__title">
-                <span class="ds-blog-post__title-text">{post.data.title}</span>
-              </h2>
-              <p class="ds-blog-post__desc">{post.data.description}</p>
-              <p class="ds-blog-post__topic">{post.data.topic}</p>
-            </a>
+          order.map((status) => (
+            <li class="rm-legend__item">
+              <span class="rm-icon" data-status={status} aria-hidden="true" />
+              <span>{statusMeta[status].label}</span>
+              <span class="rm-legend__count ds-tabular" data-count={status}>0</span>
+            </li>
           ))
         }
+      </ul>
+    </div>
+
+    <div class="rm-map">
+      {
+        parts.map((part) => (
+          <>
+            <p class="rm-part" id={`part-${part.id}`}>
+              <span>{part.title}</span>
+              <span class="rm-part__hours ds-tabular">{part.hours}시간 · {Math.round((part.hours / totalHours) * 100)}%</span>
+            </p>
+            {sections
+              .filter((section) => section.part === part.id)
+              .map((section) => (
+                <section class="rm-section" id={section.id} data-side={sideIndex++ % 2 === 0 ? 'right' : 'left'} aria-labelledby={`${section.id}-title`}>
+                  <h2 class="rm-main" id={`${section.id}-title`}>{section.title}</h2>
+                  <ul class="rm-subs">
+                    {section.nodes.map((node) => (
+                      <li>
+                        <button type="button" class="rm-node" id={node.id} data-node={node.id} data-status={node.status} aria-haspopup="dialog">
+                          <span class="rm-node__label">{node.label}</span>
+                          <span class="rm-icon" data-status={node.status} role="img" aria-label={statusMeta[node.status].label} />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+          </>
+        ))
+      }
+      <div class="rm-end">
+        <button type="button" class="rm-end__node" id={endNode.id} data-node={endNode.id} aria-haspopup="dialog">
+          <span class="rm-end__eyebrow">목표</span>
+          <span class="rm-end__label">{endNode.label}</span>
+        </button>
+      </div>
+    </div>
+
+    <footer class="rm-foot">
+      <h2 class="rm-foot__title">참고 로드맵</h2>
+      <p class="rm-foot__desc">노드 구성은 roadmap.sh 로드맵 {allRefs.length}개를 참고해 다시 묶었습니다. 진행 상태는 이 브라우저에 저장됩니다.</p>
+      <ul class="rm-refs">
+        {allRefs.map((ref) => (<li><a class="ds-badge" data-variant="outline" href={ref.url} target="_blank" rel="noopener">{ref.name}</a></li>))}
+      </ul>
+      <button type="button" class="ds-btn" data-variant="ghost" data-size="sm" data-reset-progress>진행 기록 초기화</button>
+    </footer>
+  </div>
+
+  <div class="ds-modal" id="node-modal" data-backdrop="fade" role="dialog" aria-modal="true" aria-labelledby="node-modal-title">
+    <div class="ds-modal__backdrop" data-close></div>
+    <div class="ds-modal__panel" tabindex="-1">
+      <div class="ds-modal__header">
+        <h2 class="ds-modal__title" id="node-modal-title"></h2>
+        <button type="button" class="ds-btn" data-variant="ghost" data-size="sm" data-uniform data-close aria-label="닫기">
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" stroke-linecap="round" /></svg>
+        </button>
+      </div>
+      <div class="ds-modal__body rm-detail">
+        <p class="rm-detail__where" data-modal-where></p>
+        <div class="rm-status" role="group" aria-label="진행 상태" data-modal-status>
+          <button type="button" class="ds-btn" data-variant="outline" data-size="sm" data-set-status="learning" aria-pressed="false">
+            <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5h4.5A1.5 1.5 0 0 1 8 5v8a1.5 1.5 0 0 0-1.5-1.5H2zM14 3.5H9.5A1.5 1.5 0 0 0 8 5v8a1.5 1.5 0 0 1 1.5-1.5H14z" stroke-linejoin="round" /></svg>
+            진행
+          </button>
+          <button type="button" class="ds-btn" data-variant="outline" data-size="sm" data-set-status="done" aria-pressed="false">
+            <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m3 8.5 3 3 7-7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            완료
+          </button>
+          <button type="button" class="ds-btn" data-variant="outline" data-size="sm" data-set-status="skip" aria-pressed="false">
+            <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" stroke-linecap="round" /></svg>
+            건너뜀
+          </button>
+        </div>
+        <h3 class="rm-detail__label">목표</h3>
+        <p class="rm-detail__goal" data-modal-goal></p>
+        <h3 class="rm-detail__label">할 일</h3>
+        <ol class="rm-detail__todo" data-modal-todo></ol>
+        <h3 class="rm-detail__label">무료 강의</h3>
+        <ul class="rm-detail__res" data-modal-res></ul>
+        <h3 class="rm-detail__label">참고 로드맵</h3>
+        <ul class="rm-refs" data-modal-refs></ul>
       </div>
     </div>
   </div>
+
+  <script is:inline type="application/json" id="node-data" set:html={JSON.stringify(nodeData)} />
+  <script is:inline type="application/json" id="status-meta" set:html={JSON.stringify(statusMeta)} />
+  <script is:inline>
+    (function () {
+      var KEY = 'roadmap-progress-v1';
+      var data = JSON.parse(document.getElementById('node-data').textContent);
+      var meta = JSON.parse(document.getElementById('status-meta').textContent);
+      var modal = document.getElementById('node-modal');
+      var panel = modal.querySelector('.ds-modal__panel');
+      var current = null;
+      var opener = null;
+      var overrides = {};
+      try { overrides = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { overrides = {}; }
+
+      function statusOf(id) { return overrides[id] || data[id].status; }
+
+      function save() {
+        try { localStorage.setItem(KEY, JSON.stringify(overrides)); } catch (e) {}
+      }
+
+      function paint(id) {
+        var button = document.getElementById(id);
+        if (!button || data[id].end) return;
+        var status = statusOf(id);
+        button.setAttribute('data-status', status);
+        var icon = button.querySelector('.rm-icon');
+        icon.setAttribute('data-status', status);
+        icon.setAttribute('aria-label', meta[status].label);
+      }
+
+      function summarize() {
+        var counts = { done: 0, learning: 0, pending: 0, skip: 0 };
+        var total = 0;
+        Object.keys(data).forEach(function (id) {
+          if (data[id].end) return;
+          counts[statusOf(id)] += 1;
+          total += 1;
+        });
+        Object.keys(counts).forEach(function (status) {
+          var el = document.querySelector('[data-count="' + status + '"]');
+          if (el) el.textContent = counts[status];
+        });
+        var pct = total ? Math.round((counts.done / total) * 100) : 0;
+        document.querySelector('[data-progress-done]').textContent = counts.done;
+        document.querySelector('[data-progress-pct]').textContent = pct;
+        document.querySelector('[data-progress-bar]').style.width = pct + '%';
+      }
+
+      function paintStatusButtons() {
+        var status = current ? statusOf(current) : null;
+        modal.querySelectorAll('[data-set-status]').forEach(function (btn) {
+          var on = btn.getAttribute('data-set-status') === status;
+          btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+          if (on) btn.setAttribute('data-selected', ''); else btn.removeAttribute('data-selected');
+        });
+      }
+
+      function el(tag, text, attrs) {
+        var node = document.createElement(tag);
+        if (text) node.textContent = text;
+        if (attrs) Object.keys(attrs).forEach(function (k) { node.setAttribute(k, attrs[k]); });
+        return node;
+      }
+
+      function open(id) {
+        var node = data[id];
+        if (!node) return;
+        current = id;
+        opener = document.getElementById(id);
+        modal.querySelector('#node-modal-title').textContent = node.label;
+        modal.querySelector('[data-modal-where]').textContent = node.where;
+        modal.querySelector('[data-modal-status]').hidden = !!node.end;
+        modal.querySelector('[data-modal-goal]').textContent = node.goal;
+        var todo = modal.querySelector('[data-modal-todo]');
+        todo.textContent = '';
+        node.todo.forEach(function (item) { todo.appendChild(el('li', item)); });
+        var res = modal.querySelector('[data-modal-res]');
+        res.textContent = '';
+        node.resources.forEach(function (r) {
+          var li = el('li');
+          li.appendChild(el('a', r.title, { href: r.url, target: '_blank', rel: 'noopener' }));
+          li.appendChild(el('span', r.kind + ' · ' + (r.lang === 'ko' ? '한국어' : '영어'), { class: 'rm-detail__res-meta' }));
+          res.appendChild(li);
+        });
+        var refs = modal.querySelector('[data-modal-refs]');
+        refs.textContent = '';
+        node.refs.forEach(function (ref) {
+          var li = el('li');
+          li.appendChild(el('a', ref.name, { href: ref.url, target: '_blank', rel: 'noopener', class: 'ds-badge', 'data-variant': 'outline' }));
+          refs.appendChild(li);
+        });
+        paintStatusButtons();
+        modal.classList.remove('is-closing');
+        modal.classList.add('is-open');
+        panel.scrollTop = 0;
+        modal.querySelector('.ds-modal__body').scrollTop = 0;
+        panel.focus();
+        if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+      }
+
+      function close() {
+        if (!modal.classList.contains('is-open')) return;
+        modal.classList.add('is-closing');
+        setTimeout(function () { modal.classList.remove('is-open', 'is-closing'); }, 300);
+        history.replaceState(null, '', location.pathname);
+        current = null;
+        if (opener) opener.focus();
+      }
+
+      function setStatus(status) {
+        if (!current) return;
+        var next = statusOf(current) === status ? 'pending' : status;
+        if (next === data[current].status) delete overrides[current]; else overrides[current] = next;
+        save();
+        paint(current);
+        paintStatusButtons();
+        summarize();
+      }
+
+      document.addEventListener('click', function (event) {
+        var set = event.target.closest('[data-set-status]');
+        if (set) { setStatus(set.getAttribute('data-set-status')); return; }
+        var trigger = event.target.closest('[data-node]');
+        if (trigger) { event.preventDefault(); open(trigger.getAttribute('data-node')); return; }
+        if (event.target.closest('[data-close]')) { close(); return; }
+        if (event.target.closest('[data-reset-progress]')) {
+          overrides = {};
+          save();
+          Object.keys(data).forEach(paint);
+          summarize();
+        }
+      });
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') close();
+      });
+      function openFromHash() {
+        var id = decodeURIComponent(location.hash.slice(1));
+        if (data[id] && !modal.classList.contains('is-open')) open(id);
+      }
+      window.addEventListener('hashchange', openFromHash);
+
+      Object.keys(data).forEach(paint);
+      summarize();
+      openFromHash();
+    })();
+  </script>
 </Base>
+
+<style is:global>
+  .rm { max-width: 1048px; }
+  .rm-head { padding-top: 32px; }
+  .rm-updated { color: var(--color-text-tertiary); font-size: 14px; line-height: 20px; }
+
+  .rm-progress { display: flex; flex-direction: column; gap: 8px; margin-top: 24px; }
+  .rm-progress__text { color: var(--color-text-emphasis); font-size: 14px; line-height: 20px; font-weight: 600; }
+  .rm-progress__bar { height: 6px; overflow: hidden; border-radius: var(--radius-full); background: var(--color-background-primary-soft); }
+  .rm-progress__bar span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--color-text-success-soft); transition: width .3s var(--cubic-enter); }
+
+  .rm-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 4px 0 0; padding: 0; list-style: none; font-size: 14px; line-height: 20px; color: var(--color-text-secondary); }
+  .rm-legend__item { display: inline-flex; align-items: center; gap: 6px; }
+  .rm-legend__count { color: var(--color-text-emphasis); font-weight: 600; }
+
+  .rm-icon { position: relative; display: inline-block; width: 16px; height: 16px; flex-shrink: 0; border-radius: var(--radius-full); }
+  .rm-icon[data-status='pending'] { border: 2px solid var(--color-border-strong); }
+  .rm-icon[data-status='done'] { background: var(--color-text-success-soft); }
+  .rm-icon[data-status='done']::after { content: ''; position: absolute; left: 5px; top: 3px; width: 4px; height: 7px; border: solid var(--color-text-inverse); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  .rm-icon[data-status='learning'] { border: 2px solid var(--color-text-info-soft); background: linear-gradient(90deg, var(--color-text-info-soft) 50%, transparent 50%); }
+  .rm-icon[data-status='skip'] { border: 2px dashed var(--color-border-strong); }
+
+  .rm-map { position: relative; margin-top: 40px; }
+  .rm-part { position: relative; z-index: 1; width: fit-content; margin: 24px auto 8px; padding: 8px 20px; border-radius: var(--radius-full); background: var(--color-background-primary-soft); color: var(--color-text-emphasis); font-size: 16px; line-height: 24px; font-weight: 600; }
+  .rm-part:first-child { margin-top: 0; }
+  .rm-part { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .rm-part__hours { color: var(--color-text-secondary); font-size: 12px; line-height: 18px; font-weight: 500; }
+  .rm-section { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 20px 0; }
+  .rm-main { position: relative; z-index: 1; margin: 0; padding: 10px 16px; border-radius: var(--radius-md); background: var(--color-background-primary-solid); color: var(--color-text-inverse); font-size: 16px; line-height: 24px; font-weight: 600; }
+  .rm-subs { position: relative; display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0 0 0 32px; list-style: none; }
+  .rm-subs::before { content: ''; position: absolute; top: -12px; bottom: 20px; left: 12px; border-left: 2px dotted var(--color-border-strong); }
+  .rm-subs > li { position: relative; }
+  .rm-subs > li::before { content: ''; position: absolute; top: 50%; left: -20px; width: 20px; border-top: 2px dotted var(--color-border-strong); }
+  .rm-node { display: flex; width: 100%; min-height: 40px; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); font-size: 14px; line-height: 20px; text-align: left; cursor: pointer; transition: background-color var(--transition-duration-basic) var(--transition-ease-basic), border-color var(--transition-duration-basic) var(--transition-ease-basic); }
+  .rm-node:hover { background: var(--color-surface-secondary); border-color: var(--color-border-strong); }
+  .rm-node[data-status='done'] { border-color: var(--color-border-success-surface); }
+  .rm-node[data-status='done'] .rm-node__label { color: var(--color-text-secondary); }
+  .rm-node[data-status='skip'] { border-style: dashed; color: var(--color-text-tertiary); }
+  .rm-node[data-status='skip'] .rm-node__label { text-decoration: line-through; }
+  .rm-node:focus-visible, .rm-end__node:focus-visible { outline: 2px solid var(--color-ring); outline-offset: 2px; }
+
+  .rm-end { position: relative; z-index: 1; display: flex; justify-content: center; padding: 32px 0 8px; }
+  .rm-end__node { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 240px; padding: 16px 32px; border-radius: var(--radius-lg); background: var(--color-background-primary-solid); color: var(--color-text-inverse); cursor: pointer; box-shadow: 0 0 0 4px var(--page-bg), 0 0 0 6px var(--color-border-strong); }
+  .rm-end__eyebrow { font-size: 12px; line-height: 18px; opacity: .7; }
+  .rm-end__label { font-size: 20px; line-height: 26px; font-weight: 600; }
+
+  .rm-foot { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 48px; padding: 24px 0 48px; border-top: 1px solid var(--color-border-subtle); }
+  .rm-foot__title { margin: 0; color: var(--heading-color); font-size: 18px; line-height: 24px; font-weight: 600; }
+  .rm-foot__desc { color: var(--color-text-secondary); font-size: 14px; line-height: 22px; }
+  .rm-refs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .rm-refs .ds-badge { text-decoration: none; font-weight: 500; }
+
+  @media (width >= 768px) {
+    .rm-map::before { content: ''; position: absolute; top: 0; bottom: 60px; left: 50%; width: 2px; transform: translateX(-1px); background: var(--color-border-strong); }
+    .rm-section { grid-template-columns: minmax(0, 1fr) 240px minmax(0, 1fr); gap: 0; align-items: start; padding: 28px 0; }
+    .rm-main { grid-column: 2; grid-row: 1; text-align: center; }
+    .rm-subs { grid-row: 1; padding: 0; }
+    .rm-subs > li::before { width: 24px; }
+    .rm-section[data-side='right'] .rm-subs { grid-column: 3; padding-left: 48px; }
+    .rm-section[data-side='right'] .rm-subs::before { top: 20px; bottom: 20px; left: 24px; }
+    .rm-section[data-side='right'] .rm-subs::after { content: ''; position: absolute; top: 21px; left: 0; width: 24px; border-top: 2px dotted var(--color-border-strong); }
+    .rm-section[data-side='right'] .rm-subs > li::before { left: -24px; }
+    .rm-section[data-side='left'] .rm-subs { grid-column: 1; padding-right: 48px; }
+    .rm-section[data-side='left'] .rm-subs::before { top: 20px; bottom: 20px; left: auto; right: 24px; border-left: 0; border-right: 2px dotted var(--color-border-strong); }
+    .rm-section[data-side='left'] .rm-subs::after { content: ''; position: absolute; top: 21px; right: 0; width: 24px; border-top: 2px dotted var(--color-border-strong); }
+    .rm-section[data-side='left'] .rm-subs > li::before { left: auto; right: -24px; }
+  }
+
+  .rm-detail { display: flex; flex-direction: column; gap: 4px; }
+  .rm-detail p { margin: 0; color: var(--color-text); font-size: 14px; line-height: 22px; }
+  .rm-detail__where { color: var(--color-text-secondary) !important; }
+  .rm-status { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 4px; }
+  .rm-status[hidden] { display: none; }
+  .rm-status .ds-btn svg { margin-right: 4px; }
+  .rm-status .ds-btn[aria-pressed='true'] { color: var(--color-text-emphasis); font-weight: 600; }
+  .rm-detail__label { margin: 16px 0 4px; color: var(--color-text-secondary); font-size: 12px; line-height: 18px; font-weight: 600; }
+  .rm-detail__todo, .rm-detail__res { display: flex; flex-direction: column; gap: 6px; margin: 0; padding-left: 20px; color: var(--color-text); font-size: 14px; line-height: 22px; }
+  .rm-detail__todo { list-style: decimal; }
+  .rm-detail__todo li::marker { color: var(--color-text-tertiary); font-variant-numeric: tabular-nums; }
+  .rm-detail__res { padding-left: 18px; list-style: disc; }
+  .rm-detail__res li::marker { color: var(--color-text-tertiary); }
+  .rm-detail__res a { color: var(--color-text-emphasis); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--color-border-strong); }
+  .rm-detail__res-meta { margin-left: 8px; color: var(--color-text-tertiary); font-size: 12px; white-space: nowrap; }
+</style>

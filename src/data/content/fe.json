@@ -1,0 +1,846 @@
+{
+  "internet-basics": {
+    "goal": "패킷, IP 주소, 라우터, TCP 가 요청 하나를 서버까지 전달하는 과정을 설명할 수 있습니다.",
+    "todo": [
+      "traceroute 로 사이트 2곳까지의 경로를 출력해 홉 수를 비교합니다.",
+      "ping 으로 국내 서버와 해외 서버의 응답 시간을 각각 기록합니다.",
+      "브라우저에서 서버까지 요청이 거치는 단계를 다이어그램 1장으로 그립니다."
+    ],
+    "resources": [
+      {
+        "title": "인터넷은 어떻게 동작하는가",
+        "url": "https://developer.mozilla.org/ko/docs/Learn_web_development/Howto/Web_mechanics/How_does_the_Internet_work",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "인터넷의 작동 방식",
+        "url": "https://www.cloudflare.com/ko-kr/learning/network-layer/how-does-the-internet-work/",
+        "lang": "ko",
+        "kind": "글"
+      }
+    ]
+  },
+  "http": {
+    "goal": "요청과 응답의 메서드, 상태 코드, 헤더를 DevTools 에서 읽고 설명할 수 있습니다.",
+    "todo": [
+      "curl -v 로 GET, POST 요청 3건을 보내 헤더를 비교합니다.",
+      "상태 코드 2xx, 3xx, 4xx, 5xx 를 하나씩 재현합니다.",
+      "DevTools Network 탭에서 페이지 1개의 요청을 상태 코드별로 정리합니다."
+    ],
+    "resources": [
+      {
+        "title": "HTTP 개요",
+        "url": "https://developer.mozilla.org/ko/docs/Web/HTTP/Guides/Overview",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "HTTP 상태 코드",
+        "url": "https://developer.mozilla.org/ko/docs/Web/HTTP/Reference/Status",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "네트워크 활동 검사",
+        "url": "https://developer.chrome.com/docs/devtools/network?hl=ko",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "dns-domain": {
+    "goal": "도메인 이름이 IP 주소로 바뀌는 조회 과정과 A, CNAME 레코드의 차이를 설명할 수 있습니다.",
+    "todo": [
+      "dig 로 도메인 2개의 A, CNAME, NS 레코드를 조회해 기록합니다.",
+      "dig +trace 로 루트 서버부터 최종 응답까지의 조회 단계를 출력합니다.",
+      "hosts 파일에 로컬 도메인 1개를 등록합니다."
+    ],
+    "resources": [
+      {
+        "title": "DNS란 무엇입니까",
+        "url": "https://www.cloudflare.com/ko-kr/learning/dns/what-is-dns/",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "도메인 이름이란",
+        "url": "https://developer.mozilla.org/ko/docs/Learn_web_development/Howto/Web_mechanics/What_is_a_domain_name",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "hosting": {
+    "goal": "정적 사이트를 GitHub Pages 와 Vercel 에 배포해 공개 URL 을 만들 수 있습니다.",
+    "todo": [
+      "HTML 파일 1개를 GitHub Pages 에 배포해 공개 URL 을 만듭니다.",
+      "같은 저장소를 Vercel 에 연결해 push 자동 배포를 설정합니다.",
+      "두 배포 URL 의 응답 헤더를 curl -I 로 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "GitHub Pages 빠른 시작",
+        "url": "https://docs.github.com/ko/pages/quickstart",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "웹 서버란 무엇일까",
+        "url": "https://developer.mozilla.org/ko/docs/Learn_web_development/Howto/Web_mechanics/What_is_a_web_server",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Getting started with Vercel",
+        "url": "https://vercel.com/docs/getting-started-with-vercel",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "browsers": {
+    "goal": "HTML 파싱부터 레이아웃, 페인트까지 브라우저 렌더링 단계를 순서대로 설명할 수 있습니다.",
+    "todo": [
+      "DevTools Performance 패널로 페이지 로드 1회를 기록합니다.",
+      "기록에서 Parse HTML, Layout, Paint 구간의 소요 시간을 적습니다.",
+      "레이아웃을 다시 계산하게 만드는 CSS 속성 3개를 표로 정리합니다."
+    ],
+    "resources": [
+      {
+        "title": "브라우저는 어떻게 동작하는가",
+        "url": "https://developer.mozilla.org/ko/docs/Web/Performance/Guides/How_browsers_work",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "최신 웹브라우저 들여다보기 1부",
+        "url": "https://developer.chrome.com/blog/inside-browser-part1?hl=ko",
+        "lang": "ko",
+        "kind": "글"
+      }
+    ]
+  },
+  "html-basics": {
+    "goal": "head, body, 제목, 목록, 링크, 이미지를 갖춘 HTML 문서를 직접 작성할 수 있습니다.",
+    "todo": [
+      "프로젝트 소개 페이지 1개를 HTML 만으로 작성합니다.",
+      "페이지 3개를 상대 경로 링크로 연결합니다.",
+      "W3C Markup Validator 로 검사해 오류를 0건으로 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "HTML 학습하기",
+        "url": "https://developer.mozilla.org/ko/docs/Learn_web_development/Core/Structuring_content",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "생활코딩 WEB1",
+        "url": "https://opentutorials.org/course/3084",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "Learn HTML",
+        "url": "https://web.dev/learn/html",
+        "lang": "en",
+        "kind": "강의"
+      }
+    ]
+  },
+  "semantic-html": {
+    "goal": "header, nav, main, article, footer 를 골라 문서 구조를 의미에 맞게 표현할 수 있습니다.",
+    "todo": [
+      "div 만으로 만든 페이지 1개를 시맨틱 요소로 다시 작성합니다.",
+      "DevTools Accessibility 트리에서 랜드마크 4개가 잡히는지 확인합니다.",
+      "채팅 화면 1개를 section, article, time 요소로 마크업합니다."
+    ],
+    "resources": [
+      {
+        "title": "시맨틱 HTML",
+        "url": "https://web.dev/learn/html/semantic-html?hl=ko",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Semantics 용어 설명",
+        "url": "https://developer.mozilla.org/ko/docs/Glossary/Semantics",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "HTML: 접근성의 좋은 기반",
+        "url": "https://developer.mozilla.org/ko/docs/Learn_web_development/Core/Accessibility/HTML",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "forms": {
+    "goal": "label, input type, required, pattern 으로 브라우저 기본 검증이 동작하는 폼을 만들 수 있습니다.",
+    "todo": [
+      "이메일, 비밀번호, 동의 체크박스가 있는 가입 폼 1개를 만듭니다.",
+      "required, minlength, pattern 으로 검증 규칙 3개를 적용합니다.",
+      "FormData 로 제출 값을 모아 콘솔에 출력합니다."
+    ],
+    "resources": [
+      {
+        "title": "HTML 폼 가이드",
+        "url": "https://developer.mozilla.org/ko/docs/Learn_web_development/Extensions/Forms",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "HTML 폼",
+        "url": "https://web.dev/learn/html/forms?hl=ko",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Learn Forms",
+        "url": "https://web.dev/learn/forms",
+        "lang": "en",
+        "kind": "강의"
+      }
+    ]
+  },
+  "accessibility": {
+    "goal": "Lighthouse 접근성 검사 결과를 읽고 지적 항목을 코드에서 고칠 수 있습니다.",
+    "todo": [
+      "Tab 키만으로 페이지 1개를 조작해 막히는 지점을 기록합니다.",
+      "Lighthouse 접근성 검사를 실행해 점수와 지적 항목을 저장합니다.",
+      "이미지 alt, 버튼 이름, 색 대비 문제 3건을 고칩니다."
+    ],
+    "resources": [
+      {
+        "title": "접근성 학습하기",
+        "url": "https://developer.mozilla.org/ko/docs/Learn_web_development/Core/Accessibility",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Learn Accessibility",
+        "url": "https://web.dev/learn/accessibility",
+        "lang": "en",
+        "kind": "강의"
+      }
+    ]
+  },
+  "seo": {
+    "goal": "title, meta description, sitemap, robots.txt 의 역할을 알고 페이지에 적용할 수 있습니다.",
+    "todo": [
+      "페이지 3개에 서로 다른 title 과 meta description 을 작성합니다.",
+      "sitemap.xml 과 robots.txt 를 만들어 사이트 루트에 둡니다.",
+      "Lighthouse SEO 검사를 실행해 지적 항목을 0건으로 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "SEO 기본 가이드",
+        "url": "https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=ko",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Google 검색의 작동 방식",
+        "url": "https://developers.google.com/search/docs/fundamentals/how-search-works?hl=ko",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "css-basics": {
+    "goal": "선택자 우선순위, 박스 모델, 상속을 근거로 스타일이 적용된 이유를 설명할 수 있습니다.",
+    "todo": [
+      "선택자가 다른 충돌 규칙 3개를 만들어 적용 순서를 기록합니다.",
+      "box-sizing 값 2가지로 같은 박스를 만들어 크기 차이를 비교합니다.",
+      "CSS 변수 5개로 색과 간격 토큰을 정의합니다."
+    ],
+    "resources": [
+      {
+        "title": "CSS 학습",
+        "url": "https://web.dev/learn/css?hl=ko",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "CSS 구성 블록",
+        "url": "https://developer.mozilla.org/ko/docs/Learn_web_development/Core/Styling_basics",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "css-layout": {
+    "goal": "Flexbox 와 Grid 중 알맞은 쪽을 골라 사이드바와 카드 목록 레이아웃을 만들 수 있습니다.",
+    "todo": [
+      "Flexbox Froggy 24단계를 모두 풉니다.",
+      "Grid Garden 28단계를 모두 풉니다.",
+      "사이드바, 대화 목록, 입력창이 있는 채팅 화면 1개를 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "Flexbox Froggy",
+        "url": "https://flexboxfroggy.com/#ko",
+        "lang": "ko",
+        "kind": "실습"
+      },
+      {
+        "title": "Grid Garden",
+        "url": "https://cssgridgarden.com/#ko",
+        "lang": "ko",
+        "kind": "실습"
+      },
+      {
+        "title": "Flexbox",
+        "url": "https://developer.mozilla.org/ko/docs/Learn_web_development/Core/CSS_layout/Flexbox",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "responsive": {
+    "goal": "미디어 쿼리와 유동 단위로 375px 부터 1440px 까지 깨지지 않는 화면을 만들 수 있습니다.",
+    "todo": [
+      "모바일 우선 미디어 쿼리로 카드 목록을 1열, 2열, 3열로 바꿉니다.",
+      "img 에 srcset 과 sizes 를 넣어 화면 폭별 이미지를 내려받게 합니다.",
+      "DevTools 기기 모드로 375px, 768px, 1440px 화면을 캡처합니다."
+    ],
+    "resources": [
+      {
+        "title": "반응형 디자인",
+        "url": "https://developer.mozilla.org/ko/docs/Learn_web_development/Core/CSS_layout/Responsive_Design",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Learn Responsive Design",
+        "url": "https://web.dev/learn/design",
+        "lang": "en",
+        "kind": "강의"
+      }
+    ]
+  },
+  "tailwind": {
+    "goal": "유틸리티 클래스로 반응형과 다크 모드를 갖춘 화면을 만들 수 있습니다.",
+    "todo": [
+      "Vite 프로젝트 1개에 Tailwind CSS 를 설치합니다.",
+      "CSS 로 만든 카드 화면 1개를 유틸리티 클래스로 다시 작성합니다.",
+      "dark: 접두사로 다크 모드 색 3개를 지정합니다."
+    ],
+    "resources": [
+      {
+        "title": "Installing Tailwind CSS with Vite",
+        "url": "https://tailwindcss.com/docs/installation/using-vite",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Styling with utility classes",
+        "url": "https://tailwindcss.com/docs/styling-with-utility-classes",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "js-basics": {
+    "goal": "배열 메서드, 구조 분해, 모듈로 JSON 데이터를 가공하는 코드를 작성할 수 있습니다.",
+    "todo": [
+      "모던 JavaScript 튜토리얼 '자바스크립트 기본' 장의 과제를 모두 풉니다.",
+      "JSON 배열 1개를 map, filter, reduce 로 집계하는 함수 3개를 작성합니다.",
+      "작성한 함수를 ES 모듈 2개로 나눠 import 로 연결합니다."
+    ],
+    "resources": [
+      {
+        "title": "모던 JavaScript 튜토리얼",
+        "url": "https://ko.javascript.info/",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "JavaScript 구성요소",
+        "url": "https://developer.mozilla.org/ko/docs/Learn_web_development/Core/Scripting",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "dom": {
+    "goal": "DOM API 로 요소를 선택, 생성, 수정하고 이벤트 위임으로 목록 동작을 구현할 수 있습니다.",
+    "todo": [
+      "할 일 목록 1개를 프레임워크 없이 DOM API 로 만듭니다.",
+      "항목 클릭 처리를 이벤트 위임 리스너 1개로 구현합니다.",
+      "메시지 요소 100개를 DocumentFragment 로 한 번에 추가합니다."
+    ],
+    "resources": [
+      {
+        "title": "문서",
+        "url": "https://ko.javascript.info/document",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "문서 객체 모델 (DOM)",
+        "url": "https://developer.mozilla.org/ko/docs/Web/API/Document_Object_Model",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "async-js": {
+    "goal": "Promise, async/await, 이벤트 루프를 근거로 비동기 코드의 실행 순서를 예측할 수 있습니다.",
+    "todo": [
+      "setTimeout, Promise, await 가 섞인 코드 5개의 출력 순서를 예측해 적습니다.",
+      "Promise.all 과 Promise.allSettled 로 요청 3건을 병렬 처리합니다.",
+      "실패하면 최대 3회 재시도하는 async 함수 1개를 작성합니다."
+    ],
+    "resources": [
+      {
+        "title": "프라미스와 async, await",
+        "url": "https://ko.javascript.info/async",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "Using promises",
+        "url": "https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Using_promises",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "fetch": {
+    "goal": "fetch 로 JSON 과 스트리밍 응답을 받고 오류, 취소, 타임아웃을 처리할 수 있습니다.",
+    "todo": [
+      "공개 API 1개를 fetch 로 호출해 결과를 화면에 그립니다.",
+      "AbortController 로 5초 타임아웃과 취소 버튼을 구현합니다.",
+      "response.body 리더로 스트리밍 응답을 조각 단위로 출력합니다."
+    ],
+    "resources": [
+      {
+        "title": "Fetch API 사용하기",
+        "url": "https://developer.mozilla.org/ko/docs/Web/API/Fetch_API/Using_Fetch",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "fetch",
+        "url": "https://ko.javascript.info/fetch",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "Server-Sent Events 사용하기",
+        "url": "https://developer.mozilla.org/ko/docs/Web/API/Server-sent_events/Using_server-sent_events",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "git": {
+    "goal": "브랜치 생성, 병합, 리베이스, 충돌 해결로 커밋 기록을 원하는 형태로 정리할 수 있습니다.",
+    "todo": [
+      "Learn Git Branching 의 Main 탭 레벨을 모두 풉니다.",
+      "로컬 저장소에서 병합 충돌 1건을 만들어 해결 커밋을 남깁니다.",
+      "git log --oneline --graph 로 병합과 리베이스 결과를 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "Pro Git 한국어판",
+        "url": "https://git-scm.com/book/ko/v2",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Learn Git Branching",
+        "url": "https://learngitbranching.js.org/?locale=ko",
+        "lang": "ko",
+        "kind": "실습"
+      }
+    ]
+  },
+  "github": {
+    "goal": "이슈, 브랜치, Pull Request, 리뷰, 병합으로 이어지는 GitHub 흐름을 혼자 한 바퀴 돌릴 수 있습니다.",
+    "todo": [
+      "새 저장소 1개에 이슈 2개를 등록합니다.",
+      "이슈마다 브랜치를 만들어 Pull Request 2개를 엽니다.",
+      "PR 본문에 Closes #번호 를 넣어 병합 시 이슈가 닫히게 합니다."
+    ],
+    "resources": [
+      {
+        "title": "헬로 월드",
+        "url": "https://docs.github.com/ko/get-started/using-github/hello-world",
+        "lang": "ko",
+        "kind": "실습"
+      },
+      {
+        "title": "GitHub 플로우",
+        "url": "https://docs.github.com/ko/get-started/using-github/github-flow",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "끌어오기 요청",
+        "url": "https://docs.github.com/ko/pull-requests/reference/pull-requests",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "npm": {
+    "goal": "package.json 의 scripts, dependencies, 버전 범위를 읽고 lockfile 의 역할을 설명할 수 있습니다.",
+    "todo": [
+      "npm init 으로 만든 프로젝트에 scripts 3개를 등록합니다.",
+      "버전 범위 ^ 와 ~ 가 허용하는 버전 차이를 표로 정리합니다.",
+      "npm ci 로 lockfile 기준 설치를 재현합니다."
+    ],
+    "resources": [
+      {
+        "title": "About npm",
+        "url": "https://docs.npmjs.com/about-npm",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "package.json",
+        "url": "https://docs.npmjs.com/cli/v11/configuring-npm/package-json/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "About semantic versioning",
+        "url": "https://docs.npmjs.com/about-semantic-versioning/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "pnpm": {
+    "goal": "pnpm 의 패키지 저장 방식을 설명하고 workspace 로 패키지 여러 개를 한 저장소에서 관리할 수 있습니다.",
+    "todo": [
+      "같은 프로젝트를 npm 과 pnpm 으로 설치해 node_modules 용량을 비교합니다.",
+      "pnpm-workspace.yaml 로 apps, packages 폴더 2개를 묶습니다.",
+      "pnpm --filter 로 패키지 1개만 빌드합니다."
+    ],
+    "resources": [
+      {
+        "title": "pnpm 동기",
+        "url": "https://pnpm.io/ko/motivation",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "작업 공간",
+        "url": "https://pnpm.io/ko/workspaces",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "typescript": {
+    "goal": "API 응답과 함수 인자에 타입을 붙여 컴파일 단계에서 오류를 잡을 수 있습니다.",
+    "todo": [
+      "JavaScript 파일 1개를 strict 모드 TypeScript 로 옮깁니다.",
+      "LLM API 응답 JSON 1개를 interface 와 유니온 타입으로 정의합니다.",
+      "입력 타입을 그대로 돌려주는 제네릭 함수 2개를 작성합니다."
+    ],
+    "resources": [
+      {
+        "title": "TypeScript 핸드북",
+        "url": "https://www.typescriptlang.org/ko/docs/handbook/intro.html",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "JavaScript 프로그래머를 위한 TypeScript",
+        "url": "https://www.typescriptlang.org/ko/docs/handbook/typescript-in-5-minutes.html",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "react": {
+    "goal": "state, props, effect 를 구분해 쓰는 컴포넌트로 채팅 UI 를 만들 수 있습니다.",
+    "todo": [
+      "React 공식 틱택토 자습서를 끝까지 완성합니다.",
+      "메시지 목록, 입력창, 전송 버튼 컴포넌트 3개로 채팅 화면을 만듭니다.",
+      "useEffect 로 새 메시지가 추가되면 목록 맨 아래로 스크롤합니다."
+    ],
+    "resources": [
+      {
+        "title": "React 시작하기",
+        "url": "https://ko.react.dev/learn",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "자습서: 틱택토 게임",
+        "url": "https://ko.react.dev/learn/tutorial-tic-tac-toe",
+        "lang": "ko",
+        "kind": "실습"
+      },
+      {
+        "title": "React로 사고하기",
+        "url": "https://ko.react.dev/learn/thinking-in-react",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "vue": {
+    "goal": "반응형 상태, 템플릿 문법, props 와 emit 으로 Vue 컴포넌트 화면을 구성할 수 있습니다.",
+    "todo": [
+      "Vue 공식 튜토리얼 15단계를 모두 풉니다.",
+      "React 로 만든 채팅 화면 1개를 Vue SFC 로 옮깁니다.",
+      "자식 컴포넌트의 전송 이벤트를 emit 으로 부모에 전달합니다."
+    ],
+    "resources": [
+      {
+        "title": "Vue 소개",
+        "url": "https://ko.vuejs.org/guide/introduction.html",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Vue 튜토리얼",
+        "url": "https://ko.vuejs.org/tutorial/",
+        "lang": "ko",
+        "kind": "실습"
+      }
+    ]
+  },
+  "vite": {
+    "goal": "Vite 프로젝트의 개발 서버, 환경 변수, 프로덕션 빌드를 설정할 수 있습니다.",
+    "todo": [
+      "npm create vite 로 React TypeScript 프로젝트 1개를 만듭니다.",
+      "VITE_ 접두사 환경 변수 2개를 import.meta.env 로 읽습니다.",
+      "빌드한 dist 에서 VITE_ 변수 값이 노출되는지 검색합니다."
+    ],
+    "resources": [
+      {
+        "title": "Vite 시작하기",
+        "url": "https://ko.vite.dev/guide/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "환경 변수와 모드",
+        "url": "https://ko.vite.dev/guide/env-and-mode",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "lint": {
+    "goal": "ESLint 와 Prettier 를 설정해 커밋 전에 코드 검사와 포맷 정리가 실행되게 할 수 있습니다.",
+    "todo": [
+      "eslint.config.js 를 만들어 규칙 3개를 설정합니다.",
+      "Prettier 설정 파일로 따옴표와 줄 길이 규칙을 정합니다.",
+      "husky 로 커밋 전에 lint 와 format 검사를 실행합니다."
+    ],
+    "resources": [
+      {
+        "title": "Getting Started with ESLint",
+        "url": "https://eslint.org/docs/latest/use/getting-started",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Prettier Docs",
+        "url": "https://prettier.io/docs/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Husky",
+        "url": "https://typicode.github.io/husky/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "vitest": {
+    "goal": "Vitest 로 순수 함수와 API 호출 모듈의 단위 테스트를 작성할 수 있습니다.",
+    "todo": [
+      "유틸 함수 3개에 정상, 경계, 오류 케이스 테스트를 작성합니다.",
+      "vi.mock 으로 fetch 호출을 대체해 API 모듈 1개를 테스트합니다.",
+      "vitest --coverage 로 커버리지 보고서를 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "Getting Started",
+        "url": "https://vitest.dev/guide/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Mocking",
+        "url": "https://vitest.dev/guide/mocking",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "playwright": {
+    "goal": "Playwright 로 사용자 흐름의 E2E 테스트를 작성하고 실패 원인을 trace 에서 찾을 수 있습니다.",
+    "todo": [
+      "codegen 으로 로그인 흐름 1개를 녹화합니다.",
+      "녹화한 코드를 getByRole 로케이터와 expect 단언으로 정리합니다.",
+      "trace: 'on' 설정으로 실패 테스트 1건의 trace 를 엽니다."
+    ],
+    "resources": [
+      {
+        "title": "Installation",
+        "url": "https://playwright.dev/docs/intro",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Writing tests",
+        "url": "https://playwright.dev/docs/writing-tests",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Generating tests",
+        "url": "https://playwright.dev/docs/codegen-intro",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "ssr": {
+    "goal": "CSR, SSR, SSG 의 차이를 설명하고 Next.js 에서 서버 전용 코드를 분리할 수 있습니다.",
+    "todo": [
+      "Next.js Learn 과정의 대시보드 앱을 완성합니다.",
+      "API 키를 서버에서만 읽는 Route Handler 1개를 만듭니다.",
+      "curl 로 SSR 페이지와 CSR 페이지의 첫 응답 HTML 을 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "Learn Next.js",
+        "url": "https://nextjs.org/learn",
+        "lang": "en",
+        "kind": "강의"
+      },
+      {
+        "title": "웹에서 렌더링",
+        "url": "https://web.dev/articles/rendering-on-the-web?hl=ko",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "Route Handlers",
+        "url": "https://nextjs.org/docs/app/getting-started/route-handlers",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "ssg": {
+    "goal": "Astro 로 마크다운 콘텐츠를 정적 페이지로 빌드하고 필요한 컴포넌트만 클라이언트에서 실행할 수 있습니다.",
+    "todo": [
+      "Astro 공식 블로그 튜토리얼을 끝까지 완성합니다.",
+      "마크다운 글 3개를 콘텐츠 컬렉션으로 등록합니다.",
+      "client:visible 로 동작하는 컴포넌트 1개를 페이지에 넣습니다."
+    ],
+    "resources": [
+      {
+        "title": "Astro 시작",
+        "url": "https://docs.astro.build/ko/getting-started/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "블로그 만들기 튜토리얼",
+        "url": "https://docs.astro.build/ko/tutorial/0-introduction/",
+        "lang": "ko",
+        "kind": "실습"
+      }
+    ]
+  },
+  "web-vitals": {
+    "goal": "LCP, INP, CLS 를 측정하고 가장 나쁜 지표의 원인을 찾아 고칠 수 있습니다.",
+    "todo": [
+      "Lighthouse 로 페이지 1개를 측정해 LCP, CLS 값을 기록합니다.",
+      "web-vitals 라이브러리로 INP 값을 콘솔에 출력합니다.",
+      "이미지에 width, height 를 지정해 CLS 를 0.1 아래로 낮춥니다."
+    ],
+    "resources": [
+      {
+        "title": "Web Vitals",
+        "url": "https://web.dev/articles/vitals?hl=ko",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "Lighthouse 소개",
+        "url": "https://developer.chrome.com/docs/lighthouse/overview?hl=ko",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Learn Performance",
+        "url": "https://web.dev/learn/performance",
+        "lang": "en",
+        "kind": "강의"
+      }
+    ]
+  },
+  "web-storage": {
+    "goal": "localStorage, sessionStorage, IndexedDB 의 수명과 용량 차이를 근거로 저장소를 고를 수 있습니다.",
+    "todo": [
+      "localStorage 로 테마 설정의 저장과 복원을 구현합니다.",
+      "IndexedDB 에 채팅 메시지 100건을 저장하는 모듈을 작성합니다.",
+      "DevTools Application 탭에서 저장소별 사용 용량을 기록합니다."
+    ],
+    "resources": [
+      {
+        "title": "Web Storage API",
+        "url": "https://developer.mozilla.org/ko/docs/Web/API/Web_Storage_API",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "localStorage와 sessionStorage",
+        "url": "https://ko.javascript.info/localstorage",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "IndexedDB API",
+        "url": "https://developer.mozilla.org/ko/docs/Web/API/IndexedDB_API",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "pwa": {
+    "goal": "manifest 와 Service Worker 로 설치 가능하고 오프라인에서 열리는 웹앱을 만들 수 있습니다.",
+    "todo": [
+      "manifest.json 에 name, icons, start_url 을 작성합니다.",
+      "Service Worker 로 정적 파일 캐시를 구현합니다.",
+      "DevTools 오프라인 모드에서 앱이 열리는지 확인합니다."
+    ],
+    "resources": [
+      {
+        "title": "프로그레시브 웹 앱",
+        "url": "https://developer.mozilla.org/ko/docs/Web/Progressive_web_apps",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Service worker 로 오프라인 동작",
+        "url": "https://developer.mozilla.org/ko/docs/Web/Progressive_web_apps/Tutorials/js13kGames/Offline_Service_workers",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Learn PWA",
+        "url": "https://web.dev/learn/pwa",
+        "lang": "en",
+        "kind": "강의"
+      }
+    ]
+  }
+}

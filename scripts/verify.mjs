@@ -27,68 +27,99 @@ await mkdir(out, { recursive: true });
 const browser = await chromium.launch({ executablePath: chrome });
 const results = [];
 const check = (name, ok, detail = '') => results.push({ name, ok, detail });
-
-const pages = [
-  { slug: 'home', path: '/' },
-  { slug: 'post', path: '/posts/applied-ai-engineer-roadmap/' },
-  { slug: 'roadmap', path: '/roadmap/' },
-];
+const isOpen = (page) => page.locator('#node-modal.is-open').count().then((n) => n === 1);
 
 for (const theme of ['light', 'dark']) {
   for (const width of [390, 1280]) {
     const context = await browser.newContext({ viewport: { width, height: 900 }, colorScheme: theme });
-    for (const { slug, path } of pages) {
-      const page = await context.newPage();
-      const errors = [];
-      page.on('console', (msg) => msg.type() === 'error' && errors.push(msg.text()));
-      page.on('pageerror', (err) => errors.push(err.message));
-      await page.goto(base + path, { waitUntil: 'networkidle' });
-      const tag = `${slug} ${theme} ${width}px`;
-      const overflow = await page.evaluate(() => Math.max(document.body.scrollWidth - document.body.clientWidth, document.documentElement.scrollWidth - window.innerWidth));
-      check(`가로 넘침 없음 ${tag}`, overflow <= 0, `${overflow}px`);
-      check(`콘솔 오류 없음 ${tag}`, errors.length === 0, errors.join(' | '));
-      const appliedTheme = await page.evaluate(() => document.documentElement.dataset.theme);
-      check(`테마 적용 ${tag}`, appliedTheme === theme, appliedTheme);
-      const fontOk = await page.evaluate(async () => {
-        await document.fonts.ready;
-        return document.fonts.check('16px "Pretendard Variable"');
-      });
-      check(`Pretendard 로드 ${tag}`, fontOk);
-      // body 스크롤 컨테이너 구조라 전체 캡처 때만 문서 스크롤로 전환
-      await page.addStyleTag({ content: 'html,body{height:auto!important;overflow:visible!important}' });
-      await page.screenshot({ path: join(out, `${slug}-${theme}-${width}.png`), fullPage: true });
-      await page.close();
-    }
+    const page = await context.newPage();
+    const errors = [];
+    page.on('console', (msg) => msg.type() === 'error' && errors.push(msg.text()));
+    page.on('pageerror', (err) => errors.push(err.message));
+    await page.goto(base + '/', { waitUntil: 'networkidle' });
+    const tag = `${theme} ${width}px`;
+    const overflow = await page.evaluate(() => Math.max(document.body.scrollWidth - document.body.clientWidth, document.documentElement.scrollWidth - window.innerWidth));
+    check(`가로 넘침 없음 ${tag}`, overflow <= 0, `${overflow}px`);
+    check(`콘솔 오류 없음 ${tag}`, errors.length === 0, errors.join(' | '));
+    check(`테마 적용 ${tag}`, (await page.evaluate(() => document.documentElement.dataset.theme)) === theme);
+    const fontOk = await page.evaluate(async () => {
+      await document.fonts.ready;
+      return document.fonts.check('16px "Pretendard Variable"');
+    });
+    check(`Pretendard 로드 ${tag}`, fontOk);
+    await page.locator('#python-basics').click();
+    await page.waitForTimeout(700);
+    await page.screenshot({ path: join(out, `modal-${theme}-${width}.png`) });
+    const modalOverflow = await page.evaluate(() => {
+      const panel = document.querySelector('#node-modal .ds-modal__panel');
+      return panel.scrollWidth - panel.clientWidth;
+    });
+    check(`모달 가로 넘침 없음 ${tag}`, modalOverflow <= 0, `${modalOverflow}px`);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(400);
+    // body 스크롤 컨테이너 구조라 전체 캡처 때만 문서 스크롤로 전환
+    await page.addStyleTag({ content: 'html,body{height:auto!important;overflow:visible!important}' });
+    await page.screenshot({ path: join(out, `roadmap-${theme}-${width}.png`), fullPage: true });
     await context.close();
   }
 }
 
 const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 const page = await context.newPage();
-await page.goto(base + '/roadmap/', { waitUntil: 'networkidle' });
+await page.goto(base + '/', { waitUntil: 'networkidle' });
 const nodeCount = await page.locator('.rm-node').count();
-check('로드맵 노드 렌더', nodeCount >= 30, `${nodeCount}개`);
-await page.locator('#python').click();
+check('노드 렌더', nodeCount >= 120, `${nodeCount}개`);
+check('파트 3개', (await page.locator('.rm-part').count()) === 3);
+check('종착 노드', (await page.locator('.rm-end__node').count()) === 1);
+
+const contentGaps = await page.evaluate(() => {
+  const data = JSON.parse(document.getElementById('node-data').textContent);
+  return Object.entries(data)
+    .filter(([, n]) => !n.goal || n.goal.includes('작성 중') || n.todo.length < 1 || n.resources.length < 1)
+    .map(([id]) => id);
+});
+check('노드 콘텐츠 채움', contentGaps.length === 0, `${contentGaps.length}개 미작성 ${contentGaps.slice(0, 6).join(', ')}`);
+
+await page.locator('#fastapi').click();
 await page.waitForTimeout(700);
-const title = await page.locator('#node-modal-title').textContent();
-check('노드 클릭 시 모달 열림', (await page.locator('#node-modal.is-open').count()) === 1 && title === 'Python', title ?? '');
-check('모달 열림 시 해시 갱신', page.url().endsWith('#python'), page.url());
-await page.screenshot({ path: join(out, 'roadmap-modal-1280.png') });
+check('노드 클릭 시 모달 열림', (await isOpen(page)) && (await page.locator('#node-modal-title').textContent()) === 'FastAPI');
+const goalLength = (await page.locator('[data-modal-goal]').textContent()).length;
+const todoCount = await page.locator('[data-modal-todo] li').count();
+const resCount = await page.locator('[data-modal-res] a').count();
+check('모달 목표, 할 일, 강의 표시', goalLength > 5 && todoCount >= 1 && resCount >= 1, `할 일 ${todoCount}, 강의 ${resCount}`);
+check('모달 참고 로드맵 링크', (await page.locator('[data-modal-refs] a[href^="https://roadmap.sh/"]').count()) >= 1);
+check('해시 갱신', page.url().endsWith('#fastapi'));
+
+const doneBefore = Number(await page.locator('[data-progress-done]').textContent());
+await page.locator('[data-set-status="done"]').click();
+check('완료 버튼 반영', (await page.locator('#fastapi').getAttribute('data-status')) === 'done');
+check('완료 수 증가', Number(await page.locator('[data-progress-done]').textContent()) === doneBefore + 1);
+await page.reload({ waitUntil: 'networkidle' });
+await page.waitForTimeout(500);
+check('새로고침 후 상태 유지', (await page.locator('#fastapi').getAttribute('data-status')) === 'done');
+check('해시로 모달 다시 열림', await isOpen(page));
+await page.locator('[data-set-status="done"]').click();
+check('같은 버튼 재클릭 시 미시작', (await page.locator('#fastapi').getAttribute('data-status')) === 'pending');
+await page.locator('[data-set-status="skip"]').click();
+check('건너뜀 반영', (await page.locator('#fastapi').getAttribute('data-status')) === 'skip');
 await page.keyboard.press('Escape');
 await page.waitForTimeout(500);
-check('Escape 로 모달 닫힘', (await page.locator('#node-modal.is-open').count()) === 0);
-await page.goto(base + '/roadmap/#hybrid-search', { waitUntil: 'networkidle' });
+check('Escape 로 모달 닫힘', !(await isOpen(page)));
+await page.locator('[data-reset-progress]').click();
+check('진행 기록 초기화', (await page.locator('#fastapi').getAttribute('data-status')) === 'pending');
+
+await page.locator('.rm-end__node').click();
 await page.waitForTimeout(700);
-check('해시 딥링크로 모달 열림', (await page.locator('#node-modal-title').textContent()) === 'Hybrid Search, Rerank');
-const toggle = page.locator('[data-theme-toggle]');
-const before = await page.evaluate(() => document.documentElement.dataset.theme);
+check('종착 노드 모달', (await isOpen(page)) && (await page.locator('[data-modal-status]').isHidden()));
+await page.screenshot({ path: join(out, 'modal-end-1280.png') });
 await page.keyboard.press('Escape');
 await page.waitForTimeout(400);
-await toggle.click();
-const after = await page.evaluate(() => document.documentElement.dataset.theme);
-check('테마 토글', before !== after, `${before} → ${after}`);
-const rss = await page.goto(base + '/rss.xml');
-check('RSS 응답', rss?.status() === 200);
+
+const before = await page.evaluate(() => document.documentElement.dataset.theme);
+await page.locator('[data-theme-toggle]').click();
+check('테마 토글', before !== (await page.evaluate(() => document.documentElement.dataset.theme)));
+const redirect = await page.goto(base + '/roadmap/');
+check('/roadmap/ 리다이렉트 페이지', redirect?.status() === 200);
 await context.close();
 
 await browser.close();

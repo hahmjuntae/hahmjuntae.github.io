@@ -1,0 +1,1326 @@
+{
+  "how-llms-work": {
+    "goal": "다음 토큰 예측, 사전학습, 사후학습이 이어지는 과정을 그림 한 장으로 설명할 수 있습니다.",
+    "todo": [
+      "Intro to LLMs 영상의 학습 단계 3개를 그림 한 장으로 정리합니다.",
+      "transformers 로 GPT-2 를 불러와 다음 토큰 확률 상위 5개를 출력합니다."
+    ],
+    "resources": [
+      {
+        "title": "LLM 코스 1장 트랜스포머 모델",
+        "url": "https://huggingface.co/learn/llm-course/ko/chapter1/1",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "Intro to Large Language Models",
+        "url": "https://www.youtube.com/watch?v=zjkBMFhNj_g",
+        "lang": "en",
+        "kind": "영상"
+      },
+      {
+        "title": "Neural Networks",
+        "url": "https://www.3blue1brown.com/topics/neural-networks",
+        "lang": "en",
+        "kind": "영상"
+      }
+    ]
+  },
+  "tokens": {
+    "goal": "같은 내용의 한국어, 영어 문장 토큰 수를 세고 요청 한 건의 비용을 계산할 수 있습니다.",
+    "todo": [
+      "한국어, 영어 문장 10쌍의 토큰 수를 count_tokens API 로 세어 표로 만듭니다.",
+      "10만 토큰 문서를 넣는 요청 한 건의 입력 비용을 계산합니다."
+    ],
+    "resources": [
+      {
+        "title": "토크나이저",
+        "url": "https://huggingface.co/learn/llm-course/ko/chapter2/4",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "토큰 카운팅",
+        "url": "https://platform.claude.com/docs/ko/build-with-claude/token-counting",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "컨텍스트 윈도우",
+        "url": "https://platform.claude.com/docs/ko/build-with-claude/context-windows",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "sampling": {
+    "goal": "temperature, top_p 값에 따라 답변이 얼마나 달라지는지 수치로 설명할 수 있습니다.",
+    "todo": [
+      "질문 20개를 temperature 0, 0.5, 1.0 에서 각 5회 생성한 결과 파일을 만듭니다.",
+      "설정별로 서로 다른 답변의 비율을 계산해 표로 정리합니다."
+    ],
+    "resources": [
+      {
+        "title": "LLM 설정",
+        "url": "https://www.promptingguide.ai/kr/introduction/settings",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "How to generate text",
+        "url": "https://huggingface.co/blog/how-to-generate",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "model-types": {
+    "goal": "같은 작업에서 오픈 모델과 API 모델의 정답률, 토큰 단가, 운영 부담을 비교표로 낼 수 있습니다.",
+    "todo": [
+      "Hugging Face Inference Providers 로 오픈 모델 1개를 Python 에서 호출합니다.",
+      "같은 프롬프트 20개의 정답률과 토큰 단가를 오픈 모델과 API 모델로 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "Inference Providers",
+        "url": "https://huggingface.co/docs/inference-providers/index",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Artificial Analysis 모델 비교",
+        "url": "https://artificialanalysis.ai/models",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "reasoning-models": {
+    "goal": "추론 모델이 필요한 작업과 아닌 작업을 정답률과 지연 시간으로 구분할 수 있습니다.",
+    "todo": [
+      "논리, 수학 문제 20개를 확장 사고 켜기와 끄기 두 설정으로 풉니다.",
+      "설정별 정답률, 평균 지연, 출력 토큰 수를 표로 정리합니다."
+    ],
+    "resources": [
+      {
+        "title": "확장 사고",
+        "url": "https://platform.claude.com/docs/ko/build-with-claude/extended-thinking",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Understanding Reasoning LLMs",
+        "url": "https://magazine.sebastianraschka.com/p/understanding-reasoning-llms",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "model-choice": {
+    "goal": "기능 하나에 맞는 모델을 품질, 지연, 요청당 비용 세 기준으로 고를 수 있습니다.",
+    "todo": [
+      "평가 질문 30개를 모델 3개에 보내 정답률과 평균 지연을 기록합니다.",
+      "월 10만 요청 기준으로 모델별 예상 비용을 계산합니다."
+    ],
+    "resources": [
+      {
+        "title": "적합한 모델 선택하기",
+        "url": "https://platform.claude.com/docs/ko/about-claude/models/choosing-a-model",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "가격",
+        "url": "https://platform.claude.com/docs/ko/about-claude/pricing",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "messages-api": {
+    "goal": "Python SDK 로 Messages API 를 호출하고 다중 턴 대화 기록을 직접 관리할 수 있습니다.",
+    "todo": [
+      "응답 텍스트와 usage 를 출력하는 Python 호출 스크립트를 만듭니다.",
+      "messages 배열에 이전 대화를 쌓는 터미널 챗봇을 만듭니다.",
+      "stop_reason 값 3종이 나오는 요청을 각각 재현해 기록합니다."
+    ],
+    "resources": [
+      {
+        "title": "Messages API 사용하기",
+        "url": "https://platform.claude.com/docs/ko/build-with-claude/working-with-messages",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Anthropic API Fundamentals",
+        "url": "https://github.com/anthropics/courses/tree/master/anthropic_api_fundamentals",
+        "lang": "en",
+        "kind": "실습"
+      }
+    ]
+  },
+  "streaming": {
+    "goal": "스트리밍 응답의 첫 토큰 지연을 재고 응답을 브라우저 화면에 이어 붙일 수 있습니다.",
+    "todo": [
+      "Python SDK 스트림으로 첫 토큰 시간과 전체 응답 시간을 측정합니다.",
+      "FastAPI 엔드포인트에서 모델 스트림을 SSE 로 브라우저에 전달합니다."
+    ],
+    "resources": [
+      {
+        "title": "메시지 스트리밍",
+        "url": "https://platform.claude.com/docs/ko/build-with-claude/streaming",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Server-Sent Events 사용하기",
+        "url": "https://developer.mozilla.org/ko/docs/Web/API/Server-sent_events/Using_server-sent_events",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "structured-output": {
+    "goal": "JSON 스키마로 응답 형식을 고정하고 파싱 실패율을 측정할 수 있습니다.",
+    "todo": [
+      "문의 분류 결과를 Pydantic 모델로 정의해 구조화된 출력으로 받습니다.",
+      "입력 50건을 처리해 스키마 검증 실패 건수를 셉니다."
+    ],
+    "resources": [
+      {
+        "title": "구조화된 출력",
+        "url": "https://platform.claude.com/docs/ko/build-with-claude/structured-outputs",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Tool use 코스",
+        "url": "https://github.com/anthropics/courses/tree/master/tool_use",
+        "lang": "en",
+        "kind": "실습"
+      }
+    ]
+  },
+  "prompt-caching": {
+    "goal": "긴 시스템 프롬프트에 캐시를 적용하고 전후 비용과 지연 차이를 수치로 낼 수 있습니다.",
+    "todo": [
+      "5천 토큰 시스템 프롬프트에 cache_control 을 건 요청을 10회 보냅니다.",
+      "usage 의 캐시 토큰 값으로 적용 전후 비용과 지연을 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "프롬프트 캐싱",
+        "url": "https://platform.claude.com/docs/ko/build-with-claude/prompt-caching",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Prompt caching 쿡북",
+        "url": "https://github.com/anthropics/claude-cookbooks/blob/main/misc/prompt_caching.ipynb",
+        "lang": "en",
+        "kind": "실습"
+      }
+    ]
+  },
+  "multimodal": {
+    "goal": "이미지와 PDF 에서 필요한 필드를 JSON 으로 추출하고 필드별 정확도를 잴 수 있습니다.",
+    "todo": [
+      "영수증 이미지 10장에서 날짜, 금액, 상호를 추출하는 스크립트를 만듭니다.",
+      "추출 결과를 사람이 적은 정답과 비교해 필드별 정확도를 냅니다."
+    ],
+    "resources": [
+      {
+        "title": "비전",
+        "url": "https://platform.claude.com/docs/ko/build-with-claude/vision",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "PDF 지원",
+        "url": "https://platform.claude.com/docs/ko/build-with-claude/pdf-support",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "API Fundamentals 비전 실습",
+        "url": "https://github.com/anthropics/courses/blob/master/anthropic_api_fundamentals/06_vision.ipynb",
+        "lang": "en",
+        "kind": "실습"
+      }
+    ]
+  },
+  "prompt-engineering": {
+    "goal": "프롬프트를 고칠 때마다 평가 세트 점수를 비교해 개선 여부를 판단할 수 있습니다.",
+    "todo": [
+      "Anthropic 프롬프트 튜토리얼의 연습 문제를 모두 풉니다.",
+      "작업 하나의 프롬프트 3개 버전을 테스트 20건으로 채점해 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "프롬프트 엔지니어링 가이드",
+        "url": "https://www.promptingguide.ai/kr",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "프롬프트 엔지니어링 개요",
+        "url": "https://platform.claude.com/docs/ko/build-with-claude/prompt-engineering/overview",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Prompt Engineering Interactive Tutorial",
+        "url": "https://github.com/anthropics/prompt-eng-interactive-tutorial",
+        "lang": "en",
+        "kind": "실습"
+      }
+    ]
+  },
+  "system-prompt": {
+    "goal": "역할, 규칙, 출력 형식을 나눈 시스템 프롬프트를 쓰고 규칙 준수율을 잴 수 있습니다.",
+    "todo": [
+      "역할, 금지 규칙, 출력 형식 3개 블록으로 시스템 프롬프트를 작성합니다.",
+      "규칙 위반을 유도하는 질문 20개로 준수율을 측정합니다."
+    ],
+    "resources": [
+      {
+        "title": "프롬프팅 모범 사례",
+        "url": "https://platform.claude.com/docs/ko/build-with-claude/prompt-engineering/claude-prompting-best-practices",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Real World Prompting",
+        "url": "https://github.com/anthropics/courses/tree/master/real_world_prompting",
+        "lang": "en",
+        "kind": "실습"
+      }
+    ]
+  },
+  "few-shot-cot": {
+    "goal": "예시 개수와 단계적 추론 지시가 정답률에 주는 효과를 측정할 수 있습니다.",
+    "todo": [
+      "분류 작업 하나를 예시 0개, 3개, 6개 프롬프트로 각 30건 실행합니다.",
+      "CoT 지시 유무에 따른 정답률과 출력 토큰 수를 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "Few-Shot Prompting",
+        "url": "https://www.promptingguide.ai/kr/techniques/fewshot",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Chain-of-Thought Prompting",
+        "url": "https://www.promptingguide.ai/kr/techniques/cot",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "context-engineering": {
+    "goal": "에이전트 요청의 컨텍스트를 구성 요소별 토큰으로 나눠 줄일 부분을 고를 수 있습니다.",
+    "todo": [
+      "에이전트 요청 한 건의 시스템 프롬프트, 도구, 기록, 검색 결과 토큰 수를 표로 만듭니다.",
+      "도구 설명을 줄인 버전과 원본으로 같은 작업 10건의 성공률을 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "Effective context engineering for AI agents",
+        "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+        "lang": "en",
+        "kind": "글"
+      },
+      {
+        "title": "How Long Contexts Fail",
+        "url": "https://www.dbreunig.com/2025/06/22/how-contexts-fail-and-how-to-fix-them.html",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "context-compaction": {
+    "goal": "긴 대화를 요약으로 압축하거나 하위 에이전트로 분리해 컨텍스트 한도 안에서 작업할 수 있습니다.",
+    "todo": [
+      "대화가 컨텍스트 한도의 70%를 넘으면 앞부분을 요약하는 함수를 만듭니다.",
+      "요약 전후로 같은 사실 질문 10개의 정답률을 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "컨텍스트 편집",
+        "url": "https://platform.claude.com/docs/ko/build-with-claude/context-editing",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "How to Fix Your Context",
+        "url": "https://www.dbreunig.com/2025/06/26/how-to-fix-your-context.html",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "agent-loop": {
+    "goal": "모델 호출, 도구 실행, 결과 반환을 반복하는 에이전트 루프를 SDK 없이 구현할 수 있습니다.",
+    "todo": [
+      "도구 2개를 쓰는 에이전트 루프를 Python 100줄 이내로 작성합니다.",
+      "최대 반복 횟수를 둔 루프로 작업 10건의 완료율과 평균 반복 수를 기록합니다."
+    ],
+    "resources": [
+      {
+        "title": "AI 에이전트 코스",
+        "url": "https://huggingface.co/learn/agents-course/ko/unit0/introduction",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "Building effective agents",
+        "url": "https://www.anthropic.com/engineering/building-effective-agents",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "tool-calling": {
+    "goal": "도구 스키마를 정의하고 tool_use 요청을 실행해 결과를 모델에 돌려줄 수 있습니다.",
+    "todo": [
+      "날씨 조회와 계산기 도구 2개의 스키마와 실행 코드를 작성합니다.",
+      "도구 선택이 필요한 질문 20개로 올바른 도구 선택률을 측정합니다."
+    ],
+    "resources": [
+      {
+        "title": "Claude와 함께하는 도구 사용",
+        "url": "https://platform.claude.com/docs/ko/agents-and-tools/tool-use/overview",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Tool use 코스",
+        "url": "https://github.com/anthropics/courses/tree/master/tool_use",
+        "lang": "en",
+        "kind": "실습"
+      },
+      {
+        "title": "Writing effective tools for AI agents",
+        "url": "https://www.anthropic.com/engineering/writing-tools-for-agents",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "agent-patterns": {
+    "goal": "ReAct 와 Planner-Executor 패턴을 같은 작업에 적용해 성공률과 비용을 비교할 수 있습니다.",
+    "todo": [
+      "검색 질문 하나를 ReAct 방식과 계획 후 실행 방식으로 각각 구현합니다.",
+      "작업 10건에서 두 방식의 성공률, 호출 횟수, 토큰 비용을 표로 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "ReAct Prompting",
+        "url": "https://www.promptingguide.ai/kr/techniques/react",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "LLM Agents",
+        "url": "https://www.promptingguide.ai/kr/research/llm-agents",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "multi-agents": {
+    "goal": "단일 에이전트와 멀티 에이전트 구조를 품질과 토큰 비용으로 비교해 구조를 고를 수 있습니다.",
+    "todo": [
+      "조사 작업 하나를 오케스트레이터 1개와 하위 에이전트 3개 구조로 만듭니다.",
+      "단일 에이전트 버전과 결과 품질 점수, 총 토큰 사용량을 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "SDK의 서브에이전트",
+        "url": "https://code.claude.com/docs/ko/agent-sdk/subagents",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "How we built our multi-agent research system",
+        "url": "https://www.anthropic.com/engineering/multi-agent-research-system",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "agent-memory": {
+    "goal": "세션이 바뀌어도 사용자 정보를 기억하는 메모리 저장, 조회 흐름을 구현할 수 있습니다.",
+    "todo": [
+      "대화에서 사용자 선호를 추출해 SQLite 에 저장하는 메모리 도구를 만듭니다.",
+      "새 세션 테스트 10건에서 저장된 선호가 답변에 반영된 비율을 셉니다."
+    ],
+    "resources": [
+      {
+        "title": "메모리 도구",
+        "url": "https://platform.claude.com/docs/ko/agents-and-tools/tool-use/memory-tool",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "LLMs as Operating Systems: Agent Memory",
+        "url": "https://www.deeplearning.ai/courses/llms-as-operating-systems-agent-memory",
+        "lang": "en",
+        "kind": "강의"
+      }
+    ]
+  },
+  "mcp": {
+    "goal": "MCP 의 host, client, server 역할과 tools, resources, prompts 를 구분해 설명할 수 있습니다.",
+    "todo": [
+      "공개 MCP 서버 1개를 Claude Code 에 연결해 도구 목록을 확인합니다.",
+      "MCP Inspector 로 서버의 tools, resources 응답을 기록합니다."
+    ],
+    "resources": [
+      {
+        "title": "What is the Model Context Protocol",
+        "url": "https://modelcontextprotocol.io/docs/getting-started/intro",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Introduction to Model Context Protocol",
+        "url": "https://anthropic.skilljar.com/introduction-to-model-context-protocol",
+        "lang": "en",
+        "kind": "강의"
+      },
+      {
+        "title": "MCP Course",
+        "url": "https://huggingface.co/learn/mcp-course/unit0/introduction",
+        "lang": "en",
+        "kind": "강의"
+      }
+    ]
+  },
+  "mcp-server": {
+    "goal": "Python SDK 로 도구 2개를 가진 MCP 서버를 만들어 클라이언트에 연결할 수 있습니다.",
+    "todo": [
+      "FastMCP 로 문서 검색, 문서 읽기 도구 2개를 가진 서버를 만듭니다.",
+      "MCP Inspector 로 잘못된 입력 5건의 오류 응답을 확인합니다."
+    ],
+    "resources": [
+      {
+        "title": "Build an MCP server",
+        "url": "https://modelcontextprotocol.io/docs/develop/build-server",
+        "lang": "en",
+        "kind": "실습"
+      },
+      {
+        "title": "MCP Python SDK",
+        "url": "https://github.com/modelcontextprotocol/python-sdk",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "agent-sdk": {
+    "goal": "Agent SDK 로 도구와 권한 설정이 있는 에이전트를 서비스 코드에 넣을 수 있습니다.",
+    "todo": [
+      "Python Agent SDK 로 파일 읽기만 허용한 코드 리뷰 에이전트를 만듭니다.",
+      "직접 만든 루프와 SDK 버전의 코드 줄 수와 작업 10건 성공률을 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "Agent SDK 개요",
+        "url": "https://code.claude.com/docs/ko/agent-sdk/overview",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Building agents with the Claude Agent SDK",
+        "url": "https://claude.com/resources/articles/building-agents-with-the-claude-agent-sdk",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "coding-agents": {
+    "goal": "코딩 에이전트에 훅을 걸어 위험한 명령을 막고 작업 규칙을 자동으로 검사할 수 있습니다.",
+    "todo": [
+      "rm -rf 명령을 막는 PreToolUse 훅을 Python 스크립트로 작성합니다.",
+      "파일 수정 뒤 테스트를 돌리는 PostToolUse 훅으로 차단 건수를 기록합니다."
+    ],
+    "resources": [
+      {
+        "title": "Hooks 참조",
+        "url": "https://code.claude.com/docs/ko/hooks",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Claude Code 모범 사례",
+        "url": "https://code.claude.com/docs/ko/best-practices",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "embeddings": {
+    "goal": "문장 임베딩으로 의미가 가까운 문서를 찾고 검색 적중률을 측정할 수 있습니다.",
+    "todo": [
+      "문서 100건을 임베딩해 numpy 로 코사인 유사도 검색 함수를 만듭니다.",
+      "질문 20개의 상위 5개 결과에 정답 문서가 든 비율을 셉니다."
+    ],
+    "resources": [
+      {
+        "title": "임베딩",
+        "url": "https://platform.claude.com/docs/ko/build-with-claude/embeddings",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Embeddings: What they are and why they matter",
+        "url": "https://simonwillison.net/2023/Oct/23/embeddings/",
+        "lang": "en",
+        "kind": "글"
+      },
+      {
+        "title": "Semantic search with FAISS",
+        "url": "https://huggingface.co/learn/llm-course/chapter5/6",
+        "lang": "en",
+        "kind": "강의"
+      }
+    ]
+  },
+  "vector-db": {
+    "goal": "pgvector 에 임베딩을 저장하고 인덱스 유무에 따른 검색 지연과 정확도를 비교할 수 있습니다.",
+    "todo": [
+      "Docker 로 띄운 pgvector 에 문서 1만 건의 임베딩을 저장합니다.",
+      "HNSW 인덱스 전후로 검색 지연과 recall@10 을 측정합니다."
+    ],
+    "resources": [
+      {
+        "title": "pgvector",
+        "url": "https://github.com/pgvector/pgvector",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "What is a Vector Database",
+        "url": "https://www.pinecone.io/learn/vector-database/",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "chunking": {
+    "goal": "청크 크기와 겹침 설정이 검색 정확도에 주는 영향을 수치로 비교할 수 있습니다.",
+    "todo": [
+      "같은 문서를 256, 512, 1024 토큰 크기로 나눈 인덱스 3개를 만듭니다.",
+      "질문 30개로 크기별 recall@5 를 측정해 표로 정리합니다."
+    ],
+    "resources": [
+      {
+        "title": "Chunking Strategies for LLM Applications",
+        "url": "https://www.pinecone.io/learn/chunking-strategies/",
+        "lang": "en",
+        "kind": "글"
+      },
+      {
+        "title": "Evaluating Chunking Strategies for Retrieval",
+        "url": "https://www.trychroma.com/research/evaluating-chunking",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "hybrid-search": {
+    "goal": "BM25 와 벡터 검색을 합치고 리랭커를 붙여 검색 정확도 개선 폭을 측정할 수 있습니다.",
+    "todo": [
+      "rank_bm25 와 벡터 검색 결과를 RRF 로 합치는 검색 함수를 만듭니다.",
+      "cross-encoder 리랭커 적용 전후의 recall@5 를 질문 30개로 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "Introducing Contextual Retrieval",
+        "url": "https://www.anthropic.com/news/contextual-retrieval",
+        "lang": "en",
+        "kind": "글"
+      },
+      {
+        "title": "Hybrid search overview",
+        "url": "https://docs.pinecone.io/guides/search/hybrid-search",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Cross-Encoder Usage",
+        "url": "https://sbert.net/docs/cross_encoder/usage/usage.html",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "advanced-rag": {
+    "goal": "Contextual Retrieval 과 Agentic RAG 를 적용해 기본 RAG 대비 정답률 변화를 낼 수 있습니다.",
+    "todo": [
+      "청크마다 문서 맥락 한두 문장을 붙여 인덱스를 다시 만듭니다.",
+      "다단계 질문 20개로 기본 RAG 와 검색 에이전트의 정답률을 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "Introducing Contextual Retrieval",
+        "url": "https://www.anthropic.com/news/contextual-retrieval",
+        "lang": "en",
+        "kind": "글"
+      },
+      {
+        "title": "Agentic RAG",
+        "url": "https://huggingface.co/learn/cookbook/agent_rag",
+        "lang": "en",
+        "kind": "실습"
+      },
+      {
+        "title": "Building and Evaluating Advanced RAG",
+        "url": "https://www.deeplearning.ai/short-courses/building-evaluating-advanced-rag/",
+        "lang": "en",
+        "kind": "강의"
+      }
+    ]
+  },
+  "knowledge-graph": {
+    "goal": "문서에서 개체와 관계를 뽑아 그래프로 만들고 관계 질의로 답을 찾을 수 있습니다.",
+    "todo": [
+      "문서 20건에서 LLM 으로 주어, 관계, 목적어 삼중항을 추출해 CSV 로 저장합니다.",
+      "추출한 삼중항 50개를 직접 검토해 정확도를 계산합니다.",
+      "networkx 로 만든 그래프에서 2단계 이웃을 찾는 조회 함수를 작성합니다."
+    ],
+    "resources": [
+      {
+        "title": "Knowledge Graphs for RAG",
+        "url": "https://www.deeplearning.ai/courses/knowledge-graphs-rag",
+        "lang": "en",
+        "kind": "강의"
+      },
+      {
+        "title": "What is a knowledge graph",
+        "url": "https://neo4j.com/blog/knowledge-graph/what-is-knowledge-graph/",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "ontology": {
+    "goal": "도메인 개념, 속성, 관계를 온톨로지로 정의하고 데이터의 스키마 위반을 검사할 수 있습니다.",
+    "todo": [
+      "rdflib 로 클래스 10개와 관계 10개를 가진 온톨로지 파일을 만듭니다.",
+      "pySHACL 규칙 5개로 샘플 데이터의 위반 건수를 검사합니다."
+    ],
+    "resources": [
+      {
+        "title": "Ontology Development 101",
+        "url": "https://protege.stanford.edu/publications/ontology_development/ontology101.pdf",
+        "lang": "en",
+        "kind": "글"
+      },
+      {
+        "title": "RDFLib",
+        "url": "https://rdflib.readthedocs.io/en/stable/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "pySHACL",
+        "url": "https://github.com/RDFLib/pySHACL",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "graph-db": {
+    "goal": "Neo4j 에 그래프를 적재하고 Cypher 로 다단계 관계 질의를 작성할 수 있습니다.",
+    "todo": [
+      "Docker 로 띄운 Neo4j 에 삼중항 1천 개를 Python 드라이버로 적재합니다.",
+      "2단계, 3단계 관계를 묻는 Cypher 질의 10개를 작성해 결과를 검증합니다."
+    ],
+    "resources": [
+      {
+        "title": "Cypher Fundamentals",
+        "url": "https://graphacademy.neo4j.com/courses/cypher-fundamentals",
+        "lang": "en",
+        "kind": "강의"
+      },
+      {
+        "title": "Neo4j Python Driver Manual",
+        "url": "https://neo4j.com/docs/python-manual/current/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "graphrag": {
+    "goal": "GraphRAG 와 벡터 RAG 를 같은 질문 세트로 비교해 맞는 방식을 고를 수 있습니다.",
+    "todo": [
+      "Microsoft GraphRAG 로 문서 50건의 그래프 인덱스를 만듭니다.",
+      "전체 요약형 질문 20개로 GraphRAG 와 벡터 RAG 의 정답률을 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "GraphRAG: Unlocking LLM discovery on narrative private data",
+        "url": "https://www.microsoft.com/en-us/research/blog/graphrag-unlocking-llm-discovery-on-narrative-private-data/",
+        "lang": "en",
+        "kind": "글"
+      },
+      {
+        "title": "GraphRAG 문서",
+        "url": "https://microsoft.github.io/graphrag/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "ontology-agents": {
+    "goal": "그래프 스키마를 근거로 Cypher 를 만드는 에이전트를 구현하고 질의 정답률을 잴 수 있습니다.",
+    "todo": [
+      "그래프 스키마를 프롬프트에 넣고 자연어 질문을 Cypher 로 바꾸는 도구를 만듭니다.",
+      "질문 30개로 생성된 Cypher 의 실행 성공률과 정답률을 측정합니다."
+    ],
+    "resources": [
+      {
+        "title": "Agentic Knowledge Graph Construction",
+        "url": "https://www.deeplearning.ai/courses/agentic-knowledge-graph-construction",
+        "lang": "en",
+        "kind": "강의"
+      },
+      {
+        "title": "GraphRAG for Python",
+        "url": "https://neo4j.com/docs/neo4j-graphrag-python/current/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Palantir Ontology Overview",
+        "url": "https://www.palantir.com/docs/foundry/ontology/overview",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "error-analysis": {
+    "goal": "대화 로그 100건을 읽고 실패 유형별 빈도표를 만들 수 있습니다.",
+    "todo": [
+      "대화 로그 100건마다 실패 내용을 한 줄 메모로 답니다.",
+      "메모를 실패 유형 5~8개로 묶어 유형별 건수 표를 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "A Field Guide to Rapidly Improving AI Products",
+        "url": "https://hamel.dev/blog/posts/field-guide/",
+        "lang": "en",
+        "kind": "글"
+      },
+      {
+        "title": "AI Evals: Everything You Need to Know",
+        "url": "https://hamel.dev/blog/posts/evals-faq/",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "deterministic-evals": {
+    "goal": "형식, 필수 필드, 금지어 같은 규칙 검사를 코드로 만들어 평가 세트에 적용할 수 있습니다.",
+    "todo": [
+      "JSON 형식, 필수 필드, 금지어를 검사하는 pytest 테스트 5개를 작성합니다.",
+      "평가 세트 50건에 돌려 검사 항목별 통과율을 출력합니다."
+    ],
+    "resources": [
+      {
+        "title": "성공 기준 정의 및 평가 구축",
+        "url": "https://platform.claude.com/docs/ko/test-and-evaluate/develop-tests",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Your AI Product Needs Evals",
+        "url": "https://hamel.dev/blog/posts/evals/",
+        "lang": "en",
+        "kind": "글"
+      },
+      {
+        "title": "Promptfoo Intro",
+        "url": "https://www.promptfoo.dev/docs/intro/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "llm-judge": {
+    "goal": "LLM 채점기의 판정을 사람 라벨 50건과 비교해 TPR, TNR 을 낼 수 있습니다.",
+    "todo": [
+      "실패 유형 하나를 골라 합격, 불합격 기준을 한 문단으로 씁니다.",
+      "사람 라벨 50건과 채점기 결과의 혼동 행렬을 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "Creating a LLM-as-a-Judge",
+        "url": "https://hamel.dev/blog/posts/llm-judge/",
+        "lang": "en",
+        "kind": "글"
+      },
+      {
+        "title": "Evaluating the Effectiveness of LLM-Evaluators",
+        "url": "https://eugeneyan.com/writing/llm-evaluators/",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "rag-eval": {
+    "goal": "검색과 생성 단계를 나눠 context recall, faithfulness 로 RAG 품질을 측정할 수 있습니다.",
+    "todo": [
+      "질문, 정답 문서, 정답 답변을 묶은 평가 세트 30건을 만듭니다.",
+      "Ragas 로 context recall 과 faithfulness 기준선을 계산합니다."
+    ],
+    "resources": [
+      {
+        "title": "Ragas",
+        "url": "https://docs.ragas.io/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "List of available metrics",
+        "url": "https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "eval-ci": {
+    "goal": "프롬프트나 모델을 바꾸는 PR 마다 평가 세트를 돌려 점수 하락을 막을 수 있습니다.",
+    "todo": [
+      "promptfoo 설정 파일에 테스트 케이스 30건과 assert 를 작성합니다.",
+      "통과율 90% 미만이면 PR 을 실패시키는 GitHub Actions 워크플로를 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "GitHub Actions 시작 가이드",
+        "url": "https://docs.github.com/ko/actions/get-started/quickstart",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "CI/CD Integration",
+        "url": "https://www.promptfoo.dev/docs/integrations/ci-cd/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "tracing": {
+    "goal": "요청 하나의 LLM 호출, 도구 호출, 검색 단계를 트레이스 하나로 묶어 볼 수 있습니다.",
+    "todo": [
+      "Langfuse Python SDK 로 RAG 파이프라인의 단계마다 span 을 기록합니다.",
+      "트레이스 20건에서 단계별 지연 시간 분포를 표로 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "Langfuse Docs",
+        "url": "https://langfuse.com/docs",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "OpenTelemetry GenAI Semantic Conventions",
+        "url": "https://opentelemetry.io/docs/specs/semconv/gen-ai/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "cost-latency": {
+    "goal": "요청당 비용과 p50, p95 지연을 측정하고 줄일 지점을 수치로 고를 수 있습니다.",
+    "todo": [
+      "요청 100건의 토큰 수와 지연을 기록해 p50, p95 를 계산합니다.",
+      "캐시나 출력 길이 제한 하나를 적용해 전후 비용과 지연을 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "지연 시간 줄이기",
+        "url": "https://platform.claude.com/docs/ko/test-and-evaluate/strengthen-guardrails/reduce-latency",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Token & Cost Tracking",
+        "url": "https://langfuse.com/docs/observability/features/token-and-cost-tracking",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "model-gateway": {
+    "goal": "모델 게이트웨이를 두어 공급사 장애 때 다른 모델로 자동 전환되게 만들 수 있습니다.",
+    "todo": [
+      "LiteLLM 으로 기본 모델 1개와 대체 모델 2개를 묶은 라우터를 만듭니다.",
+      "기본 모델 호출을 강제로 실패시켜 전환 성공률과 추가 지연을 기록합니다."
+    ],
+    "resources": [
+      {
+        "title": "LiteLLM Router",
+        "url": "https://docs.litellm.ai/docs/routing",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Vercel AI Gateway",
+        "url": "https://vercel.com/docs/ai-gateway",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "user-feedback": {
+    "goal": "사용자 좋아요, 싫어요를 트레이스에 붙이고 실패 사례를 평가 세트로 옮길 수 있습니다.",
+    "todo": [
+      "응답의 좋아요, 싫어요 결과를 Langfuse score 로 기록합니다.",
+      "싫어요를 받은 응답 20건을 골라 평가 세트에 추가합니다."
+    ],
+    "resources": [
+      {
+        "title": "User Feedback",
+        "url": "https://langfuse.com/docs/observability/features/user-feedback",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Patterns for Building LLM-based Systems & Products",
+        "url": "https://eugeneyan.com/writing/llm-patterns/",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "production-monitoring": {
+    "goal": "운영 중인 AI 기능의 품질, 비용, 오류 지표를 매일 확인하고 이상 알림을 받을 수 있습니다.",
+    "todo": [
+      "실패율, 비용, p95 지연, 싫어요 비율, 채점기 점수 5개 지표를 정의합니다.",
+      "운영 로그 표본 50건에 LLM 채점기를 매일 돌려 점수 추이를 기록합니다.",
+      "지표가 기준을 넘으면 알림을 보내는 스크립트를 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "Evaluation of LLM Applications",
+        "url": "https://langfuse.com/docs/evaluation/overview",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "A postmortem of three recent issues",
+        "url": "https://www.anthropic.com/engineering/a-postmortem-of-three-recent-issues",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "prompt-injection": {
+    "goal": "직접, 간접 프롬프트 인젝션을 재현하고 방어 전후 공격 성공률을 잴 수 있습니다.",
+    "todo": [
+      "챗봇에 직접 주입 10건과 문서 속 간접 주입 10건을 시험합니다.",
+      "입력 분리와 출력 검사를 넣은 뒤 공격 성공률을 다시 측정합니다."
+    ],
+    "resources": [
+      {
+        "title": "적대적 프롬프팅",
+        "url": "https://www.promptingguide.ai/kr/risks/adversarial",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "LLM01:2025 Prompt Injection",
+        "url": "https://genai.owasp.org/llmrisk/llm01-prompt-injection/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Prompt injection 연재",
+        "url": "https://simonwillison.net/series/prompt-injection/",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "tool-permissions": {
+    "goal": "에이전트 도구에 최소 권한과 승인 단계를 두어 위험한 동작을 막을 수 있습니다.",
+    "todo": [
+      "에이전트 도구를 읽기, 쓰기, 외부 전송 세 등급으로 나눈 권한표를 만듭니다.",
+      "쓰기 도구 실행 전 사람 승인을 받는 흐름을 구현합니다."
+    ],
+    "resources": [
+      {
+        "title": "LLM06:2025 Excessive Agency",
+        "url": "https://genai.owasp.org/llmrisk/llm062025-excessive-agency/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Claude Code sandboxing",
+        "url": "https://www.anthropic.com/engineering/claude-code-sandboxing",
+        "lang": "en",
+        "kind": "글"
+      },
+      {
+        "title": "The lethal trifecta for AI agents",
+        "url": "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "pii": {
+    "goal": "모델에 보내기 전 개인정보를 찾아 가리고 로그에 원문이 남지 않게 할 수 있습니다.",
+    "todo": [
+      "Presidio 로 이름, 전화번호, 이메일을 가리는 전처리 함수를 만듭니다.",
+      "한국어 샘플 50건의 탐지 누락 건수를 세어 정규식 규칙을 보강합니다."
+    ],
+    "resources": [
+      {
+        "title": "LLM02:2025 Sensitive Information Disclosure",
+        "url": "https://genai.owasp.org/llmrisk/llm022025-sensitive-information-disclosure/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Presidio",
+        "url": "https://data-privacy-stack.github.io/presidio/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "guardrails": {
+    "goal": "입력과 출력 단계에 검사기를 두어 정책 위반 응답 비율을 낮출 수 있습니다.",
+    "todo": [
+      "주제 이탈 질문을 걸러내는 입력 분류기를 작은 모델로 만듭니다.",
+      "위반 유도 질문 30건으로 가드레일 적용 전후 위반율을 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "탈옥 및 프롬프트 인젝션 완화",
+        "url": "https://platform.claude.com/docs/ko/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "환각 줄이기",
+        "url": "https://platform.claude.com/docs/ko/test-and-evaluate/strengthen-guardrails/reduce-hallucinations",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "red-teaming": {
+    "goal": "자동 레드팀 도구로 공격 케이스를 만들고 취약 항목 보고서를 낼 수 있습니다.",
+    "todo": [
+      "promptfoo redteam 으로 챗봇 대상 공격 케이스 50건을 생성해 실행합니다.",
+      "실패 항목을 OWASP LLM Top 10 분류로 묶은 보고서를 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "LLM red teaming guide",
+        "url": "https://www.promptfoo.dev/docs/red-team/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "OWASP Top 10 for LLM Applications",
+        "url": "https://genai.owasp.org/llm-top-10/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "local-models": {
+    "goal": "Ollama 로 오픈 모델을 로컬에서 띄우고 API 모델과 품질, 속도를 비교할 수 있습니다.",
+    "todo": [
+      "Ollama 로 띄운 7B 안팎 모델을 OpenAI 호환 API 로 호출합니다.",
+      "같은 질문 20개의 초당 토큰 수와 정답률을 API 모델과 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "Ollama Quickstart",
+        "url": "https://docs.ollama.com/quickstart",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "OpenAI compatibility",
+        "url": "https://docs.ollama.com/api/openai-compatibility",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "hf-transformers": {
+    "goal": "transformers 로 모델과 토크나이저를 불러와 분류, 생성 추론을 실행할 수 있습니다.",
+    "todo": [
+      "pipeline 으로 감성 분류 모델을 불러와 한국어 문장 50건을 분류합니다.",
+      "generate 의 max_new_tokens 값 3개에 따른 출력 길이와 지연을 기록합니다."
+    ],
+    "resources": [
+      {
+        "title": "파이프라인 내부 동작 과정",
+        "url": "https://huggingface.co/learn/llm-course/ko/chapter2/2",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "Transformers",
+        "url": "https://huggingface.co/docs/transformers/index",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Text generation",
+        "url": "https://huggingface.co/docs/transformers/llm_tutorial",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "quantization": {
+    "goal": "양자화 수준별 크기, 속도, 정답률 차이를 측정해 배포할 형식을 고를 수 있습니다.",
+    "todo": [
+      "같은 모델의 Q4, Q8 GGUF 파일을 llama.cpp 로 실행합니다.",
+      "질문 20개로 수준별 메모리 사용량, 초당 토큰 수, 정답률을 표로 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "A Visual Guide to Quantization",
+        "url": "https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-quantization",
+        "lang": "en",
+        "kind": "글"
+      },
+      {
+        "title": "GGUF",
+        "url": "https://huggingface.co/docs/hub/gguf",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "llama.cpp",
+        "url": "https://github.com/ggml-org/llama.cpp",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "vllm": {
+    "goal": "vLLM 으로 OpenAI 호환 추론 서버를 띄우고 동시 요청 처리량을 측정할 수 있습니다.",
+    "todo": [
+      "vLLM 으로 소형 모델의 OpenAI 호환 서버를 띄웁니다.",
+      "동시 요청 1, 8, 32개에서 초당 토큰 처리량과 p95 지연을 측정합니다."
+    ],
+    "resources": [
+      {
+        "title": "vLLM Quickstart",
+        "url": "https://docs.vllm.ai/en/latest/getting_started/quickstart/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "vLLM: Easy, Fast, and Cheap LLM Serving with PagedAttention",
+        "url": "https://vllm.ai/blog/2023-06-20-vllm",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "gpu-deploy": {
+    "goal": "클라우드 GPU 에 추론 서버를 배포하고 백만 토큰당 비용을 API 단가와 비교할 수 있습니다.",
+    "todo": [
+      "Modal 에 vLLM 추론 서버를 배포합니다.",
+      "부하 테스트 결과로 백만 토큰당 비용을 계산해 API 단가와 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "Run OpenAI-compatible LLM inference with vLLM",
+        "url": "https://modal.com/docs/examples/vllm_inference",
+        "lang": "en",
+        "kind": "실습"
+      },
+      {
+        "title": "vLLM Using Docker",
+        "url": "https://docs.vllm.ai/en/latest/deployment/docker/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Inference Endpoints",
+        "url": "https://huggingface.co/docs/inference-endpoints/index",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "fine-tuning": {
+    "goal": "LoRA 로 소형 모델을 미세조정하고 프롬프트만 쓴 기준선과 정답률을 비교할 수 있습니다.",
+    "todo": [
+      "작업 하나의 학습 데이터 500건을 대화 형식 JSONL 로 만듭니다.",
+      "TRL 과 PEFT 로 소형 모델에 LoRA 미세조정을 실행합니다.",
+      "평가 세트 50건에서 미세조정 모델과 few-shot 기준선의 정답률을 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "Supervised Fine-Tuning",
+        "url": "https://huggingface.co/learn/llm-course/chapter11/1",
+        "lang": "en",
+        "kind": "강의"
+      },
+      {
+        "title": "LoRA (Low-Rank Adaptation)",
+        "url": "https://huggingface.co/learn/llm-course/chapter11/4",
+        "lang": "en",
+        "kind": "강의"
+      },
+      {
+        "title": "Fine-tuning LLMs Guide",
+        "url": "https://unsloth.ai/docs/get-started/fine-tuning-llms-guide",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "pretraining": {
+    "goal": "모델을 처음부터 사전학습하는 일은 모델 연구 직무의 영역이라서 건너뜁니다.",
+    "todo": [
+      "Let's build GPT 영상을 보며 문자 단위 소형 GPT 를 따라 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "Let's build GPT: from scratch",
+        "url": "https://www.youtube.com/watch?v=kCc8FmEb1nY",
+        "lang": "en",
+        "kind": "영상"
+      }
+    ]
+  },
+  "applied-ai-engineer": {
+    "goal": "측정 수치가 붙은 AI 기능 사례 2~3개를 공개하고 Applied AI Engineer 로 일할 수 있습니다.",
+    "todo": [
+      "사례마다 문제, 평가 세트, 개선 전후 수치를 한 쪽 문서로 정리합니다.",
+      "사례 코드와 평가 결과를 공개 저장소와 블로그 글로 공개합니다.",
+      "국내외 채용 공고 20건의 요구 기술과 연봉 범위를 표로 정리합니다."
+    ],
+    "resources": [
+      {
+        "title": "The Rise of the AI Engineer",
+        "url": "https://www.latent.space/p/ai-engineer",
+        "lang": "en",
+        "kind": "글"
+      },
+      {
+        "title": "Building A Generative AI Platform",
+        "url": "https://huyenchip.com/2024/07/25/genai-platform.html",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  }
+}

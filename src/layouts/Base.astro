@@ -2,10 +2,9 @@
 interface Props {
   title: string;
   description: string;
-  current?: 'posts' | 'roadmap';
 }
 
-const { title, description, current } = Astro.props;
+const { title, description } = Astro.props;
 const siteName = 'hahmjuntae';
 const fullTitle = title === siteName ? siteName : `${title} · ${siteName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -23,7 +22,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <link rel="alternate" type="application/rss+xml" title={siteName} href="/rss.xml" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script is:inline>
       (function () {
@@ -40,7 +38,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="stylesheet" href="/ds/ds-pages.css" />
     <style is:global>
       .site-main { padding-top: var(--header-height); min-height: 100vh; background: var(--page-bg); }
-      .site-nav { display: flex; align-items: center; gap: 4px; }
       .site-footer { padding: 32px 16px 48px; border-top: 1px solid var(--color-border-subtle); color: var(--color-text-tertiary); font-size: 14px; line-height: 20px; text-align: center; }
       .site-footer a { color: var(--color-text-secondary); }
     </style>
@@ -50,10 +47,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <div class="ds-header__inner">
         <a class="ds-header__logo" href="/"><span class="ds-header__wordmark">{siteName}</span></a>
         <div class="ds-header__actions">
-          <nav class="site-nav" aria-label="주 메뉴">
-            <a class="ds-btn" data-variant="ghost" data-size="sm" href="/" aria-current={current === 'posts' ? 'page' : undefined} data-selected={current === 'posts' ? '' : undefined}>글</a>
-            <a class="ds-btn" data-variant="ghost" data-size="sm" href="/roadmap/" aria-current={current === 'roadmap' ? 'page' : undefined} data-selected={current === 'roadmap' ? '' : undefined}>로드맵</a>
-          </nav>
           <button type="button" class="ds-header__icon-btn" data-theme-toggle aria-label="테마 전환">
             <svg data-icon="sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="3" /><path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" stroke-linecap="round" /></svg>
             <svg data-icon="moon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7Z" stroke-linejoin="round" /></svg>
@@ -64,7 +57,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <main class="site-main">
       <slot />
       <footer class="site-footer">
-        <a href="/rss.xml">RSS</a> · <a href="https://github.com/hahmjuntae">GitHub</a>
+        <a href="https://github.com/hahmjuntae/hahmjuntae.github.io">GitHub</a>
       </footer>
     </main>
     <script is:inline>

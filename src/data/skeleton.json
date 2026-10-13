@@ -1,0 +1,1114 @@
+{
+  "parts": [
+    {
+      "id": "fe",
+      "title": "Front-end",
+      "hours": 40
+    },
+    {
+      "id": "be",
+      "title": "Back-end",
+      "hours": 235
+    },
+    {
+      "id": "ai",
+      "title": "AI Engineering",
+      "hours": 505
+    }
+  ],
+  "sections": [
+    {
+      "id": "internet",
+      "part": "fe",
+      "title": "인터넷",
+      "refs": [
+        "frontend"
+      ],
+      "nodes": [
+        [
+          "internet-basics",
+          "How the Internet Works",
+          "pending"
+        ],
+        [
+          "http",
+          "HTTP",
+          "pending"
+        ],
+        [
+          "dns-domain",
+          "DNS, Domain",
+          "pending"
+        ],
+        [
+          "hosting",
+          "Hosting",
+          "pending"
+        ],
+        [
+          "browsers",
+          "How Browsers Work",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "html",
+      "part": "fe",
+      "title": "HTML",
+      "refs": [
+        "html",
+        "frontend"
+      ],
+      "nodes": [
+        [
+          "html-basics",
+          "HTML Basics",
+          "learning"
+        ],
+        [
+          "semantic-html",
+          "Semantic HTML",
+          "pending"
+        ],
+        [
+          "forms",
+          "Forms, Validation",
+          "learning"
+        ],
+        [
+          "accessibility",
+          "Accessibility",
+          "pending"
+        ],
+        [
+          "seo",
+          "SEO Basics",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "css",
+      "part": "fe",
+      "title": "CSS",
+      "refs": [
+        "css",
+        "frontend"
+      ],
+      "nodes": [
+        [
+          "css-basics",
+          "CSS Basics",
+          "learning"
+        ],
+        [
+          "css-layout",
+          "Flexbox, Grid",
+          "learning"
+        ],
+        [
+          "responsive",
+          "Responsive Design",
+          "learning"
+        ],
+        [
+          "tailwind",
+          "Tailwind CSS",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "javascript",
+      "part": "fe",
+      "title": "JavaScript",
+      "refs": [
+        "javascript",
+        "frontend"
+      ],
+      "nodes": [
+        [
+          "js-basics",
+          "JavaScript Basics",
+          "learning"
+        ],
+        [
+          "dom",
+          "DOM",
+          "learning"
+        ],
+        [
+          "async-js",
+          "Async, Promise",
+          "learning"
+        ],
+        [
+          "fetch",
+          "Fetch API",
+          "learning"
+        ]
+      ]
+    },
+    {
+      "id": "git",
+      "part": "fe",
+      "title": "버전 관리",
+      "refs": [
+        "git-github"
+      ],
+      "nodes": [
+        [
+          "git",
+          "Git",
+          "learning"
+        ],
+        [
+          "github",
+          "GitHub",
+          "learning"
+        ]
+      ]
+    },
+    {
+      "id": "package-managers",
+      "part": "fe",
+      "title": "패키지 매니저",
+      "refs": [
+        "frontend"
+      ],
+      "nodes": [
+        [
+          "npm",
+          "npm",
+          "learning"
+        ],
+        [
+          "pnpm",
+          "pnpm",
+          "learning"
+        ]
+      ]
+    },
+    {
+      "id": "frameworks",
+      "part": "fe",
+      "title": "프레임워크",
+      "refs": [
+        "react",
+        "vue",
+        "typescript"
+      ],
+      "nodes": [
+        [
+          "typescript",
+          "TypeScript",
+          "learning"
+        ],
+        [
+          "react",
+          "React",
+          "learning"
+        ],
+        [
+          "vue",
+          "Vue.js",
+          "learning"
+        ]
+      ]
+    },
+    {
+      "id": "fe-tooling",
+      "part": "fe",
+      "title": "빌드와 테스트",
+      "refs": [
+        "frontend"
+      ],
+      "nodes": [
+        [
+          "vite",
+          "Vite",
+          "learning"
+        ],
+        [
+          "lint",
+          "ESLint, Prettier",
+          "learning"
+        ],
+        [
+          "vitest",
+          "Vitest",
+          "pending"
+        ],
+        [
+          "playwright",
+          "Playwright",
+          "learning"
+        ]
+      ]
+    },
+    {
+      "id": "rendering",
+      "part": "fe",
+      "title": "렌더링 전략",
+      "refs": [
+        "nextjs",
+        "frontend"
+      ],
+      "nodes": [
+        [
+          "ssr",
+          "SSR, Next.js",
+          "pending"
+        ],
+        [
+          "ssg",
+          "SSG, Astro",
+          "learning"
+        ]
+      ]
+    },
+    {
+      "id": "web-platform",
+      "part": "fe",
+      "title": "성능과 브라우저 API",
+      "refs": [
+        "frontend"
+      ],
+      "nodes": [
+        [
+          "web-vitals",
+          "Core Web Vitals",
+          "pending"
+        ],
+        [
+          "web-storage",
+          "Web Storage",
+          "pending"
+        ],
+        [
+          "pwa",
+          "PWA, Service Worker",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "python",
+      "part": "be",
+      "title": "Python",
+      "refs": [
+        "python",
+        "backend"
+      ],
+      "nodes": [
+        [
+          "python-basics",
+          "Python Basics",
+          "pending"
+        ],
+        [
+          "python-typing",
+          "Type Hints",
+          "pending"
+        ],
+        [
+          "python-async",
+          "asyncio",
+          "pending"
+        ],
+        [
+          "python-env",
+          "uv, Virtual Env",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "databases",
+      "part": "be",
+      "title": "관계형 데이터베이스",
+      "refs": [
+        "sql",
+        "postgresql-dba",
+        "backend"
+      ],
+      "nodes": [
+        [
+          "sql-basics",
+          "SQL",
+          "learning"
+        ],
+        [
+          "postgresql",
+          "PostgreSQL",
+          "pending"
+        ],
+        [
+          "transactions",
+          "Transactions, ACID",
+          "pending"
+        ],
+        [
+          "db-indexes",
+          "Indexes",
+          "pending"
+        ],
+        [
+          "orm",
+          "ORM, Migrations",
+          "pending"
+        ],
+        [
+          "n-plus-one",
+          "N+1 Problem",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "apis",
+      "part": "be",
+      "title": "API",
+      "refs": [
+        "api-design",
+        "backend"
+      ],
+      "nodes": [
+        [
+          "rest",
+          "REST",
+          "learning"
+        ],
+        [
+          "openapi",
+          "OpenAPI",
+          "pending"
+        ],
+        [
+          "fastapi",
+          "FastAPI",
+          "pending"
+        ],
+        [
+          "graphql-grpc",
+          "GraphQL, gRPC",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "auth-security",
+      "part": "be",
+      "title": "인증과 보안",
+      "refs": [
+        "backend",
+        "cyber-security"
+      ],
+      "nodes": [
+        [
+          "session-cookie",
+          "Session, Cookie",
+          "pending"
+        ],
+        [
+          "jwt",
+          "JWT",
+          "pending"
+        ],
+        [
+          "oauth",
+          "OAuth 2.0, OIDC",
+          "pending"
+        ],
+        [
+          "web-security",
+          "HTTPS, CORS, CSP",
+          "pending"
+        ],
+        [
+          "owasp",
+          "OWASP Top 10",
+          "pending"
+        ],
+        [
+          "hashing",
+          "Password Hashing",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "cache-messaging",
+      "part": "be",
+      "title": "캐시와 메시지",
+      "refs": [
+        "redis",
+        "backend"
+      ],
+      "nodes": [
+        [
+          "http-caching",
+          "HTTP Caching",
+          "pending"
+        ],
+        [
+          "redis",
+          "Redis",
+          "pending"
+        ],
+        [
+          "message-queue",
+          "Message Queue",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "realtime",
+      "part": "be",
+      "title": "실시간 통신",
+      "refs": [
+        "backend"
+      ],
+      "nodes": [
+        [
+          "sse",
+          "Server-Sent Events",
+          "learning"
+        ],
+        [
+          "websockets",
+          "WebSockets",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "be-testing",
+      "part": "be",
+      "title": "백엔드 테스트",
+      "refs": [
+        "backend",
+        "qa"
+      ],
+      "nodes": [
+        [
+          "pytest",
+          "pytest",
+          "pending"
+        ],
+        [
+          "integration-testing",
+          "Integration Testing",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "infra",
+      "part": "be",
+      "title": "인프라",
+      "refs": [
+        "devops",
+        "docker",
+        "linux"
+      ],
+      "nodes": [
+        [
+          "linux",
+          "Linux, Shell",
+          "learning"
+        ],
+        [
+          "docker",
+          "Docker",
+          "pending"
+        ],
+        [
+          "kubernetes",
+          "Kubernetes, Helm",
+          "pending"
+        ],
+        [
+          "ci-cd",
+          "CI/CD",
+          "learning"
+        ],
+        [
+          "web-server",
+          "Nginx, Reverse Proxy",
+          "pending"
+        ],
+        [
+          "cloud",
+          "Cloud Basics",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "architecture",
+      "part": "be",
+      "title": "아키텍처와 확장",
+      "refs": [
+        "system-design",
+        "software-design-architecture",
+        "backend"
+      ],
+      "nodes": [
+        [
+          "twelve-factor",
+          "Twelve-Factor App",
+          "pending"
+        ],
+        [
+          "monolith-msa",
+          "Monolith, Microservices",
+          "pending"
+        ],
+        [
+          "serverless",
+          "Serverless",
+          "pending"
+        ],
+        [
+          "scaling",
+          "Scaling, Replication",
+          "pending"
+        ],
+        [
+          "full-text-search",
+          "Full-text Search",
+          "pending"
+        ],
+        [
+          "system-design",
+          "System Design",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "cs",
+      "part": "be",
+      "title": "CS 기초",
+      "refs": [
+        "datastructures-and-algorithms",
+        "computer-science"
+      ],
+      "nodes": [
+        [
+          "data-structures",
+          "Data Structures",
+          "pending"
+        ],
+        [
+          "algorithms",
+          "Algorithms, Big-O",
+          "pending"
+        ],
+        [
+          "coding-interview",
+          "Coding Interview",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "llm-basics",
+      "part": "ai",
+      "title": "LLM 기초",
+      "refs": [
+        "ai-engineer"
+      ],
+      "nodes": [
+        [
+          "how-llms-work",
+          "How LLMs Work, Transformer",
+          "pending"
+        ],
+        [
+          "tokens",
+          "Tokens, Context Window",
+          "learning"
+        ],
+        [
+          "sampling",
+          "Temperature, Top-p",
+          "pending"
+        ],
+        [
+          "model-types",
+          "Open vs Closed Models",
+          "pending"
+        ],
+        [
+          "reasoning-models",
+          "Reasoning Models",
+          "pending"
+        ],
+        [
+          "model-choice",
+          "Choosing a Model, Pricing",
+          "done"
+        ]
+      ]
+    },
+    {
+      "id": "model-api",
+      "part": "ai",
+      "title": "모델 API",
+      "refs": [
+        "ai-engineer"
+      ],
+      "nodes": [
+        [
+          "messages-api",
+          "Messages API",
+          "learning"
+        ],
+        [
+          "streaming",
+          "Streaming",
+          "done"
+        ],
+        [
+          "structured-output",
+          "Structured Output",
+          "pending"
+        ],
+        [
+          "prompt-caching",
+          "Prompt Caching",
+          "pending"
+        ],
+        [
+          "multimodal",
+          "Vision, Multimodal",
+          "pending"
+        ],
+        [
+          "voice-agents",
+          "Voice Agents, Realtime API",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "prompting",
+      "part": "ai",
+      "title": "프롬프트와 컨텍스트",
+      "refs": [
+        "prompt-engineering",
+        "ai-engineer"
+      ],
+      "nodes": [
+        [
+          "prompt-engineering",
+          "Prompt Engineering",
+          "learning"
+        ],
+        [
+          "system-prompt",
+          "System Prompting",
+          "done"
+        ],
+        [
+          "few-shot-cot",
+          "Few-shot, CoT",
+          "learning"
+        ],
+        [
+          "context-engineering",
+          "Context Engineering",
+          "done"
+        ],
+        [
+          "context-compaction",
+          "Compaction, Isolation",
+          "done"
+        ]
+      ]
+    },
+    {
+      "id": "agents",
+      "part": "ai",
+      "title": "에이전트",
+      "refs": [
+        "ai-agents",
+        "claude-code"
+      ],
+      "nodes": [
+        [
+          "agent-loop",
+          "Agent Loop",
+          "learning"
+        ],
+        [
+          "tool-calling",
+          "Tool Calling",
+          "done"
+        ],
+        [
+          "agent-patterns",
+          "ReAct, Planner-Executor",
+          "pending"
+        ],
+        [
+          "multi-agents",
+          "Multi-agents",
+          "done"
+        ],
+        [
+          "agent-memory",
+          "Agent Memory",
+          "pending"
+        ],
+        [
+          "mcp",
+          "MCP",
+          "learning"
+        ],
+        [
+          "mcp-server",
+          "Building an MCP Server",
+          "pending"
+        ],
+        [
+          "agent-sdk",
+          "Agent SDK",
+          "pending"
+        ],
+        [
+          "langgraph",
+          "LangChain, LangGraph",
+          "pending"
+        ],
+        [
+          "coding-agents",
+          "Coding Agents, Hooks",
+          "done"
+        ],
+        [
+          "computer-use",
+          "Computer Use, Browser Agents",
+          "pending"
+        ],
+        [
+          "generative-ui",
+          "Generative UI, MCP Apps",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "rag",
+      "part": "ai",
+      "title": "임베딩과 RAG",
+      "refs": [
+        "ai-engineer"
+      ],
+      "nodes": [
+        [
+          "embeddings",
+          "Embeddings",
+          "pending"
+        ],
+        [
+          "vector-db",
+          "Vector DB, pgvector",
+          "pending"
+        ],
+        [
+          "document-parsing",
+          "Document Parsing, OCR",
+          "pending"
+        ],
+        [
+          "chunking",
+          "Chunking",
+          "pending"
+        ],
+        [
+          "hybrid-search",
+          "Hybrid Search, Rerank",
+          "pending"
+        ],
+        [
+          "advanced-rag",
+          "Contextual, Agentic RAG",
+          "pending"
+        ],
+        [
+          "query-construction",
+          "Text-to-SQL, Query Construction",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "knowledge-graph",
+      "part": "ai",
+      "title": "지식 그래프와 온톨로지",
+      "refs": [
+        "ai-engineer"
+      ],
+      "nodes": [
+        [
+          "knowledge-graph",
+          "Knowledge Graph",
+          "pending"
+        ],
+        [
+          "ontology",
+          "Ontology Modeling",
+          "pending"
+        ],
+        [
+          "graph-db",
+          "Graph DB, Cypher",
+          "pending"
+        ],
+        [
+          "graphrag",
+          "GraphRAG",
+          "pending"
+        ],
+        [
+          "ontology-agents",
+          "Ontology-based Agents",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "evals",
+      "part": "ai",
+      "title": "Evals",
+      "refs": [
+        "ai-engineer"
+      ],
+      "nodes": [
+        [
+          "error-analysis",
+          "Error Analysis",
+          "pending"
+        ],
+        [
+          "deterministic-evals",
+          "Deterministic Evals",
+          "learning"
+        ],
+        [
+          "llm-judge",
+          "LLM-as-a-Judge",
+          "pending"
+        ],
+        [
+          "agent-evals",
+          "Agent Evals, pass^k",
+          "pending"
+        ],
+        [
+          "rag-eval",
+          "RAG Evaluation",
+          "pending"
+        ],
+        [
+          "eval-ci",
+          "Regression Evals in CI",
+          "pending"
+        ],
+        [
+          "model-benchmarks",
+          "lm-eval-harness, Benchmarks",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "llmops",
+      "part": "ai",
+      "title": "관측성과 운영",
+      "refs": [
+        "mlops",
+        "ai-engineer"
+      ],
+      "nodes": [
+        [
+          "tracing",
+          "Tracing, Logging",
+          "learning"
+        ],
+        [
+          "cost-latency",
+          "Cost, Latency",
+          "learning"
+        ],
+        [
+          "model-gateway",
+          "Model Gateway, Fallback",
+          "pending"
+        ],
+        [
+          "durable-execution",
+          "Durable Execution, Workflows",
+          "pending"
+        ],
+        [
+          "user-feedback",
+          "User Feedback Loop",
+          "pending"
+        ],
+        [
+          "production-monitoring",
+          "Production Monitoring",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "ai-security",
+      "part": "ai",
+      "title": "AI 보안과 안전",
+      "refs": [
+        "ai-red-teaming",
+        "ai-agents"
+      ],
+      "nodes": [
+        [
+          "prompt-injection",
+          "Prompt Injection",
+          "pending"
+        ],
+        [
+          "tool-permissions",
+          "Tool Sandboxing, Permissions",
+          "pending"
+        ],
+        [
+          "pii",
+          "PII, Data Privacy",
+          "pending"
+        ],
+        [
+          "guardrails",
+          "Guardrails",
+          "pending"
+        ],
+        [
+          "red-teaming",
+          "Red Teaming",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "model-serving",
+      "part": "ai",
+      "title": "오픈 모델 서빙",
+      "refs": [
+        "inference-engineering",
+        "mlops"
+      ],
+      "nodes": [
+        [
+          "local-models",
+          "Ollama, Local Models",
+          "pending"
+        ],
+        [
+          "hf-transformers",
+          "Hugging Face Transformers",
+          "pending"
+        ],
+        [
+          "quantization",
+          "Quantization, GGUF",
+          "pending"
+        ],
+        [
+          "inference-optimization",
+          "KV Cache, PagedAttention",
+          "pending"
+        ],
+        [
+          "vllm",
+          "vLLM, Inference Serving",
+          "pending"
+        ],
+        [
+          "serving-benchmark",
+          "Throughput, TTFT Benchmark",
+          "pending"
+        ],
+        [
+          "gpu-deploy",
+          "GPU Deployment",
+          "pending"
+        ],
+        [
+          "lora-serving",
+          "Multi-LoRA Serving",
+          "pending"
+        ],
+        [
+          "demo-deploy",
+          "Gradio, HF Spaces",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "fine-tuning-sec",
+      "part": "ai",
+      "title": "파인튜닝",
+      "refs": [
+        "machine-learning",
+        "mlops"
+      ],
+      "nodes": [
+        [
+          "pytorch-basics",
+          "PyTorch, Training Loop",
+          "pending"
+        ],
+        [
+          "finetune-datasets",
+          "Chat Templates, Synthetic Data",
+          "pending"
+        ],
+        [
+          "fine-tuning",
+          "Fine-tuning, LoRA",
+          "pending"
+        ],
+        [
+          "preference-alignment",
+          "DPO, GRPO",
+          "pending"
+        ],
+        [
+          "distillation",
+          "Distillation, Small Models",
+          "pending"
+        ],
+        [
+          "experiment-tracking",
+          "W&B, MLflow",
+          "pending"
+        ],
+        [
+          "pretraining",
+          "Pretraining",
+          "skip"
+        ]
+      ]
+    }
+  ],
+  "end": [
+    "applied-ai-engineer",
+    "Applied AI Engineer"
+  ]
+}

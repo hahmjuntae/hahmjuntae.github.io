@@ -1,31 +1,32 @@
 # hahmjuntae.github.io
 
-Applied AI Engineer 전환 과정을 기록하는 개인 블로그입니다. Astro 7 정적 사이트이고 GitHub Pages(`https://hahmjuntae.github.io`)로 배포합니다.
+Front-end 에서 시작해 Applied AI Engineer 로 끝나는 학습 로드맵 사이트입니다. Astro 7 정적 페이지 하나이고 GitHub Pages(`https://hahmjuntae.github.io`)로 배포합니다.
 
 ## 구조
 
 | 경로 | 내용 |
 |---|---|
-| `src/content/posts/*.md` | 글. frontmatter 는 `title` `description` `date` `topic` `nodes` `draft` |
-| `src/data/roadmap.ts` | 로드맵 노드와 상태(`done` `doing` `gap` `skip`), 근거, 다음 할 일, 단계 |
-| `src/pages/roadmap.astro` | roadmap.sh 형식 노드 맵과 노드 상세 모달 |
-| `src/layouts/Base.astro` | 헤더, 테마 초기화, 테마 토글 |
+| `src/data/skeleton.json` | 파트(시간 배분 `hours`), 섹션, 노드 id, 라벨, 기본 상태(`pending` `learning` `done` `skip`), 섹션별 참고 roadmap.sh 로드맵 id |
+| `src/data/content/*.json` | 노드별 `goal` `todo` `resources`. `fe` `be` `ai` 파트별 파일, `extra` `future` 는 추가 노드 |
+| `src/data/roadmap.ts` | 뼈대와 콘텐츠 병합. 콘텐츠가 빠진 노드가 있으면 빌드 실패 |
+| `src/pages/index.astro` | 노드 맵, 노드 상세 모달, 진행 상태 버튼, 진행률 |
 | `public/ds/` | `~/.claude/design-system` 사본. `npm run ds:sync` 로 갱신 |
-| `scripts/verify.mjs` | Chrome 으로 390px, 1280px, 라이트, 다크 검사. `.verify/` 에 스크린샷 |
+| `scripts/verify.mjs` | Chrome 으로 390px, 1280px, 라이트, 다크, 모달, 상태 저장 검사. `.verify/` 에 스크린샷 |
 
 ## 작업
 
 | 요청 | 할 일 |
 |---|---|
-| 새 글 | `src/content/posts/<slug>.md` 추가. 다룬 로드맵 노드 id 를 `nodes` 에 넣음 |
-| 노드 완료 | `src/data/roadmap.ts` 의 `status` 와 `evidence` 수정, `updatedAt` 갱신 |
-| 디자인 갱신 | `npm run ds:sync` 후 `npm run check` |
+| 노드 추가 | `skeleton.json` 에 노드 추가, 같은 id 로 `content/*.json` 에 콘텐츠 추가 |
+| 기본 상태 변경 | `skeleton.json` 의 세 번째 값 수정. 방문자 브라우저의 진행 기록은 `localStorage` 의 `roadmap-progress-v1` |
+| 무료 강의 교체 | URL 을 바꾼 뒤 200 응답 확인 |
 
 ## 규칙
 
 - 디자인은 `ds.css`, `ds-pages.css` 토큰과 클래스만 씁니다. 페이지 전용 스타일도 토큰으로만 값을 지정합니다.
-- 글 문체는 `~/.claude/DOC-STYLE.md` 를 따릅니다.
-- 회사 이름, 사내 저장소 이름, 사내 수치는 글에 쓰지 않습니다. 사내 사례는 회사 승인 후 일반화해서 씁니다.
+- 문구는 `~/.claude/DOC-STYLE.md` 를 따릅니다. 개인 이력(경력, 회사, 사내 업무)은 쓰지 않습니다.
+- roadmap.sh 콘텐츠(설명, 자료 목록, 그림)는 라이선스상 재게시할 수 없습니다. 주제 구성만 참고하고 roadmap.sh 는 링크로만 연결합니다.
+- 무료 강의는 무료 자료만 넣고 한국어 자료를 우선합니다.
 
 ## 완료 기준
 

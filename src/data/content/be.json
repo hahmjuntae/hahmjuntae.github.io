@@ -1,0 +1,1079 @@
+{
+  "python-basics": {
+    "goal": "리스트, 딕셔너리, 함수, 클래스로 JSON 파일을 읽어 집계하는 스크립트를 작성할 수 있습니다.",
+    "todo": [
+      "점프 투 파이썬 2장부터 5장까지 읽고 장마다 예제 코드를 실행합니다.",
+      "JSONL 로그 파일을 읽어 모델별 토큰 수를 합산하는 스크립트를 만듭니다.",
+      "프롬프트 템플릿을 클래스 하나로 표현하고 변수 치환 메서드를 작성합니다."
+    ],
+    "resources": [
+      {
+        "title": "점프 투 파이썬",
+        "url": "https://wikidocs.net/book/1",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "파이썬 자습서",
+        "url": "https://docs.python.org/ko/3/tutorial/",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "python-typing": {
+    "goal": "함수와 Pydantic 모델에 타입 힌트를 달고 mypy 검사를 오류 0개로 통과할 수 있습니다.",
+    "todo": [
+      "FastAPI 문서의 파이썬 타입 소개 예제를 모두 실행합니다.",
+      "LLM 응답 JSON 을 Pydantic 모델 3개로 정의하고 잘못된 입력의 ValidationError 를 확인합니다.",
+      "기존 스크립트에 타입 힌트를 추가하고 mypy --strict 오류를 0개로 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "파이썬 타입 소개",
+        "url": "https://fastapi.tiangolo.com/ko/python-types/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Pydantic Models",
+        "url": "https://pydantic.dev/docs/validation/latest/concepts/models/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "mypy Getting started",
+        "url": "https://mypy.readthedocs.io/en/stable/getting_started.html",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "python-async": {
+    "goal": "async/await 로 외부 API 호출 여러 개를 동시에 실행하고 시간 제한을 걸 수 있습니다.",
+    "todo": [
+      "httpx.AsyncClient 와 asyncio.gather 로 URL 10개를 호출하고 순차 호출과 시간을 비교합니다.",
+      "asyncio.Semaphore 로 동시 요청을 3개로 제한하고 asyncio.timeout 으로 5초 상한을 겁니다.",
+      "asyncio.Queue 로 생산자 1개와 소비자 3개를 둔 작업 큐를 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "동시성과 async / await",
+        "url": "https://fastapi.tiangolo.com/ko/async/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "asyncio 비동기 I/O",
+        "url": "https://docs.python.org/ko/3/library/asyncio.html",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "python-env": {
+    "goal": "uv 로 Python 버전과 의존성을 고정한 프로젝트를 다른 머신에서 그대로 재현할 수 있습니다.",
+    "todo": [
+      "uv init 으로 프로젝트를 만들고 uv add fastapi 로 의존성을 추가합니다.",
+      "uv add --dev pytest ruff 로 개발 의존성을 분리합니다.",
+      "uv.lock 을 커밋하고 새 디렉터리에서 uv sync 로 같은 환경을 재현합니다."
+    ],
+    "resources": [
+      {
+        "title": "가상 환경 및 패키지",
+        "url": "https://docs.python.org/ko/3/tutorial/venv.html",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "가상 환경",
+        "url": "https://fastapi.tiangolo.com/ko/virtual-environments/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "uv Working on projects",
+        "url": "https://docs.astral.sh/uv/guides/projects/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "sql-basics": {
+    "goal": "JOIN, GROUP BY, 서브쿼리를 써서 두 테이블의 집계 결과를 SQL 한 문장으로 구할 수 있습니다.",
+    "todo": [
+      "SQLBolt 레슨 1부터 18까지 풀고 연습 문제를 전부 통과합니다.",
+      "프로그래머스 SQL 고득점 Kit 에서 GROUP BY 와 JOIN 문제를 각 5개 풉니다."
+    ],
+    "resources": [
+      {
+        "title": "SQL 고득점 Kit",
+        "url": "https://school.programmers.co.kr/learn/challenges?tab=sql_practice_kit",
+        "lang": "ko",
+        "kind": "실습"
+      },
+      {
+        "title": "SQLBolt",
+        "url": "https://sqlbolt.com/",
+        "lang": "en",
+        "kind": "실습"
+      }
+    ]
+  },
+  "postgresql": {
+    "goal": "Docker 로 PostgreSQL 을 띄우고 psql 로 스키마, 제약 조건, 데이터를 다룰 수 있습니다.",
+    "todo": [
+      "docker run 으로 postgres 컨테이너를 띄우고 psql 로 접속합니다.",
+      "공식 튜토리얼 1장부터 3장까지의 예제를 psql 에서 실행합니다.",
+      "documents, chunks 테이블을 만들고 PRIMARY KEY, FOREIGN KEY, NOT NULL 제약을 겁니다."
+    ],
+    "resources": [
+      {
+        "title": "PostgreSQL 자습서",
+        "url": "https://postgresql.kr/docs/current/tutorial.html",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "PostgreSQL Tutorial",
+        "url": "https://www.postgresql.org/docs/current/tutorial.html",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "postgres 공식 이미지",
+        "url": "https://hub.docker.com/_/postgres",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "transactions": {
+    "goal": "격리 수준별 이상 현상을 psql 세션 2개로 재현하고 원인을 설명할 수 있습니다.",
+    "todo": [
+      "psql 세션 2개를 열고 BEGIN, COMMIT, ROLLBACK 결과를 비교합니다.",
+      "READ COMMITTED 와 REPEATABLE READ 에서 같은 조회를 실행해 결과 차이를 기록합니다.",
+      "SELECT FOR UPDATE 로 사용량 크레딧 동시 차감 시 음수 잔액을 막습니다."
+    ],
+    "resources": [
+      {
+        "title": "트랜잭션",
+        "url": "https://postgresql.kr/docs/current/tutorial-transactions.html",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Transaction Isolation",
+        "url": "https://www.postgresql.org/docs/current/transaction-iso.html",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "db-indexes": {
+    "goal": "EXPLAIN ANALYZE 로 실행 계획을 읽고 인덱스 추가 전후의 질의 시간을 비교할 수 있습니다.",
+    "todo": [
+      "generate_series 로 100만 행 테이블을 만들고 EXPLAIN ANALYZE 결과를 저장합니다.",
+      "단일, 복합 B-tree 인덱스를 만들고 Seq Scan 이 Index Scan 으로 바뀌는지 확인합니다.",
+      "Use The Index, Luke 1장과 2장을 읽고 복합 인덱스 컬럼 순서를 다시 정합니다."
+    ],
+    "resources": [
+      {
+        "title": "Use The Index, Luke",
+        "url": "https://use-the-index-luke.com/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "PostgreSQL Indexes",
+        "url": "https://www.postgresql.org/docs/current/indexes.html",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Using EXPLAIN",
+        "url": "https://www.postgresql.org/docs/current/using-explain.html",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "orm": {
+    "goal": "SQLAlchemy 모델과 Alembic 마이그레이션으로 스키마 변경을 버전 관리할 수 있습니다.",
+    "todo": [
+      "FastAPI 문서의 SQL 데이터베이스 장을 따라 SQLModel 로 CRUD 를 만듭니다.",
+      "alembic revision --autogenerate 로 컬럼 추가 마이그레이션 파일을 만듭니다.",
+      "alembic upgrade head 와 downgrade -1 을 실행해 스키마가 오가는지 확인합니다."
+    ],
+    "resources": [
+      {
+        "title": "SQL (관계형) 데이터베이스",
+        "url": "https://fastapi.tiangolo.com/ko/tutorial/sql-databases/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "SQLAlchemy Unified Tutorial",
+        "url": "https://docs.sqlalchemy.org/en/20/tutorial/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Alembic Tutorial",
+        "url": "https://alembic.sqlalchemy.org/en/latest/tutorial.html",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "n-plus-one": {
+    "goal": "ORM 질의 로그에서 N+1 을 찾아 eager loading 으로 질의 수를 고정할 수 있습니다.",
+    "todo": [
+      "echo=True 로 문서 10건과 각 청크를 조회하고 실행된 SELECT 수를 셉니다.",
+      "selectinload 와 joinedload 를 각각 적용해 질의 수와 응답 시간을 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "Relationship Loading Techniques",
+        "url": "https://docs.sqlalchemy.org/en/20/orm/queryguide/relationships.html",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Working with ORM Related Objects",
+        "url": "https://docs.sqlalchemy.org/en/20/tutorial/orm_related_objects.html",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "rest": {
+    "goal": "리소스 URL, HTTP 메서드, 상태 코드 규칙에 맞는 REST API 를 설계할 수 있습니다.",
+    "todo": [
+      "Web API 디자인 모범 사례를 읽고 설계 점검 항목 10개를 적습니다.",
+      "프롬프트 관리 API 엔드포인트 6개를 메서드, 경로, 상태 코드 표로 설계합니다."
+    ],
+    "resources": [
+      {
+        "title": "Web API 디자인 모범 사례",
+        "url": "https://learn.microsoft.com/ko-kr/azure/architecture/best-practices/api-design",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "HTTP 상태 코드",
+        "url": "https://developer.mozilla.org/ko/docs/Web/HTTP/Reference/Status",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "RESTful API란",
+        "url": "https://aws.amazon.com/ko/what-is/restful-api/",
+        "lang": "ko",
+        "kind": "글"
+      }
+    ]
+  },
+  "openapi": {
+    "goal": "FastAPI 가 만든 OpenAPI 스키마로 TypeScript 클라이언트 타입을 생성할 수 있습니다.",
+    "todo": [
+      "FastAPI 앱의 /openapi.json 을 내려받아 paths 와 components 구조를 확인합니다.",
+      "엔드포인트마다 summary 와 response_model 을 채워 /docs 화면을 갱신합니다.",
+      "openapi-typescript 로 타입 파일을 생성하고 프론트엔드 fetch 코드에 적용합니다."
+    ],
+    "resources": [
+      {
+        "title": "SDK 생성하기",
+        "url": "https://fastapi.tiangolo.com/ko/advanced/generate-clients/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "OpenAPI Getting Started",
+        "url": "https://learn.openapis.org/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "OpenAPI TypeScript",
+        "url": "https://openapi-ts.dev/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "fastapi": {
+    "goal": "Pydantic 모델로 검증하는 CRUD API 를 FastAPI 로 만들고 OpenAPI 문서를 생성할 수 있습니다.",
+    "todo": [
+      "공식 자습서의 첫걸음부터 요청 본문까지 따라 합니다.",
+      "문서 CRUD API 를 만들고 /docs 에서 엔드포인트 4개를 호출합니다.",
+      "APIRouter 로 라우터를 나누고 Depends 로 DB 세션을 주입합니다."
+    ],
+    "resources": [
+      {
+        "title": "FastAPI 자습서",
+        "url": "https://fastapi.tiangolo.com/ko/tutorial/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "의존성",
+        "url": "https://fastapi.tiangolo.com/ko/tutorial/dependencies/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "더 큰 애플리케이션",
+        "url": "https://fastapi.tiangolo.com/ko/tutorial/bigger-applications/",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "graphql-grpc": {
+    "goal": "REST, GraphQL, gRPC 의 선택 기준을 설명하고 gRPC Python 예제를 실행할 수 있습니다.",
+    "todo": [
+      "GraphQL, gRPC 를 REST 와 비교한 글 2편을 읽고 선택 기준 표를 만듭니다.",
+      "gRPC Python 빠른 시작의 helloworld 예제에 메서드 1개를 추가해 호출합니다."
+    ],
+    "resources": [
+      {
+        "title": "GraphQL과 REST API 비교",
+        "url": "https://aws.amazon.com/ko/compare/the-difference-between-graphql-and-rest/",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "gRPC와 REST 비교",
+        "url": "https://aws.amazon.com/ko/compare/the-difference-between-grpc-and-rest/",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "gRPC Python Quick start",
+        "url": "https://grpc.io/docs/languages/python/quickstart/",
+        "lang": "en",
+        "kind": "실습"
+      }
+    ]
+  },
+  "session-cookie": {
+    "goal": "세션 쿠키 로그인을 구현하고 HttpOnly, Secure, SameSite 속성의 효과를 설명할 수 있습니다.",
+    "todo": [
+      "Set-Cookie 속성 6개의 의미와 기본값을 표로 만듭니다.",
+      "FastAPI 로 로그인, 로그아웃 엔드포인트를 만들고 세션 ID 를 PostgreSQL 에 저장합니다.",
+      "브라우저 개발자 도구에서 쿠키 속성과 만료 시각을 확인합니다."
+    ],
+    "resources": [
+      {
+        "title": "HTTP 쿠키",
+        "url": "https://developer.mozilla.org/ko/docs/Web/HTTP/Guides/Cookies",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Set-Cookie",
+        "url": "https://developer.mozilla.org/ko/docs/Web/HTTP/Reference/Headers/Set-Cookie",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Session Management Cheat Sheet",
+        "url": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "jwt": {
+    "goal": "JWT 서명 검증 원리를 설명하고 FastAPI 에 Bearer 토큰 인증을 구현할 수 있습니다.",
+    "todo": [
+      "jwt.io 디버거에 토큰을 넣어 header, payload, signature 를 분리합니다.",
+      "FastAPI 보안 자습서를 따라 토큰 발급과 검증 의존성을 만듭니다.",
+      "만료된 토큰과 변조된 토큰으로 요청해 401 응답을 확인합니다."
+    ],
+    "resources": [
+      {
+        "title": "OAuth2와 JWT Bearer 토큰",
+        "url": "https://fastapi.tiangolo.com/ko/tutorial/security/oauth2-jwt/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "토큰 기반 인증이란",
+        "url": "https://www.cloudflare.com/ko-kr/learning/access-management/token-based-authentication/",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "JSON Web Token Introduction",
+        "url": "https://www.jwt.io/introduction",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "oauth": {
+    "goal": "Authorization Code 흐름과 PKCE 를 설명하고 Google 로그인을 백엔드에 연동할 수 있습니다.",
+    "todo": [
+      "생활코딩 OAuth 2.0 수업을 듣고 역할 4개의 관계를 그림으로 그립니다.",
+      "Google OAuth 클라이언트를 등록하고 code 를 토큰으로 교환하는 콜백을 만듭니다.",
+      "ID 토큰의 iss, aud, exp 클레임을 검증하는 함수를 작성합니다."
+    ],
+    "resources": [
+      {
+        "title": "WEB2 OAuth 2.0",
+        "url": "https://opentutorials.org/course/3405",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "OAuth 2.0으로 Google API 액세스",
+        "url": "https://developers.google.com/identity/protocols/oauth2?hl=ko",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "How OpenID Connect Works",
+        "url": "https://openid.net/developers/how-connect-works/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "web-security": {
+    "goal": "CORS 오류의 원인을 응답 헤더로 진단하고 HTTPS, CSP 헤더를 설정할 수 있습니다.",
+    "todo": [
+      "다른 포트의 프론트엔드에서 FastAPI 를 호출해 CORS 오류를 재현합니다.",
+      "CORSMiddleware 에 허용 출처를 명시하고 preflight 응답 헤더를 확인합니다.",
+      "Content-Security-Policy 와 Strict-Transport-Security 헤더를 붙이는 미들웨어를 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "교차 출처 리소스 공유 (CORS)",
+        "url": "https://developer.mozilla.org/ko/docs/Web/HTTP/Guides/CORS",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "콘텐츠 보안 정책 (CSP)",
+        "url": "https://developer.mozilla.org/ko/docs/Web/HTTP/Guides/CSP",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "CORS (교차-출처 리소스 공유)",
+        "url": "https://fastapi.tiangolo.com/ko/tutorial/cors/",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "owasp": {
+    "goal": "OWASP Top 10 항목별 공격 원리를 설명하고 직접 만든 API 에서 취약점 3개를 점검할 수 있습니다.",
+    "todo": [
+      "OWASP Top 10 항목마다 FastAPI 에서의 대응 방법을 한 줄씩 적습니다.",
+      "PortSwigger Web Security Academy 의 SQL injection 실습 3개를 풉니다.",
+      "문자열 포맷으로 만든 SQL 질의를 찾아 파라미터 바인딩으로 바꿉니다."
+    ],
+    "resources": [
+      {
+        "title": "OWASP Top 10 설명",
+        "url": "https://www.cloudflare.com/ko-kr/learning/security/threats/owasp-top-10/",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "OWASP Top Ten",
+        "url": "https://owasp.org/www-project-top-ten/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Web Security Academy",
+        "url": "https://portswigger.net/web-security",
+        "lang": "en",
+        "kind": "실습"
+      }
+    ]
+  },
+  "hashing": {
+    "goal": "Argon2 로 비밀번호를 해싱해 저장하고 해싱과 암호화의 차이를 설명할 수 있습니다.",
+    "todo": [
+      "안전한 패스워드 저장 글을 읽고 salt 와 key stretching 의 역할을 두 줄로 적습니다.",
+      "pwdlib 로 같은 비밀번호를 두 번 해싱해 결과가 다른지 확인합니다.",
+      "로그인 성공 시 오래된 해시를 새 파라미터로 다시 해싱하는 로직을 추가합니다."
+    ],
+    "resources": [
+      {
+        "title": "안전한 패스워드 저장",
+        "url": "https://d2.naver.com/helloworld/318732",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "Password Storage Cheat Sheet",
+        "url": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "pwdlib",
+        "url": "https://frankie567.github.io/pwdlib/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "http-caching": {
+    "goal": "Cache-Control 과 ETag 헤더로 응답 캐시와 조건부 요청을 구현할 수 있습니다.",
+    "todo": [
+      "max-age, no-cache, no-store 의 동작 차이를 표로 만듭니다.",
+      "FastAPI 응답에 ETag 를 붙이고 If-None-Match 요청에 304 를 반환합니다.",
+      "curl -I 로 같은 URL 을 두 번 요청해 헤더 변화를 기록합니다."
+    ],
+    "resources": [
+      {
+        "title": "HTTP 캐싱",
+        "url": "https://developer.mozilla.org/ko/docs/Web/HTTP/Guides/Caching",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "HTTP 캐시로 불필요한 네트워크 요청 방지",
+        "url": "https://web.dev/articles/http-cache?hl=ko",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "Cache-Control",
+        "url": "https://developer.mozilla.org/ko/docs/Web/HTTP/Reference/Headers/Cache-Control",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "redis": {
+    "goal": "Redis 로 LLM 응답 캐시와 사용자별 요청 제한을 TTL 기반으로 구현할 수 있습니다.",
+    "todo": [
+      "Docker 로 Redis 를 띄우고 redis-cli 로 SET, GET, EXPIRE, INCR 을 실행합니다.",
+      "프롬프트 해시를 키로 LLM 응답을 1시간 동안 캐시하는 함수를 만듭니다.",
+      "INCR 와 EXPIRE 로 사용자별 분당 10회 요청 제한을 구현합니다."
+    ],
+    "resources": [
+      {
+        "title": "캐싱이란",
+        "url": "https://aws.amazon.com/ko/caching/",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "Redis Quick starts",
+        "url": "https://redis.io/docs/latest/develop/get-started/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "redis-py guide",
+        "url": "https://redis.io/docs/latest/develop/clients/redis-py/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "message-queue": {
+    "goal": "오래 걸리는 평가 작업을 메시지 큐로 API 요청과 분리하고 실패 시 재시도할 수 있습니다.",
+    "todo": [
+      "RabbitMQ Python 튜토리얼 1편과 2편을 따라 작업 큐를 실행합니다.",
+      "평가 요청 API 가 작업 ID 를 즉시 반환하고 워커가 결과를 DB 에 저장하게 만듭니다.",
+      "워커를 강제로 종료하고 메시지가 다른 워커에서 다시 처리되는지 확인합니다."
+    ],
+    "resources": [
+      {
+        "title": "메시지 대기열이란",
+        "url": "https://aws.amazon.com/ko/message-queue/",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "RabbitMQ Tutorials",
+        "url": "https://www.rabbitmq.com/tutorials",
+        "lang": "en",
+        "kind": "실습"
+      },
+      {
+        "title": "Redis Streams",
+        "url": "https://redis.io/docs/latest/develop/data-types/streams/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "sse": {
+    "goal": "FastAPI 에서 LLM 토큰을 SSE 로 스트리밍하고 브라우저에서 받아 화면에 출력할 수 있습니다.",
+    "todo": [
+      "1초마다 이벤트를 보내는 FastAPI SSE 엔드포인트를 만들고 EventSource 로 받습니다.",
+      "Claude 스트리밍 응답의 text delta 를 SSE 이벤트로 중계합니다.",
+      "클라이언트 연결이 끊기면 생성 작업을 중단하는 처리를 추가합니다."
+    ],
+    "resources": [
+      {
+        "title": "서버 전송 이벤트(SSE)",
+        "url": "https://fastapi.tiangolo.com/ko/tutorial/server-sent-events/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "서버 전송 이벤트 사용하기",
+        "url": "https://developer.mozilla.org/ko/docs/Web/API/Server-sent_events/Using_server-sent_events",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Claude Streaming Messages",
+        "url": "https://docs.claude.com/en/docs/build-with-claude/streaming",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "websockets": {
+    "goal": "FastAPI WebSocket 으로 양방향 메시지를 주고받고 SSE 와의 선택 기준을 설명할 수 있습니다.",
+    "todo": [
+      "FastAPI WebSockets 문서의 에코 예제를 실행합니다.",
+      "방 단위로 메시지를 브로드캐스트하는 연결 관리자 클래스를 만듭니다.",
+      "SSE 와 WebSocket 의 통신 방향, 재연결, 프록시 설정 차이를 표로 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "WebSockets",
+        "url": "https://fastapi.tiangolo.com/ko/advanced/websockets/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "WebSocket API",
+        "url": "https://developer.mozilla.org/ko/docs/Web/API/WebSockets_API",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "WebSocket 클라이언트 애플리케이션 작성하기",
+        "url": "https://developer.mozilla.org/ko/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "pytest": {
+    "goal": "pytest fixture 와 parametrize 로 FastAPI 엔드포인트 테스트를 작성할 수 있습니다.",
+    "todo": [
+      "pytest Get Started 를 따라 테스트 3개를 작성하고 실행합니다.",
+      "TestClient 로 CRUD 엔드포인트 4개의 정상 응답과 오류 응답을 검증합니다.",
+      "parametrize 로 입력 검증 실패 사례 5개를 테스트 함수 하나에 묶습니다."
+    ],
+    "resources": [
+      {
+        "title": "테스팅",
+        "url": "https://fastapi.tiangolo.com/ko/tutorial/testing/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "pytest Get Started",
+        "url": "https://docs.pytest.org/en/stable/getting-started.html",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "How to use fixtures",
+        "url": "https://docs.pytest.org/en/stable/how-to/fixtures.html",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "integration-testing": {
+    "goal": "실제 PostgreSQL 컨테이너로 API 와 DB 를 함께 검증하는 통합 테스트를 작성할 수 있습니다.",
+    "todo": [
+      "Testcontainers 가이드를 따라 테스트 세션마다 PostgreSQL 컨테이너를 띄웁니다.",
+      "트랜잭션 롤백 fixture 로 테스트 사이의 데이터를 격리합니다.",
+      "GitHub Actions 서비스 컨테이너로 같은 테스트를 CI 에서 실행합니다."
+    ],
+    "resources": [
+      {
+        "title": "PostgreSQL 서비스 컨테이너 만들기",
+        "url": "https://docs.github.com/ko/actions/tutorials/use-containerized-services/create-postgresql-service-containers",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Getting started with Testcontainers for Python",
+        "url": "https://testcontainers.com/guides/getting-started-with-testcontainers-for-python/",
+        "lang": "en",
+        "kind": "실습"
+      },
+      {
+        "title": "The Practical Test Pyramid",
+        "url": "https://martinfowler.com/articles/practical-test-pyramid.html",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "linux": {
+    "goal": "파이프, 권한, 프로세스 명령으로 서버 로그를 분석하는 셸 스크립트를 작성할 수 있습니다.",
+    "todo": [
+      "Missing Semester 한국어판 1강과 2강의 연습 문제를 풉니다.",
+      "grep, awk, sort, uniq 파이프로 접근 로그의 상태 코드별 건수를 셉니다.",
+      "서버를 백그라운드로 띄우고 ps, kill 로 종료하는 셸 스크립트를 작성합니다."
+    ],
+    "resources": [
+      {
+        "title": "생활코딩 리눅스",
+        "url": "https://opentutorials.org/course/2598",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "Missing Semester 한국어판",
+        "url": "https://missing-semester-kr.github.io/",
+        "lang": "ko",
+        "kind": "강의"
+      }
+    ]
+  },
+  "docker": {
+    "goal": "FastAPI 앱과 PostgreSQL 을 Dockerfile 과 Compose 로 묶어 명령 하나로 실행할 수 있습니다.",
+    "todo": [
+      "FastAPI 앱의 Dockerfile 을 작성하고 docker build, docker run 으로 실행합니다.",
+      "compose.yaml 에 api, db 서비스를 정의하고 docker compose up 으로 띄웁니다.",
+      "named volume 을 붙여 컨테이너를 지워도 DB 데이터가 남는지 확인합니다."
+    ],
+    "resources": [
+      {
+        "title": "생활코딩 Docker 입구 수업",
+        "url": "https://opentutorials.org/course/4781",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "컨테이너의 FastAPI",
+        "url": "https://fastapi.tiangolo.com/ko/deployment/docker/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Docker Get started",
+        "url": "https://docs.docker.com/get-started/",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "ci-cd": {
+    "goal": "GitHub Actions 로 푸시마다 린트와 테스트를 실행하고 통과한 커밋만 배포할 수 있습니다.",
+    "todo": [
+      "uv sync, ruff check, pytest 를 순서대로 실행하는 워크플로를 작성합니다.",
+      "main 브랜치에서 테스트 잡이 통과한 뒤에만 배포 잡이 돌도록 needs 를 설정합니다."
+    ],
+    "resources": [
+      {
+        "title": "GitHub Actions 빠른 시작",
+        "url": "https://docs.github.com/ko/actions/get-started/quickstart",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Python 빌드 및 테스트",
+        "url": "https://docs.github.com/ko/actions/tutorials/build-and-test-code/python",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "web-server": {
+    "goal": "Nginx 를 리버스 프록시로 두고 FastAPI 앞단의 라우팅과 SSE 버퍼링을 설정할 수 있습니다.",
+    "todo": [
+      "Compose 에 nginx 서비스를 추가해 /api 요청을 uvicorn 으로 전달합니다.",
+      "SSE 경로에 proxy_buffering off 를 설정하고 토큰이 바로 도착하는지 확인합니다.",
+      "X-Forwarded-For 헤더로 원래 클라이언트 IP 가 로그에 남는지 확인합니다."
+    ],
+    "resources": [
+      {
+        "title": "리버스 프록시란",
+        "url": "https://www.cloudflare.com/ko-kr/learning/cdn/glossary/reverse-proxy/",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "프록시 뒤에서 실행하기",
+        "url": "https://fastapi.tiangolo.com/ko/advanced/behind-a-proxy/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Nginx Beginner's Guide",
+        "url": "https://nginx.org/en/docs/beginners_guide.html",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "cloud": {
+    "goal": "IaaS, PaaS, SaaS 를 구분하고 컨테이너 앱을 관리형 서비스에 배포할 수 있습니다.",
+    "todo": [
+      "클라우드 서비스 모델 3가지의 예시 서비스를 하나씩 적습니다.",
+      "Cloud Run 빠른 시작을 따라 FastAPI 앱을 배포하고 공개 URL 로 호출합니다.",
+      "결제 계정에 월 예산 알림을 설정합니다."
+    ],
+    "resources": [
+      {
+        "title": "클라우드 컴퓨팅이란",
+        "url": "https://aws.amazon.com/ko/what-is-cloud-computing/",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "Cloud Run FastAPI 빠른 시작",
+        "url": "https://docs.cloud.google.com/run/docs/quickstarts/build-and-deploy/deploy-python-fastapi-service?hl=ko",
+        "lang": "ko",
+        "kind": "실습"
+      }
+    ]
+  },
+  "twelve-factor": {
+    "goal": "Twelve-Factor 원칙으로 설정, 로그, 프로세스를 점검하고 위반 항목을 고칠 수 있습니다.",
+    "todo": [
+      "FastAPI 프로젝트를 12개 항목으로 점검해 준수 여부 표를 만듭니다.",
+      "코드에 들어 있는 API 키를 pydantic-settings 환경 변수로 옮깁니다.",
+      "로그를 파일 대신 stdout 으로 출력하도록 바꿉니다."
+    ],
+    "resources": [
+      {
+        "title": "The Twelve-Factor App (한국어)",
+        "url": "https://12factor.net/ko/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "설정과 환경 변수",
+        "url": "https://fastapi.tiangolo.com/ko/advanced/settings/",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "monolith-msa": {
+    "goal": "모놀리스와 마이크로서비스의 비용을 비교하고 서비스 분리 시점을 근거로 판단할 수 있습니다.",
+    "todo": [
+      "모놀리스와 마이크로서비스의 배포, 장애, 운영 비용을 비교한 표를 만듭니다.",
+      "Monolith First 글을 읽고 서비스를 분리할 조건 3개를 적습니다.",
+      "검색 API 와 평가 서비스를 모듈 경계로 나눈 모듈러 모놀리스 구조도를 그립니다."
+    ],
+    "resources": [
+      {
+        "title": "모놀리식과 마이크로서비스 비교",
+        "url": "https://aws.amazon.com/ko/compare/the-difference-between-monolithic-and-microservices-architecture/",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "마이크로 서비스 아키텍처 스타일",
+        "url": "https://learn.microsoft.com/ko-kr/azure/architecture/guide/architecture-styles/microservices",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Monolith First",
+        "url": "https://martinfowler.com/bliki/MonolithFirst.html",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "serverless": {
+    "goal": "과금, 콜드 스타트, 실행 시간 제한을 비교해 서버리스와 컨테이너 중 배포 방식을 고를 수 있습니다.",
+    "todo": [
+      "서버리스와 컨테이너 배포의 과금, 시간 제한, 상태 유지 차이를 표로 만듭니다.",
+      "Python Lambda 함수를 만들고 콘솔의 테스트 이벤트로 호출합니다.",
+      "유휴 후 첫 호출과 연속 호출의 응답 시간을 각 10회 측정합니다."
+    ],
+    "resources": [
+      {
+        "title": "서버리스 컴퓨팅이란",
+        "url": "https://www.cloudflare.com/ko-kr/learning/serverless/what-is-serverless/",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "Python으로 Lambda 함수 빌드",
+        "url": "https://docs.aws.amazon.com/ko_kr/lambda/latest/dg/lambda-python.html",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "scaling": {
+    "goal": "수평 확장, 부하 분산, 읽기 복제본으로 트래픽 증가에 대응하는 구성을 설계할 수 있습니다.",
+    "todo": [
+      "Compose 로 API 컨테이너 3개와 Nginx 로드 밸런서를 띄웁니다.",
+      "k6 로 인스턴스 1개와 3개의 초당 처리량을 측정해 비교합니다.",
+      "PostgreSQL 스트리밍 복제로 읽기 전용 복제본 1개를 구성합니다."
+    ],
+    "resources": [
+      {
+        "title": "규모 확장을 위한 디자인",
+        "url": "https://learn.microsoft.com/ko-kr/azure/architecture/guide/design-principles/scale-out",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "부하 분산이란",
+        "url": "https://www.cloudflare.com/ko-kr/learning/performance/what-is-load-balancing/",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "고가용성, 부하 분산, 복제",
+        "url": "https://postgresql.kr/docs/current/high-availability.html",
+        "lang": "ko",
+        "kind": "문서"
+      }
+    ]
+  },
+  "full-text-search": {
+    "goal": "PostgreSQL 전문 검색과 pgvector 를 결합한 하이브리드 검색 API 를 만들 수 있습니다.",
+    "todo": [
+      "tsvector 컬럼과 GIN 인덱스를 만들고 ts_rank 로 결과를 정렬합니다.",
+      "pgvector 임베딩 컬럼을 추가하고 코사인 거리 상위 10건을 조회합니다.",
+      "두 순위를 RRF 로 합친 검색 API 를 만들고 질의 20개로 결과를 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "PostgreSQL Full Text Search",
+        "url": "https://www.postgresql.org/docs/current/textsearch.html",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "pgvector",
+        "url": "https://github.com/pgvector/pgvector",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "Contextual Retrieval",
+        "url": "https://www.anthropic.com/news/contextual-retrieval",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "system-design": {
+    "goal": "요구사항에서 트래픽을 추정하고 캐시, 큐, DB 를 배치한 설계안을 그릴 수 있습니다.",
+    "todo": [
+      "system-design-primer 학습 가이드의 기초 주제를 순서대로 읽습니다.",
+      "일 사용자 1만 명 LLM 챗봇의 QPS 와 월 저장 용량을 계산합니다.",
+      "검색, 생성, 평가 흐름을 담은 아키텍처 다이어그램 1장을 그립니다."
+    ],
+    "resources": [
+      {
+        "title": "Azure 애플리케이션 디자인 원칙",
+        "url": "https://learn.microsoft.com/ko-kr/azure/architecture/guide/design-principles/",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "system-design-primer",
+        "url": "https://github.com/donnemartin/system-design-primer",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "data-structures": {
+    "goal": "list, dict, set, deque, heapq 의 연산 비용을 알고 문제에 맞는 자료구조를 고를 수 있습니다.",
+    "todo": [
+      "Python 자습서 5장 자료 구조의 예제를 모두 실행합니다.",
+      "collections.deque 로 큐를, heapq 로 우선순위 큐를 구현합니다.",
+      "VisuAlgo 에서 해시 테이블, 힙, 이진 탐색 트리의 삽입 과정을 재생합니다."
+    ],
+    "resources": [
+      {
+        "title": "자료 구조",
+        "url": "https://docs.python.org/ko/3/tutorial/datastructures.html",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "collections 컨테이너 데이터형",
+        "url": "https://docs.python.org/ko/3/library/collections.html",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "VisuAlgo",
+        "url": "https://visualgo.net/en",
+        "lang": "en",
+        "kind": "실습"
+      }
+    ]
+  },
+  "algorithms": {
+    "goal": "Big-O 로 코드의 시간 복잡도를 계산하고 정렬, 이진 탐색, BFS, DFS 를 구현할 수 있습니다.",
+    "todo": [
+      "이진 탐색, BFS, DFS 를 직접 구현하고 테스트 케이스 5개로 검증합니다.",
+      "작성한 함수 5개의 시간 복잡도를 Big-O 로 적고 입력 크기별 실행 시간을 잽니다.",
+      "프로그래머스 코딩테스트 연습 Lv. 1 문제 10개를 풉니다."
+    ],
+    "resources": [
+      {
+        "title": "코딩테스트 연습",
+        "url": "https://school.programmers.co.kr/learn/challenges",
+        "lang": "ko",
+        "kind": "실습"
+      },
+      {
+        "title": "Big-O Cheat Sheet",
+        "url": "https://www.bigocheatsheet.com/",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "MIT 6.006 Introduction to Algorithms",
+        "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/",
+        "lang": "en",
+        "kind": "강의"
+      }
+    ]
+  },
+  "coding-interview": {
+    "goal": "유형별 대표 문제를 45분 안에 풀고 접근 방법과 복잡도를 말로 설명할 수 있습니다.",
+    "todo": [
+      "프로그래머스 고득점 Kit 의 해시, 스택/큐, 정렬 문제를 유형별 3개씩 풉니다.",
+      "NeetCode 로드맵의 Arrays & Hashing, Two Pointers 문제를 각 5개 풉니다.",
+      "모의 면접 1회를 녹화하고 풀이 설명에 걸린 시간을 기록합니다."
+    ],
+    "resources": [
+      {
+        "title": "코딩테스트 고득점 Kit",
+        "url": "https://school.programmers.co.kr/learn/challenges?tab=algorithm_practice_kit",
+        "lang": "ko",
+        "kind": "실습"
+      },
+      {
+        "title": "코딩 인터뷰 대학",
+        "url": "https://github.com/jwasham/coding-interview-university/blob/main/translations/README-ko.md",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "NeetCode Roadmap",
+        "url": "https://neetcode.io/roadmap",
+        "lang": "en",
+        "kind": "실습"
+      }
+    ]
+  }
+}
