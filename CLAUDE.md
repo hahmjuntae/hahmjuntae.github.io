@@ -33,3 +33,4 @@ Front-end 에서 시작해 Applied AI Engineer 로 끝나는 학습 로드맵 �
 1. `npm run check` 전 항목 PASS
 2. `.verify/*.png` 육안 확인
 3. `main` 푸시 후 Actions 의 Deploy to GitHub Pages 성공, `https://hahmjuntae.github.io` 200
+4. 운영 검사 `VERIFY_BASE=https://hahmjuntae.github.io node scripts/verify.mjs` 전 항목 PASS
