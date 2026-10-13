@@ -6,7 +6,6 @@ import extra from './content/extra.json';
 import future from './content/future.json';
 import trendContent from './content/trend.json';
 import trends from './trends.json';
-import bootcamps from './bootcamps.json';
 
 export type Status = 'pending' | 'learning' | 'done' | 'skip';
 
@@ -41,8 +40,6 @@ export interface RoadmapSection {
   refs: RoadmapRef[];
   nodes: RoadmapNode[];
 }
-
-export const updatedAt = '2026-10-13';
 
 export const statusMeta: Record<Status, { label: string; color: string }> = {
   pending: { label: '미시작', color: 'secondary' },
@@ -96,7 +93,6 @@ export const endNode: RoadmapNode & { refs: RoadmapRef[] } = {
   ...contentOf(skeleton.end[0]),
 };
 
-export const allRefs: RoadmapRef[] = [...new Set(skeleton.sections.flatMap((section) => section.refs))].map(refOf);
 
 export interface Trend {
   count: number;
@@ -110,5 +106,3 @@ export function trendOf(id: string): Trend {
 }
 
 export const trendTotal: number = trends.total;
-export const topTools = trends.topTools as [string, number][];
-export const programs = bootcamps.map(({ id, name, provider, region, url, format }) => ({ id, name, provider, region, url, format }));

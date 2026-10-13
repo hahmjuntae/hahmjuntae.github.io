@@ -20,7 +20,7 @@
     {
       "id": "internet",
       "part": "fe",
-      "title": "인터넷",
+      "title": "Internet",
       "refs": [
         "frontend"
       ],
@@ -153,7 +153,7 @@
     {
       "id": "git",
       "part": "fe",
-      "title": "버전 관리",
+      "title": "Version Control",
       "refs": [
         "git-github"
       ],
@@ -173,7 +173,7 @@
     {
       "id": "package-managers",
       "part": "fe",
-      "title": "패키지 매니저",
+      "title": "Package Managers",
       "refs": [
         "frontend"
       ],
@@ -193,7 +193,7 @@
     {
       "id": "frameworks",
       "part": "fe",
-      "title": "프레임워크",
+      "title": "Frameworks",
       "refs": [
         "react",
         "vue",
@@ -220,7 +220,7 @@
     {
       "id": "fe-tooling",
       "part": "fe",
-      "title": "빌드와 테스트",
+      "title": "Build Tools, Testing",
       "refs": [
         "frontend"
       ],
@@ -250,7 +250,7 @@
     {
       "id": "rendering",
       "part": "fe",
-      "title": "렌더링 전략",
+      "title": "Rendering Strategies",
       "refs": [
         "nextjs",
         "frontend"
@@ -271,7 +271,7 @@
     {
       "id": "web-platform",
       "part": "fe",
-      "title": "성능과 브라우저 API",
+      "title": "Performance, Browser APIs",
       "refs": [
         "frontend"
       ],
@@ -332,7 +332,7 @@
     {
       "id": "databases",
       "part": "be",
-      "title": "관계형 데이터베이스",
+      "title": "Relational Databases",
       "refs": [
         "sql",
         "postgresql-dba",
@@ -374,7 +374,7 @@
     {
       "id": "apis",
       "part": "be",
-      "title": "API",
+      "title": "APIs",
       "refs": [
         "api-design",
         "backend"
@@ -405,7 +405,7 @@
     {
       "id": "auth-security",
       "part": "be",
-      "title": "인증과 보안",
+      "title": "Auth, Security",
       "refs": [
         "backend",
         "cyber-security"
@@ -446,7 +446,7 @@
     {
       "id": "cache-messaging",
       "part": "be",
-      "title": "캐시와 메시지",
+      "title": "Caching, Messaging",
       "refs": [
         "redis",
         "backend"
@@ -472,7 +472,7 @@
     {
       "id": "realtime",
       "part": "be",
-      "title": "실시간 통신",
+      "title": "Real-time",
       "refs": [
         "backend"
       ],
@@ -492,7 +492,7 @@
     {
       "id": "be-testing",
       "part": "be",
-      "title": "백엔드 테스트",
+      "title": "Backend Testing",
       "refs": [
         "backend",
         "qa"
@@ -513,7 +513,7 @@
     {
       "id": "infra",
       "part": "be",
-      "title": "인프라",
+      "title": "Infrastructure",
       "refs": [
         "devops",
         "docker",
@@ -555,7 +555,7 @@
     {
       "id": "architecture",
       "part": "be",
-      "title": "아키텍처와 확장",
+      "title": "Architecture, Scaling",
       "refs": [
         "system-design",
         "software-design-architecture",
@@ -597,7 +597,7 @@
     {
       "id": "cs",
       "part": "be",
-      "title": "CS 기초",
+      "title": "CS Fundamentals",
       "refs": [
         "datastructures-and-algorithms",
         "computer-science"
@@ -623,7 +623,7 @@
     {
       "id": "ml-dl",
       "part": "ai",
-      "title": "ML, DL 기초",
+      "title": "ML, DL Basics",
       "refs": [
         "machine-learning",
         "ai-engineer"
@@ -659,7 +659,7 @@
     {
       "id": "llm-basics",
       "part": "ai",
-      "title": "LLM 기초",
+      "title": "LLM Basics",
       "refs": [
         "ai-engineer"
       ],
@@ -699,7 +699,7 @@
     {
       "id": "model-api",
       "part": "ai",
-      "title": "모델 API",
+      "title": "Model APIs",
       "refs": [
         "ai-engineer"
       ],
@@ -739,7 +739,7 @@
     {
       "id": "prompting",
       "part": "ai",
-      "title": "프롬프트와 컨텍스트",
+      "title": "Prompt, Context",
       "refs": [
         "prompt-engineering",
         "ai-engineer"
@@ -775,7 +775,7 @@
     {
       "id": "rag",
       "part": "ai",
-      "title": "임베딩과 RAG",
+      "title": "Embeddings, RAG",
       "refs": [
         "ai-engineer"
       ],
@@ -820,7 +820,7 @@
     {
       "id": "knowledge-graph",
       "part": "ai",
-      "title": "지식 그래프와 온톨로지",
+      "title": "Knowledge Graph, Ontology",
       "refs": [
         "ai-engineer"
       ],
@@ -855,7 +855,7 @@
     {
       "id": "agents",
       "part": "ai",
-      "title": "에이전트",
+      "title": "Agents",
       "refs": [
         "ai-agents",
         "claude-code"
@@ -976,7 +976,7 @@
     {
       "id": "llmops",
       "part": "ai",
-      "title": "관측성과 운영",
+      "title": "Observability, LLMOps",
       "refs": [
         "mlops",
         "ai-engineer"
@@ -1017,7 +1017,7 @@
     {
       "id": "ai-security",
       "part": "ai",
-      "title": "AI 보안과 안전",
+      "title": "AI Security, Safety",
       "refs": [
         "ai-red-teaming",
         "ai-agents"
@@ -1058,7 +1058,7 @@
     {
       "id": "model-serving",
       "part": "ai",
-      "title": "오픈 모델 서빙",
+      "title": "Open Model Serving",
       "refs": [
         "inference-engineering",
         "mlops"
@@ -1114,7 +1114,7 @@
     {
       "id": "fine-tuning-sec",
       "part": "ai",
-      "title": "파인튜닝",
+      "title": "Fine-tuning",
       "refs": [
         "machine-learning",
         "mlops"

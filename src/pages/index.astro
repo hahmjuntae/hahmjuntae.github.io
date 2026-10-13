@@ -1,11 +1,37 @@
 ---
 import Base from '../layouts/Base.astro';
-import { sections, parts, endNode, allRefs, statusMeta, updatedAt, trendOf, trendTotal, topTools, programs, type Status } from '../data/roadmap';
+import { sections, parts, endNode, statusMeta, trendOf, trendTotal, type Status, type RoadmapSection } from '../data/roadmap';
 
+const COLS = 3;
 const order: Status[] = ['done', 'learning', 'pending', 'skip'];
 const partTitle = Object.fromEntries(parts.map((part) => [part.id, part.title]));
 const total = sections.reduce((sum, section) => sum + section.nodes.length, 0);
 const totalHours = parts.reduce((sum, part) => sum + part.hours, 0);
+
+type Cell =
+  | { kind: 'part'; part: (typeof parts)[number]; row: number; col: number }
+  | { kind: 'section'; section: RoadmapSection; row: number; col: number }
+  | { kind: 'end'; row: number; col: number };
+
+// 데스크톱 3열 지그재그 배치 기준, 행 끝에서 같은 열로 내려가 방향 반전
+const cells: Cell[] = [];
+let row = 1;
+let col = 0;
+for (const part of parts) {
+  cells.push({ kind: 'part', part, row, col });
+  row += 1;
+  const list = sections.filter((section) => section.part === part.id);
+  let index = 0;
+  while (index < list.length) {
+    const size = list.length - index >= COLS ? COLS : 1;
+    const dir = col === 0 ? 1 : -1;
+    list.slice(index, index + size).forEach((section, k) => cells.push({ kind: 'section', section, row, col: col + k * dir }));
+    col += (size - 1) * dir;
+    index += size;
+    row += 1;
+  }
+}
+cells.push({ kind: 'end', row, col });
 
 const nodeData = Object.fromEntries([
   ...sections.flatMap((section) =>
@@ -26,20 +52,16 @@ const nodeData = Object.fromEntries([
   ),
   [
     endNode.id,
-    { label: endNode.label, where: '목표', status: endNode.status, goal: endNode.goal, todo: endNode.todo, resources: endNode.resources, refs: endNode.refs, trend: trendOf(endNode.id), end: true },
+    { label: endNode.label, where: 'Goal', status: endNode.status, goal: endNode.goal, todo: endNode.todo, resources: endNode.resources, refs: endNode.refs, part: 'ai', trend: trendOf(endNode.id), end: true },
   ],
 ]);
-
-const lead = 'Front-end 에서 시작해 Applied AI Engineer 로 끝나는 학습 경로입니다. 노드를 누르면 목표, 할 일, 무료 강의가 열립니다.';
-let sideIndex = 0;
+const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로드맵입니다.';
 ---
 
-<Base title="Applied AI Engineer 로드맵" description={lead}>
+<Base title="Applied AI Engineer 로드맵" description={description}>
   <div class="ds-page rm">
     <header class="ds-article__header rm-head">
       <h1 class="ds-article__title">Applied AI Engineer 로드맵</h1>
-      <p class="ds-article__lead">{lead}</p>
-      <p class="rm-updated ds-tabular">갱신 {updatedAt} · 노드 {total}개 · 주 5시간 3년 기준 {totalHours}시간</p>
     </header>
 
     <div class="rm-progress" aria-live="polite">
@@ -56,72 +78,58 @@ let sideIndex = 0;
           ))
         }
       </ul>
-      <p class="rm-trend-note">노드 오른쪽 숫자는 그 주제를 가르치는 교육 과정 수입니다(조사 {trendTotal}곳).</p>
     </div>
 
     <div class="rm-map">
-      {
-        parts.map((part) => (
-          <>
-            <p class="rm-part" id={`part-${part.id}`}>
-              <span>{part.title}</span>
-              <span class="rm-part__hours ds-tabular">{part.hours}시간 · {Math.round((part.hours / totalHours) * 100)}%</span>
-            </p>
-            {sections
-              .filter((section) => section.part === part.id)
-              .map((section) => (
-                <section class="rm-section" id={section.id} data-side={sideIndex++ % 2 === 0 ? 'right' : 'left'} aria-labelledby={`${section.id}-title`}>
-                  <h2 class="rm-main" id={`${section.id}-title`}>{section.title}</h2>
-                  <ul class="rm-subs">
-                    {section.nodes.map((node) => (
+      <svg class="rm-lines" aria-hidden="true"></svg>
+      <div class="rm-grid">
+        {
+          cells.map((cell) => {
+            const style = `--r:${cell.row};--c:${cell.col + 1}`;
+            if (cell.kind === 'part') {
+              return (
+                <div class="rm-cell rm-cell--pin" style={style} data-col={cell.col}>
+                  <p class="rm-part" id={`part-${cell.part.id}`} data-anchor data-row={cell.row} data-col={cell.col}>
+                    <span>{cell.part.title}</span>
+                    <span class="rm-part__hours ds-tabular">{cell.part.hours}h · {Math.round((cell.part.hours / totalHours) * 100)}%</span>
+                  </p>
+                </div>
+              );
+            }
+            if (cell.kind === 'end') {
+              return (
+                <div class="rm-cell rm-cell--pin" style={style} data-col={cell.col}>
+                  <button type="button" class="rm-end__node" id={endNode.id} data-node={endNode.id} data-anchor data-row={cell.row} data-col={cell.col} aria-haspopup="dialog">
+                    <span class="rm-end__eyebrow">Goal</span>
+                    <span class="rm-end__label">{endNode.label}</span>
+                  </button>
+                </div>
+              );
+            }
+            const section = cell.section;
+            return (
+              <section class="rm-cell rm-section" id={section.id} style={style} aria-labelledby={`${section.id}-title`}>
+                <h2 class="rm-main" id={`${section.id}-title`} data-anchor data-row={cell.row} data-col={cell.col}>{section.title}</h2>
+                <ul class="rm-subs">
+                  {section.nodes.map((node) => {
+                    const trend = trendOf(node.id);
+                    return (
                       <li>
                         <button type="button" class="rm-node" id={node.id} data-node={node.id} data-status={node.status} aria-haspopup="dialog">
                           <span class="rm-node__label">{node.label}</span>
-                          {trendOf(node.id).count > 0 && <span class="rm-node__trend ds-tabular" aria-label={`교육 과정 ${trendOf(node.id).count}곳`}>{trendOf(node.id).count}</span>}
+                          {trend.count > 0 && <span class="rm-node__trend ds-tabular" title={`교육 과정 ${trendTotal}곳 중 ${trend.count}곳`} aria-label={`교육 과정 ${trend.count}곳`}>{trend.count}</span>}
                           <span class="rm-icon" data-status={node.status} role="img" aria-label={statusMeta[node.status].label} />
                         </button>
                       </li>
-                    ))}
-                  </ul>
-                </section>
-              ))}
-          </>
-        ))
-      }
-      <div class="rm-end">
-        <button type="button" class="rm-end__node" id={endNode.id} data-node={endNode.id} aria-haspopup="dialog">
-          <span class="rm-end__eyebrow">목표</span>
-          <span class="rm-end__label">{endNode.label}</span>
-        </button>
+                    );
+                  })}
+                </ul>
+              </section>
+            );
+          })
+        }
       </div>
     </div>
-
-    <section class="rm-foot" aria-labelledby="trend-title">
-      <h2 class="rm-foot__title" id="trend-title">교육 과정 동향</h2>
-      <ul class="rm-insights">
-        <li>국내 과정은 Python, ML·DL 기초, Transformer, 프롬프트와 API, RAG, 파인튜닝, 에이전트, 배포 순서로 가르칩니다.</li>
-        <li>에이전트 도구는 LangChain, LangGraph 가 7곳으로 표준이고 벤더 Agent SDK 는 1곳입니다.</li>
-        <li>서빙은 vLLM 중심(5곳)이고 벡터 DB 는 Chroma, Qdrant, Milvus 로 나뉩니다.</li>
-        <li>2026 과정에는 MCP(5곳), Context Engineering, Agent Skills, 코딩 에이전트(각 3곳)가 들어왔습니다.</li>
-        <li>Eval, 관측성, AI 보안의 고급 주제는 0~1곳만 다룹니다.</li>
-      </ul>
-      <p class="rm-foot__desc">아래 숫자는 교육 과정 {trendTotal}곳의 커리큘럼에 도구 이름이 나온 횟수입니다.</p>
-      <ul class="rm-tools">
-        {topTools.slice(0, 16).map(([tool, count]) => (<li class="rm-tools__item"><span>{tool}</span><span class="rm-tools__count ds-tabular">{count}</span></li>))}
-      </ul>
-      <ul class="rm-programs">
-        {programs.map((program) => (<li><a href={program.url} target="_blank" rel="noopener">{program.name}</a><span class="rm-programs__meta">{program.provider} · {program.format.split(/[,(]/)[0].trim()}</span></li>))}
-      </ul>
-    </section>
-
-    <footer class="rm-foot">
-      <h2 class="rm-foot__title">참고 로드맵</h2>
-      <p class="rm-foot__desc">노드 구성은 roadmap.sh 로드맵 {allRefs.length}개를 참고해 다시 묶었습니다. 진행 상태는 이 브라우저에 저장됩니다.</p>
-      <ul class="rm-refs">
-        {allRefs.map((ref) => (<li><a class="ds-badge" data-variant="outline" href={ref.url} target="_blank" rel="noopener">{ref.name}</a></li>))}
-      </ul>
-      <button type="button" class="ds-btn" data-variant="ghost" data-size="sm" data-reset-progress>진행 기록 초기화</button>
-    </footer>
   </div>
 
   <div class="ds-modal" id="node-modal" data-backdrop="fade" role="dialog" aria-modal="true" aria-labelledby="node-modal-title">
@@ -265,7 +273,6 @@ let sideIndex = 0;
         paintStatusButtons();
         modal.classList.remove('is-closing');
         modal.classList.add('is-open');
-        panel.scrollTop = 0;
         modal.querySelector('.ds-modal__body').scrollTop = 0;
         panel.focus();
         if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
@@ -290,18 +297,55 @@ let sideIndex = 0;
         summarize();
       }
 
+      var map = document.querySelector('.rm-map');
+      var svg = map.querySelector('.rm-lines');
+      var COLS = 3;
+      var GUTTER = 22;
+
+      function route() {
+        if (!matchMedia('(min-width: 1024px)').matches) { svg.textContent = ''; return; }
+        var m = map.getBoundingClientRect();
+        var anchors = Array.prototype.slice.call(map.querySelectorAll('[data-anchor]'));
+        var paths = [];
+        for (var i = 0; i < anchors.length - 1; i += 1) {
+          var a = anchors[i];
+          var b = anchors[i + 1];
+          var ra = a.getBoundingClientRect();
+          var rb = b.getBoundingClientRect();
+          var ac = Number(a.dataset.col);
+          var bc = Number(b.dataset.col);
+          var ay = Math.round(ra.top - m.top + ra.height / 2);
+          var by = Math.round(rb.top - m.top + rb.height / 2);
+          if (a.dataset.row === b.dataset.row) {
+            var x1 = Math.round((bc > ac ? ra.right : ra.left) - m.left);
+            var x2 = Math.round((bc > ac ? rb.left : rb.right) - m.left);
+            paths.push('M' + x1 + ' ' + ay + 'H' + x2);
+          } else if (ac === bc && ac === 0) {
+            var gl = Math.round(Math.min(ra.left, rb.left) - m.left - GUTTER);
+            paths.push('M' + Math.round(ra.left - m.left) + ' ' + ay + 'H' + gl + 'V' + by + 'H' + Math.round(rb.left - m.left));
+          } else {
+            var gr = Math.round(Math.max(ra.right, rb.right) - m.left + GUTTER);
+            paths.push('M' + Math.round(ra.right - m.left) + ' ' + ay + 'H' + gr + 'V' + by + 'H' + Math.round(rb.right - m.left));
+          }
+        }
+        svg.setAttribute('viewBox', '0 0 ' + Math.round(m.width) + ' ' + Math.round(m.height));
+        var marker = '<defs><marker id="rm-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 8 4 0 8z" class="rm-lines__head"/></marker></defs>';
+        svg.innerHTML = marker + paths.map(function (d) { return '<path d="' + d + '" marker-end="url(#rm-arrow)"/>'; }).join('');
+      }
+
+      var pending = false;
+      function scheduleRoute() {
+        if (pending) return;
+        pending = true;
+        requestAnimationFrame(function () { pending = false; route(); });
+      }
+
       document.addEventListener('click', function (event) {
         var set = event.target.closest('[data-set-status]');
         if (set) { setStatus(set.getAttribute('data-set-status')); return; }
         var trigger = event.target.closest('[data-node]');
         if (trigger) { event.preventDefault(); open(trigger.getAttribute('data-node')); return; }
-        if (event.target.closest('[data-close]')) { close(); return; }
-        if (event.target.closest('[data-reset-progress]')) {
-          overrides = {};
-          save();
-          Object.keys(data).forEach(paint);
-          summarize();
-        }
+        if (event.target.closest('[data-close]')) close();
       });
       document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') close();
@@ -311,20 +355,23 @@ let sideIndex = 0;
         if (data[id] && !modal.classList.contains('is-open')) open(id);
       }
       window.addEventListener('hashchange', openFromHash);
+      if ('ResizeObserver' in window) new ResizeObserver(scheduleRoute).observe(map);
+      window.addEventListener('resize', scheduleRoute);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleRoute);
 
       Object.keys(data).forEach(paint);
       summarize();
+      route();
       openFromHash();
     })();
   </script>
 </Base>
 
 <style is:global>
-  .rm { max-width: 1048px; }
+  .rm { max-width: 1240px; }
   .rm-head { padding-top: 32px; }
-  .rm-updated { color: var(--color-text-tertiary); font-size: 14px; line-height: 20px; }
 
-  .rm-progress { display: flex; flex-direction: column; gap: 8px; margin-top: 24px; }
+  .rm-progress { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
   .rm-progress__text { color: var(--color-text-emphasis); font-size: 14px; line-height: 20px; font-weight: 600; }
   .rm-progress__bar { height: 6px; overflow: hidden; border-radius: var(--radius-full); background: var(--color-background-primary-soft); }
   .rm-progress__bar span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--color-text-success-soft); transition: width .3s var(--cubic-enter); }
@@ -340,13 +387,18 @@ let sideIndex = 0;
   .rm-icon[data-status='learning'] { border: 2px solid var(--color-text-info-soft); background: linear-gradient(90deg, var(--color-text-info-soft) 50%, transparent 50%); }
   .rm-icon[data-status='skip'] { border: 2px dashed var(--color-border-strong); }
 
-  .rm-map { position: relative; margin-top: 40px; }
-  .rm-part { position: relative; z-index: 1; width: fit-content; margin: 24px auto 8px; padding: 8px 20px; border-radius: var(--radius-full); background: var(--color-background-primary-soft); color: var(--color-text-emphasis); font-size: 16px; line-height: 24px; font-weight: 600; }
-  .rm-part:first-child { margin-top: 0; }
-  .rm-part { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .rm-map { position: relative; margin-top: 40px; padding-bottom: 64px; }
+  .rm-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; fill: none; stroke: var(--color-text-tertiary); stroke-width: 2; stroke-linejoin: round; }
+  .rm-lines__head { fill: var(--color-text-tertiary); stroke: none; }
+  .rm-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .rm-cell { min-width: 0; }
+  .rm-cell--pin { display: flex; justify-content: center; }
+
+  .rm-part { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 0; padding: 8px 20px; border-radius: var(--radius-full); background: var(--color-background-primary-soft); color: var(--color-text-emphasis); font-size: 16px; line-height: 24px; font-weight: 600; }
   .rm-part__hours { color: var(--color-text-secondary); font-size: 12px; line-height: 18px; font-weight: 500; }
-  .rm-section { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 20px 0; }
-  .rm-main { position: relative; z-index: 1; margin: 0; padding: 10px 16px; border-radius: var(--radius-md); background: var(--color-background-primary-solid); color: var(--color-text-inverse); font-size: 16px; line-height: 24px; font-weight: 600; }
+
+  .rm-section { position: relative; display: flex; flex-direction: column; gap: 12px; }
+  .rm-main { position: relative; z-index: 1; margin: 0; padding: 10px 16px; border-radius: var(--radius-md); background: var(--color-background-primary-solid); color: var(--color-text-inverse); font-size: 16px; line-height: 24px; font-weight: 600; text-align: center; }
   .rm-subs { position: relative; display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0 0 0 32px; list-style: none; }
   .rm-subs::before { content: ''; position: absolute; top: -12px; bottom: 20px; left: 12px; border-left: 2px dotted var(--color-border-strong); }
   .rm-subs > li { position: relative; }
@@ -357,52 +409,27 @@ let sideIndex = 0;
   .rm-node[data-status='done'] .rm-node__label { color: var(--color-text-secondary); }
   .rm-node[data-status='skip'] { border-style: dashed; color: var(--color-text-tertiary); }
   .rm-node[data-status='skip'] .rm-node__label { text-decoration: line-through; }
+  .rm-node__trend { margin-left: auto; color: var(--color-text-tertiary); font-size: 12px; line-height: 18px; }
   .rm-node:focus-visible, .rm-end__node:focus-visible { outline: 2px solid var(--color-ring); outline-offset: 2px; }
 
-  .rm-end { position: relative; z-index: 1; display: flex; justify-content: center; padding: 32px 0 8px; }
-  .rm-end__node { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 240px; padding: 16px 32px; border-radius: var(--radius-lg); background: var(--color-background-primary-solid); color: var(--color-text-inverse); cursor: pointer; box-shadow: 0 0 0 4px var(--page-bg), 0 0 0 6px var(--color-border-strong); }
+  .rm-end__node { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 240px; padding: 16px 32px; border-radius: var(--radius-lg); background: var(--color-background-primary-solid); color: var(--color-text-inverse); cursor: pointer; box-shadow: 0 0 0 4px var(--page-bg), 0 0 0 6px var(--color-border-strong); }
   .rm-end__eyebrow { font-size: 12px; line-height: 18px; opacity: .7; }
   .rm-end__label { font-size: 20px; line-height: 26px; font-weight: 600; }
 
-  .rm-foot { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 48px; padding: 24px 0 24px; border-top: 1px solid var(--color-border-subtle); }
-  footer.rm-foot { margin-top: 0; padding-bottom: 48px; }
-  .rm-foot__title { margin: 0; color: var(--heading-color); font-size: 18px; line-height: 24px; font-weight: 600; }
-  .rm-foot__desc { color: var(--color-text-secondary); font-size: 14px; line-height: 22px; }
-  .rm-node__trend { margin-left: auto; color: var(--color-text-tertiary); font-size: 12px; line-height: 18px; }
-  .rm-trend-note { color: var(--color-text-tertiary); font-size: 12px; line-height: 18px; }
-  .rm-insights { display: flex; flex-direction: column; gap: 4px; margin: 0; padding-left: 18px; list-style: disc; color: var(--color-text); font-size: 14px; line-height: 22px; }
-  .rm-insights li::marker { color: var(--color-text-tertiary); }
-  .rm-tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
-  .rm-tools__item { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border: 1px solid var(--color-border); border-radius: var(--radius-full); color: var(--color-text); font-size: 13px; }
-  .rm-tools__count { color: var(--color-text-tertiary); font-size: 12px; }
-  .rm-programs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px 24px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 14px; line-height: 22px; }
-  .rm-programs a { color: var(--color-text-emphasis); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--color-border-strong); }
-  .rm-programs__meta { margin-left: 8px; color: var(--color-text-tertiary); font-size: 12px; }
-  @media (width >= 768px) { .rm-programs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  .rm-refs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
-  .rm-refs .ds-badge { text-decoration: none; font-weight: 500; }
-
-  @media (width >= 768px) {
-    .rm-map::before { content: ''; position: absolute; top: 0; bottom: 60px; left: 50%; width: 2px; transform: translateX(-1px); background: var(--color-border-strong); }
-    .rm-section { grid-template-columns: minmax(0, 1fr) 240px minmax(0, 1fr); gap: 0; align-items: start; padding: 28px 0; }
-    .rm-main { grid-column: 2; grid-row: 1; text-align: center; }
-    .rm-subs { grid-row: 1; padding: 0; }
-    .rm-subs > li::before { width: 24px; }
-    .rm-section[data-side='right'] .rm-subs { grid-column: 3; padding-left: 48px; }
-    .rm-section[data-side='right'] .rm-subs::before { top: 20px; bottom: 20px; left: 24px; }
-    .rm-section[data-side='right'] .rm-subs::after { content: ''; position: absolute; top: 21px; left: 0; width: 24px; border-top: 2px dotted var(--color-border-strong); }
-    .rm-section[data-side='right'] .rm-subs > li::before { left: -24px; }
-    .rm-section[data-side='left'] .rm-subs { grid-column: 1; padding-right: 48px; }
-    .rm-section[data-side='left'] .rm-subs::before { top: 20px; bottom: 20px; left: auto; right: 24px; border-left: 0; border-right: 2px dotted var(--color-border-strong); }
-    .rm-section[data-side='left'] .rm-subs::after { content: ''; position: absolute; top: 21px; right: 0; width: 24px; border-top: 2px dotted var(--color-border-strong); }
-    .rm-section[data-side='left'] .rm-subs > li::before { left: auto; right: -24px; }
+  @media (width >= 1024px) {
+    .rm-map { padding: 8px 32px 64px; }
+    .rm-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 56px; row-gap: 40px; align-items: start; }
+    .rm-cell { grid-row: var(--r); grid-column: var(--c); }
+    .rm-cell--pin[data-col='0'] { justify-content: flex-start; }
+    .rm-cell--pin[data-col='2'] { justify-content: flex-end; }
+    .rm-end__node { width: 100%; }
   }
 
   .rm-detail { display: flex; flex-direction: column; gap: 4px; }
   .rm-detail p { margin: 0; color: var(--color-text); font-size: 14px; line-height: 22px; }
   .rm-detail__where { color: var(--color-text-secondary) !important; }
+  .rm-detail [hidden] { display: none; }
   .rm-status { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 4px; }
-  .rm-status[hidden] { display: none; }
   .rm-status .ds-btn svg { margin-right: 4px; }
   .rm-status .ds-btn[aria-pressed='true'] { color: var(--color-text-emphasis); font-weight: 600; }
   .rm-detail__label { margin: 16px 0 4px; color: var(--color-text-secondary); font-size: 12px; line-height: 18px; font-weight: 600; }
@@ -413,4 +440,6 @@ let sideIndex = 0;
   .rm-detail__res li::marker { color: var(--color-text-tertiary); }
   .rm-detail__res a { color: var(--color-text-emphasis); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--color-border-strong); }
   .rm-detail__res-meta { margin-left: 8px; color: var(--color-text-tertiary); font-size: 12px; white-space: nowrap; }
+  .rm-refs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .rm-refs .ds-badge { text-decoration: none; font-weight: 500; }
 </style>
