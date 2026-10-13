@@ -1,0 +1,197 @@
+{
+  "ml-fundamentals": {
+    "goal": "train, test 분할과 과적합, 평가 지표를 scikit-learn 학습 결과로 설명할 수 있습니다.",
+    "todo": [
+      "breast_cancer 데이터로 학습한 scikit-learn LogisticRegression 의 test 정확도를 출력합니다.",
+      "max_depth 1~10 DecisionTree 10개의 train, test 정확도를 그래프 하나로 그립니다.",
+      "같은 모델의 precision, recall, F1 을 classification_report 로 표에 정리합니다."
+    ],
+    "resources": [
+      {
+        "title": "Google 머신러닝 단기집중과정",
+        "url": "https://developers.google.com/machine-learning/crash-course?hl=ko",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "혼자 공부하는 머신러닝+딥러닝 코드 저장소",
+        "url": "https://github.com/rickiepark/hg-mldl2",
+        "lang": "ko",
+        "kind": "실습"
+      },
+      {
+        "title": "scikit-learn Getting Started",
+        "url": "https://scikit-learn.org/stable/getting_started.html",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "neural-networks": {
+    "goal": "순전파, 손실, 역전파, 경사하강법으로 이어지는 학습 루프를 PyTorch 코드로 설명할 수 있습니다.",
+    "todo": [
+      "은닉층 2개 PyTorch MLP 로 FashionMNIST 테스트 정확도 85% 이상을 냅니다.",
+      "학습률 0.1, 0.01, 0.001 의 epoch 별 loss 곡선을 그래프 하나로 비교합니다.",
+      "nn.Module 없이 autograd 만으로 선형 회귀 학습 루프를 20줄 안에 작성합니다."
+    ],
+    "resources": [
+      {
+        "title": "모두를 위한 딥러닝 시즌 2",
+        "url": "https://deeplearningzerotoall.github.io/season2/",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "파이토치 한국어 튜토리얼 신경망 모델 구성하기",
+        "url": "https://tutorials.pytorch.kr/beginner/basics/buildmodel_tutorial.html",
+        "lang": "ko",
+        "kind": "실습"
+      },
+      {
+        "title": "Google 머신러닝 단기집중과정 신경망",
+        "url": "https://developers.google.com/machine-learning/crash-course/neural-networks?hl=ko",
+        "lang": "ko",
+        "kind": "강의"
+      }
+    ]
+  },
+  "classic-nlp": {
+    "goal": "토큰화, BoW, TF-IDF, 단어 임베딩이 LLM 입력 표현으로 이어지는 흐름을 설명할 수 있습니다.",
+    "todo": [
+      "NSMC 리뷰 1만 건으로 학습한 TF-IDF, LogisticRegression 감성 분류기의 정확도를 잽니다.",
+      "문장 쌍 10개의 TF-IDF 유사도와 임베딩 모델 유사도를 표로 비교합니다."
+    ],
+    "resources": [
+      {
+        "title": "딥 러닝을 이용한 자연어 처리 입문",
+        "url": "https://wikidocs.net/book/2155",
+        "lang": "ko",
+        "kind": "글"
+      },
+      {
+        "title": "네이버 영화 리뷰 데이터셋 NSMC",
+        "url": "https://github.com/e9t/nsmc",
+        "lang": "ko",
+        "kind": "실습"
+      },
+      {
+        "title": "scikit-learn Feature extraction",
+        "url": "https://scikit-learn.org/stable/modules/feature_extraction.html",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "computer-vision": {
+    "goal": "CNN 의 합성곱, 풀링과 전이학습이 이미지 분류 정확도를 높이는 이유를 설명할 수 있습니다.",
+    "todo": [
+      "PyTorch 로 학습한 CIFAR10 분류 CNN 의 클래스별 테스트 정확도를 기록합니다.",
+      "사전학습 ResNet18 을 전이학습한 개미, 벌 분류 모델의 검증 정확도를 기록합니다.",
+      "Hugging Face ViT pipeline 으로 직접 찍은 사진 10장의 top-3 라벨을 출력합니다."
+    ],
+    "resources": [
+      {
+        "title": "파이토치 한국어 튜토리얼 분류기 학습하기",
+        "url": "https://tutorials.pytorch.kr/beginner/blitz/cifar10_tutorial.html",
+        "lang": "ko",
+        "kind": "실습"
+      },
+      {
+        "title": "파이토치 한국어 튜토리얼 컴퓨터 비전 전이학습",
+        "url": "https://tutorials.pytorch.kr/beginner/transfer_learning_tutorial.html",
+        "lang": "ko",
+        "kind": "실습"
+      },
+      {
+        "title": "Hugging Face Computer Vision Course",
+        "url": "https://huggingface.co/learn/computer-vision-course/unit0/welcome/welcome",
+        "lang": "en",
+        "kind": "강의"
+      }
+    ]
+  },
+  "data-analysis": {
+    "goal": "NumPy 배열 연산과 Pandas groupby, merge 로 CSV 데이터를 집계할 수 있습니다.",
+    "todo": [
+      "원소 100만 개 배열에서 Python for 문과 NumPy 벡터 연산의 실행 시간을 비교합니다.",
+      "공공 데이터 CSV 의 결측치를 처리한 groupby 집계표 1개를 Pandas 로 만듭니다.",
+      "LLM 평가 결과 CSV 2개를 merge 한 모델별 정답률 표를 만듭니다."
+    ],
+    "resources": [
+      {
+        "title": "데이터 분석 입문자를 위한 파이썬 판다스 300제",
+        "url": "https://wikidocs.net/book/4852",
+        "lang": "ko",
+        "kind": "실습"
+      },
+      {
+        "title": "NumPy: the absolute basics for beginners",
+        "url": "https://numpy.org/doc/stable/user/absolute_beginners.html",
+        "lang": "en",
+        "kind": "문서"
+      },
+      {
+        "title": "10 minutes to pandas",
+        "url": "https://pandas.pydata.org/docs/user_guide/10min.html",
+        "lang": "en",
+        "kind": "문서"
+      }
+    ]
+  },
+  "ai-ethics": {
+    "goal": "LLM 출력의 편향 유형을 구분하고 그룹별 결과 차이를 수치로 보고할 수 있습니다.",
+    "todo": [
+      "Hugging Face fill-mask 모델로 직업 문장 10개의 성별 단어 확률을 표로 만듭니다.",
+      "이름만 바꾼 지원서 평가 프롬프트 20쌍으로 LLM 점수의 그룹별 평균 차이를 잽니다.",
+      "Fairlearn MetricFrame 으로 분류 모델의 그룹별 recall 차이를 계산합니다."
+    ],
+    "resources": [
+      {
+        "title": "LLM 코스 1장 편향과 한계",
+        "url": "https://huggingface.co/learn/llm-course/ko/chapter1/8",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "Google 머신러닝 단기집중과정 공정성",
+        "url": "https://developers.google.com/machine-learning/crash-course/fairness?hl=ko",
+        "lang": "ko",
+        "kind": "강의"
+      },
+      {
+        "title": "Evaluating and Mitigating Discrimination in Language Model Decisions",
+        "url": "https://www.anthropic.com/research/evaluating-and-mitigating-discrimination-in-language-model-decisions",
+        "lang": "en",
+        "kind": "글"
+      }
+    ]
+  },
+  "agent-skills": {
+    "goal": "SKILL.md 의 frontmatter, 본문, 참조 파일 구조로 스킬 하나를 패키징해 적용할 수 있습니다.",
+    "todo": [
+      "반복 작업 하나를 name, description frontmatter 를 갖춘 SKILL.md 스킬로 만듭니다.",
+      "스킬 폴더의 스크립트 1개와 참조 문서 1개를 SKILL.md 본문에서 경로로 연결합니다.",
+      "스킬 적용 전후 같은 요청 5건의 기준 통과 건수를 표로 기록합니다."
+    ],
+    "resources": [
+      {
+        "title": "Agent Skills 개요",
+        "url": "https://platform.claude.com/docs/ko/agents-and-tools/agent-skills/overview",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "Claude를 skills로 확장하기",
+        "url": "https://code.claude.com/docs/ko/skills",
+        "lang": "ko",
+        "kind": "문서"
+      },
+      {
+        "title": "anthropics/skills 예제 저장소",
+        "url": "https://github.com/anthropics/skills",
+        "lang": "en",
+        "kind": "실습"
+      }
+    ]
+  }
+}

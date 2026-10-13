@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { sections, parts, endNode, allRefs, statusMeta, updatedAt, type Status } from '../data/roadmap';
+import { sections, parts, endNode, allRefs, statusMeta, updatedAt, trendOf, trendTotal, topTools, programs, type Status } from '../data/roadmap';
 
 const order: Status[] = ['done', 'learning', 'pending', 'skip'];
 const partTitle = Object.fromEntries(parts.map((part) => [part.id, part.title]));
@@ -19,12 +19,14 @@ const nodeData = Object.fromEntries([
         todo: node.todo,
         resources: node.resources,
         refs: section.refs,
+        part: section.part,
+        trend: trendOf(node.id),
       },
     ]),
   ),
   [
     endNode.id,
-    { label: endNode.label, where: '목표', status: endNode.status, goal: endNode.goal, todo: endNode.todo, resources: endNode.resources, refs: endNode.refs, end: true },
+    { label: endNode.label, where: '목표', status: endNode.status, goal: endNode.goal, todo: endNode.todo, resources: endNode.resources, refs: endNode.refs, trend: trendOf(endNode.id), end: true },
   ],
 ]);
 
@@ -54,6 +56,7 @@ let sideIndex = 0;
           ))
         }
       </ul>
+      <p class="rm-trend-note">노드 오른쪽 숫자는 그 주제를 가르치는 교육 과정 수입니다(조사 {trendTotal}곳).</p>
     </div>
 
     <div class="rm-map">
@@ -74,6 +77,7 @@ let sideIndex = 0;
                       <li>
                         <button type="button" class="rm-node" id={node.id} data-node={node.id} data-status={node.status} aria-haspopup="dialog">
                           <span class="rm-node__label">{node.label}</span>
+                          {trendOf(node.id).count > 0 && <span class="rm-node__trend ds-tabular" aria-label={`교육 과정 ${trendOf(node.id).count}곳`}>{trendOf(node.id).count}</span>}
                           <span class="rm-icon" data-status={node.status} role="img" aria-label={statusMeta[node.status].label} />
                         </button>
                       </li>
@@ -91,6 +95,24 @@ let sideIndex = 0;
         </button>
       </div>
     </div>
+
+    <section class="rm-foot" aria-labelledby="trend-title">
+      <h2 class="rm-foot__title" id="trend-title">교육 과정 동향</h2>
+      <ul class="rm-insights">
+        <li>국내 과정은 Python, ML·DL 기초, Transformer, 프롬프트와 API, RAG, 파인튜닝, 에이전트, 배포 순서로 가르칩니다.</li>
+        <li>에이전트 도구는 LangChain, LangGraph 가 7곳으로 표준이고 벤더 Agent SDK 는 1곳입니다.</li>
+        <li>서빙은 vLLM 중심(5곳)이고 벡터 DB 는 Chroma, Qdrant, Milvus 로 나뉩니다.</li>
+        <li>2026 과정에는 MCP(5곳), Context Engineering, Agent Skills, 코딩 에이전트(각 3곳)가 들어왔습니다.</li>
+        <li>Eval, 관측성, AI 보안의 고급 주제는 0~1곳만 다룹니다.</li>
+      </ul>
+      <p class="rm-foot__desc">아래 숫자는 교육 과정 {trendTotal}곳의 커리큘럼에 도구 이름이 나온 횟수입니다.</p>
+      <ul class="rm-tools">
+        {topTools.slice(0, 16).map(([tool, count]) => (<li class="rm-tools__item"><span>{tool}</span><span class="rm-tools__count ds-tabular">{count}</span></li>))}
+      </ul>
+      <ul class="rm-programs">
+        {programs.map((program) => (<li><a href={program.url} target="_blank" rel="noopener">{program.name}</a><span class="rm-programs__meta">{program.provider} · {program.format.split(/[,(]/)[0].trim()}</span></li>))}
+      </ul>
+    </section>
 
     <footer class="rm-foot">
       <h2 class="rm-foot__title">참고 로드맵</h2>
@@ -133,17 +155,22 @@ let sideIndex = 0;
         <ol class="rm-detail__todo" data-modal-todo></ol>
         <h3 class="rm-detail__label">무료 강의</h3>
         <ul class="rm-detail__res" data-modal-res></ul>
+        <div data-modal-trend-wrap>
+          <h3 class="rm-detail__label">교육 과정 동향</h3>
+          <p data-modal-trend></p>
+        </div>
         <h3 class="rm-detail__label">참고 로드맵</h3>
         <ul class="rm-refs" data-modal-refs></ul>
       </div>
     </div>
   </div>
 
-  <script is:inline type="application/json" id="node-data" set:html={JSON.stringify(nodeData)} />
+  <script is:inline type="application/json" id="node-data" data-total={trendTotal} set:html={JSON.stringify(nodeData)} />
   <script is:inline type="application/json" id="status-meta" set:html={JSON.stringify(statusMeta)} />
   <script is:inline>
     (function () {
       var KEY = 'roadmap-progress-v1';
+      var TOTAL = Number(document.getElementById('node-data').getAttribute('data-total'));
       var data = JSON.parse(document.getElementById('node-data').textContent);
       var meta = JSON.parse(document.getElementById('status-meta').textContent);
       var modal = document.getElementById('node-modal');
@@ -223,6 +250,11 @@ let sideIndex = 0;
           li.appendChild(el('span', r.kind + ' · ' + (r.lang === 'ko' ? '한국어' : '영어'), { class: 'rm-detail__res-meta' }));
           res.appendChild(li);
         });
+        var trend = node.trend || { count: 0, tools: [] };
+        modal.querySelector('[data-modal-trend-wrap]').hidden = trend.count === 0 && node.part !== 'ai';
+        modal.querySelector('[data-modal-trend]').textContent = trend.count === 0
+          ? '조사한 ' + TOTAL + '곳 중 다루는 곳이 없습니다.'
+          : TOTAL + '곳 중 ' + trend.count + '곳에서 다룹니다.' + (trend.tools.length ? ' 주요 스택: ' + trend.tools.join(', ') : '');
         var refs = modal.querySelector('[data-modal-refs]');
         refs.textContent = '';
         node.refs.forEach(function (ref) {
@@ -332,9 +364,21 @@ let sideIndex = 0;
   .rm-end__eyebrow { font-size: 12px; line-height: 18px; opacity: .7; }
   .rm-end__label { font-size: 20px; line-height: 26px; font-weight: 600; }
 
-  .rm-foot { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 48px; padding: 24px 0 48px; border-top: 1px solid var(--color-border-subtle); }
+  .rm-foot { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 48px; padding: 24px 0 24px; border-top: 1px solid var(--color-border-subtle); }
+  footer.rm-foot { margin-top: 0; padding-bottom: 48px; }
   .rm-foot__title { margin: 0; color: var(--heading-color); font-size: 18px; line-height: 24px; font-weight: 600; }
   .rm-foot__desc { color: var(--color-text-secondary); font-size: 14px; line-height: 22px; }
+  .rm-node__trend { margin-left: auto; color: var(--color-text-tertiary); font-size: 12px; line-height: 18px; }
+  .rm-trend-note { color: var(--color-text-tertiary); font-size: 12px; line-height: 18px; }
+  .rm-insights { display: flex; flex-direction: column; gap: 4px; margin: 0; padding-left: 18px; list-style: disc; color: var(--color-text); font-size: 14px; line-height: 22px; }
+  .rm-insights li::marker { color: var(--color-text-tertiary); }
+  .rm-tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .rm-tools__item { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border: 1px solid var(--color-border); border-radius: var(--radius-full); color: var(--color-text); font-size: 13px; }
+  .rm-tools__count { color: var(--color-text-tertiary); font-size: 12px; }
+  .rm-programs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px 24px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 14px; line-height: 22px; }
+  .rm-programs a { color: var(--color-text-emphasis); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--color-border-strong); }
+  .rm-programs__meta { margin-left: 8px; color: var(--color-text-tertiary); font-size: 12px; }
+  @media (width >= 768px) { .rm-programs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .rm-refs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
   .rm-refs .ds-badge { text-decoration: none; font-weight: 500; }
 

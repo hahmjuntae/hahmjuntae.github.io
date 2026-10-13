@@ -4,6 +4,9 @@ import be from './content/be.json';
 import ai from './content/ai.json';
 import extra from './content/extra.json';
 import future from './content/future.json';
+import trendContent from './content/trend.json';
+import trends from './trends.json';
+import bootcamps from './bootcamps.json';
 
 export type Status = 'pending' | 'learning' | 'done' | 'skip';
 
@@ -61,7 +64,7 @@ const roadmapNames: Record<string, string> = {
   'inference-engineering': 'Inference Engineering',
 };
 
-const content = { ...fe, ...be, ...ai, ...extra, ...future } as Record<string, NodeContent>;
+const content = { ...fe, ...be, ...ai, ...extra, ...future, ...trendContent } as Record<string, NodeContent>;
 
 function contentOf(id: string): NodeContent {
   const found = content[id];
@@ -94,3 +97,18 @@ export const endNode: RoadmapNode & { refs: RoadmapRef[] } = {
 };
 
 export const allRefs: RoadmapRef[] = [...new Set(skeleton.sections.flatMap((section) => section.refs))].map(refOf);
+
+export interface Trend {
+  count: number;
+  tools: string[];
+}
+
+const trendNodes = trends.nodes as Record<string, Trend>;
+
+export function trendOf(id: string): Trend {
+  return trendNodes[id] ?? { count: 0, tools: [] };
+}
+
+export const trendTotal: number = trends.total;
+export const topTools = trends.topTools as [string, number][];
+export const programs = bootcamps.map(({ id, name, provider, region, url, format }) => ({ id, name, provider, region, url, format }));

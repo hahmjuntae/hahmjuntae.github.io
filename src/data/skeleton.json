@@ -321,6 +321,11 @@
           "python-env",
           "uv, Virtual Env",
           "pending"
+        ],
+        [
+          "data-analysis",
+          "NumPy, Pandas",
+          "pending"
         ]
       ]
     },
@@ -616,6 +621,42 @@
       ]
     },
     {
+      "id": "ml-dl",
+      "part": "ai",
+      "title": "ML, DL 기초",
+      "refs": [
+        "machine-learning",
+        "ai-engineer"
+      ],
+      "nodes": [
+        [
+          "ml-fundamentals",
+          "Machine Learning Basics",
+          "pending"
+        ],
+        [
+          "neural-networks",
+          "Neural Networks, Deep Learning",
+          "pending"
+        ],
+        [
+          "pytorch-basics",
+          "PyTorch, Training Loop",
+          "pending"
+        ],
+        [
+          "classic-nlp",
+          "NLP Basics",
+          "pending"
+        ],
+        [
+          "computer-vision",
+          "Computer Vision Basics",
+          "pending"
+        ]
+      ]
+    },
+    {
       "id": "llm-basics",
       "part": "ai",
       "title": "LLM 기초",
@@ -732,77 +773,6 @@
       ]
     },
     {
-      "id": "agents",
-      "part": "ai",
-      "title": "에이전트",
-      "refs": [
-        "ai-agents",
-        "claude-code"
-      ],
-      "nodes": [
-        [
-          "agent-loop",
-          "Agent Loop",
-          "learning"
-        ],
-        [
-          "tool-calling",
-          "Tool Calling",
-          "done"
-        ],
-        [
-          "agent-patterns",
-          "ReAct, Planner-Executor",
-          "pending"
-        ],
-        [
-          "multi-agents",
-          "Multi-agents",
-          "done"
-        ],
-        [
-          "agent-memory",
-          "Agent Memory",
-          "pending"
-        ],
-        [
-          "mcp",
-          "MCP",
-          "learning"
-        ],
-        [
-          "mcp-server",
-          "Building an MCP Server",
-          "pending"
-        ],
-        [
-          "agent-sdk",
-          "Agent SDK",
-          "pending"
-        ],
-        [
-          "langgraph",
-          "LangChain, LangGraph",
-          "pending"
-        ],
-        [
-          "coding-agents",
-          "Coding Agents, Hooks",
-          "done"
-        ],
-        [
-          "computer-use",
-          "Computer Use, Browser Agents",
-          "pending"
-        ],
-        [
-          "generative-ui",
-          "Generative UI, MCP Apps",
-          "pending"
-        ]
-      ]
-    },
-    {
       "id": "rag",
       "part": "ai",
       "title": "임베딩과 RAG",
@@ -878,6 +848,82 @@
         [
           "ontology-agents",
           "Ontology-based Agents",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "id": "agents",
+      "part": "ai",
+      "title": "에이전트",
+      "refs": [
+        "ai-agents",
+        "claude-code"
+      ],
+      "nodes": [
+        [
+          "agent-loop",
+          "Agent Loop",
+          "learning"
+        ],
+        [
+          "tool-calling",
+          "Tool Calling",
+          "done"
+        ],
+        [
+          "agent-patterns",
+          "ReAct, Planner-Executor",
+          "pending"
+        ],
+        [
+          "multi-agents",
+          "Multi-agents",
+          "done"
+        ],
+        [
+          "agent-memory",
+          "Agent Memory",
+          "pending"
+        ],
+        [
+          "mcp",
+          "MCP",
+          "learning"
+        ],
+        [
+          "mcp-server",
+          "Building an MCP Server",
+          "pending"
+        ],
+        [
+          "agent-sdk",
+          "Agent SDK",
+          "pending"
+        ],
+        [
+          "langgraph",
+          "LangChain, LangGraph",
+          "pending"
+        ],
+        [
+          "coding-agents",
+          "Coding Agents, Hooks",
+          "done"
+        ],
+        [
+          "agent-skills",
+          "Agent Skills",
+          "done"
+        ],
+        [
+          "computer-use",
+          "Computer Use, Browser Agents",
+          "pending"
+        ],
+        [
+          "generative-ui",
+          "Generative UI, MCP Apps",
           "pending"
         ]
       ]
@@ -998,6 +1044,11 @@
           "pending"
         ],
         [
+          "ai-ethics",
+          "AI Ethics, Bias",
+          "pending"
+        ],
+        [
           "red-teaming",
           "Red Teaming",
           "pending"
@@ -1069,11 +1120,6 @@
         "mlops"
       ],
       "nodes": [
-        [
-          "pytorch-basics",
-          "PyTorch, Training Loop",
-          "pending"
-        ],
         [
           "finetune-datasets",
           "Chat Templates, Synthetic Data",

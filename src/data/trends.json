@@ -1,0 +1,617 @@
+{
+ "total": 13,
+ "nodes": {
+  "hosting": {
+   "count": 2,
+   "tools": [
+    "Vercel"
+   ]
+  },
+  "html-basics": {
+   "count": 1,
+   "tools": []
+  },
+  "css-basics": {
+   "count": 1,
+   "tools": []
+  },
+  "js-basics": {
+   "count": 1,
+   "tools": []
+  },
+  "git": {
+   "count": 4,
+   "tools": [
+    "Git"
+   ]
+  },
+  "github": {
+   "count": 5,
+   "tools": [
+    "GitHub"
+   ]
+  },
+  "typescript": {
+   "count": 1,
+   "tools": []
+  },
+  "react": {
+   "count": 1,
+   "tools": [
+    "React"
+   ]
+  },
+  "playwright": {
+   "count": 2,
+   "tools": [
+    "Playwright"
+   ]
+  },
+  "ssr": {
+   "count": 1,
+   "tools": [
+    "Next.js"
+   ]
+  },
+  "python-basics": {
+   "count": 6,
+   "tools": []
+  },
+  "python-async": {
+   "count": 1,
+   "tools": []
+  },
+  "python-env": {
+   "count": 1,
+   "tools": [
+    "uv"
+   ]
+  },
+  "sql-basics": {
+   "count": 1,
+   "tools": []
+  },
+  "postgresql": {
+   "count": 1,
+   "tools": [
+    "PostgreSQL",
+    "Supabase"
+   ]
+  },
+  "orm": {
+   "count": 1,
+   "tools": [
+    "Prisma"
+   ]
+  },
+  "rest": {
+   "count": 1,
+   "tools": [
+    "Express"
+   ]
+  },
+  "openapi": {
+   "count": 1,
+   "tools": []
+  },
+  "fastapi": {
+   "count": 4,
+   "tools": [
+    "FastAPI",
+    "Pydantic"
+   ]
+  },
+  "linux": {
+   "count": 1,
+   "tools": []
+  },
+  "docker": {
+   "count": 6,
+   "tools": [
+    "Docker",
+    "Docker Hub"
+   ]
+  },
+  "kubernetes": {
+   "count": 1,
+   "tools": [
+    "GKE",
+    "Kubernetes"
+   ]
+  },
+  "ci-cd": {
+   "count": 5,
+   "tools": [
+    "Argo CD",
+    "GitHub Actions"
+   ]
+  },
+  "cloud": {
+   "count": 6,
+   "tools": [
+    "GCP",
+    "AWS",
+    "Cloud Run",
+    "Ansible"
+   ]
+  },
+  "scaling": {
+   "count": 1,
+   "tools": []
+  },
+  "how-llms-work": {
+   "count": 5,
+   "tools": []
+  },
+  "tokens": {
+   "count": 1,
+   "tools": [
+    "Hugging Face Tokenizers"
+   ]
+  },
+  "model-types": {
+   "count": 4,
+   "tools": []
+  },
+  "reasoning-models": {
+   "count": 2,
+   "tools": []
+  },
+  "model-choice": {
+   "count": 2,
+   "tools": []
+  },
+  "messages-api": {
+   "count": 6,
+   "tools": [
+    "OpenAI API",
+    "Anthropic API",
+    "Gemini API",
+    "OpenRouter"
+   ]
+  },
+  "streaming": {
+   "count": 1,
+   "tools": []
+  },
+  "structured-output": {
+   "count": 3,
+   "tools": [
+    "LMQL",
+    "Outlines"
+   ]
+  },
+  "multimodal": {
+   "count": 3,
+   "tools": []
+  },
+  "prompt-engineering": {
+   "count": 4,
+   "tools": []
+  },
+  "system-prompt": {
+   "count": 1,
+   "tools": []
+  },
+  "few-shot-cot": {
+   "count": 1,
+   "tools": []
+  },
+  "context-engineering": {
+   "count": 3,
+   "tools": []
+  },
+  "context-compaction": {
+   "count": 1,
+   "tools": []
+  },
+  "agent-loop": {
+   "count": 3,
+   "tools": []
+  },
+  "tool-calling": {
+   "count": 6,
+   "tools": []
+  },
+  "agent-patterns": {
+   "count": 4,
+   "tools": []
+  },
+  "multi-agents": {
+   "count": 4,
+   "tools": [
+    "Deep Agents"
+   ]
+  },
+  "agent-memory": {
+   "count": 3,
+   "tools": [
+    "Mem0"
+   ]
+  },
+  "mcp": {
+   "count": 5,
+   "tools": []
+  },
+  "mcp-server": {
+   "count": 1,
+   "tools": []
+  },
+  "agent-sdk": {
+   "count": 1,
+   "tools": [
+    "Claude Agent SDK",
+    "Google ADK",
+    "OpenAI Agents SDK"
+   ]
+  },
+  "langgraph": {
+   "count": 9,
+   "tools": [
+    "LangChain",
+    "LangGraph",
+    "LlamaIndex",
+    "AutoGen"
+   ]
+  },
+  "coding-agents": {
+   "count": 3,
+   "tools": [
+    "Claude Code",
+    "OpenCode",
+    "Codex",
+    "Pi"
+   ]
+  },
+  "embeddings": {
+   "count": 5,
+   "tools": [
+    "Sentence Transformers",
+    "OpenAI Embeddings"
+   ]
+  },
+  "vector-db": {
+   "count": 7,
+   "tools": [
+    "Chroma",
+    "Milvus",
+    "Qdrant",
+    "Annoy"
+   ]
+  },
+  "document-parsing": {
+   "count": 2,
+   "tools": [
+    "LlamaParse"
+   ]
+  },
+  "chunking": {
+   "count": 4,
+   "tools": []
+  },
+  "hybrid-search": {
+   "count": 4,
+   "tools": [
+    "Cohere Rerank"
+   ]
+  },
+  "advanced-rag": {
+   "count": 4,
+   "tools": [
+    "Tavily"
+   ]
+  },
+  "query-construction": {
+   "count": 1,
+   "tools": []
+  },
+  "graph-db": {
+   "count": 1,
+   "tools": []
+  },
+  "graphrag": {
+   "count": 3,
+   "tools": []
+  },
+  "error-analysis": {
+   "count": 1,
+   "tools": [
+    "DeepEval"
+   ]
+  },
+  "agent-evals": {
+   "count": 3,
+   "tools": [
+    "DeepEval"
+   ]
+  },
+  "rag-eval": {
+   "count": 6,
+   "tools": [
+    "DeepEval",
+    "Ragas"
+   ]
+  },
+  "eval-ci": {
+   "count": 1,
+   "tools": []
+  },
+  "model-benchmarks": {
+   "count": 1,
+   "tools": []
+  },
+  "tracing": {
+   "count": 3,
+   "tools": [
+    "LangSmith",
+    "OpenTelemetry"
+   ]
+  },
+  "production-monitoring": {
+   "count": 5,
+   "tools": []
+  },
+  "prompt-injection": {
+   "count": 3,
+   "tools": []
+  },
+  "pii": {
+   "count": 3,
+   "tools": []
+  },
+  "guardrails": {
+   "count": 1,
+   "tools": []
+  },
+  "red-teaming": {
+   "count": 3,
+   "tools": [
+    "garak"
+   ]
+  },
+  "local-models": {
+   "count": 5,
+   "tools": [
+    "Ollama",
+    "LM Studio",
+    "kobold.cpp",
+    "llama.cpp"
+   ]
+  },
+  "hf-transformers": {
+   "count": 4,
+   "tools": [
+    "Hugging Face",
+    "Hugging Face Transformers"
+   ]
+  },
+  "quantization": {
+   "count": 4,
+   "tools": []
+  },
+  "inference-optimization": {
+   "count": 1,
+   "tools": []
+  },
+  "vllm": {
+   "count": 5,
+   "tools": [
+    "vLLM",
+    "NVIDIA Triton",
+    "SGLang",
+    "TGI"
+   ]
+  },
+  "gpu-deploy": {
+   "count": 3,
+   "tools": [
+    "Amazon SageMaker",
+    "Runpod",
+    "SkyPilot"
+   ]
+  },
+  "demo-deploy": {
+   "count": 4,
+   "tools": [
+    "Gradio",
+    "Hugging Face Spaces",
+    "Streamlit"
+   ]
+  },
+  "pytorch-basics": {
+   "count": 5,
+   "tools": [
+    "PyTorch",
+    "Keras",
+    "TensorFlow"
+   ]
+  },
+  "finetune-datasets": {
+   "count": 2,
+   "tools": [
+    "Argilla",
+    "Hugging Face Datasets"
+   ]
+  },
+  "fine-tuning": {
+   "count": 8,
+   "tools": [
+    "TRL",
+    "Accelerate"
+   ]
+  },
+  "preference-alignment": {
+   "count": 2,
+   "tools": [
+    "TRL"
+   ]
+  },
+  "experiment-tracking": {
+   "count": 1,
+   "tools": [
+    "MLflow"
+   ]
+  },
+  "ml-fundamentals": {
+   "count": 7,
+   "tools": []
+  },
+  "neural-networks": {
+   "count": 5,
+   "tools": []
+  },
+  "classic-nlp": {
+   "count": 4,
+   "tools": []
+  },
+  "computer-vision": {
+   "count": 4,
+   "tools": []
+  },
+  "ai-ethics": {
+   "count": 3,
+   "tools": []
+  },
+  "agent-skills": {
+   "count": 3,
+   "tools": []
+  },
+  "data-analysis": {
+   "count": 3,
+   "tools": []
+  }
+ },
+ "topTools": [
+  [
+   "LangChain",
+   7
+  ],
+  [
+   "LangGraph",
+   7
+  ],
+  [
+   "OpenAI API",
+   6
+  ],
+  [
+   "Claude Code",
+   5
+  ],
+  [
+   "Docker",
+   5
+  ],
+  [
+   "GitHub",
+   5
+  ],
+  [
+   "Hugging Face",
+   5
+  ],
+  [
+   "PyTorch",
+   5
+  ],
+  [
+   "FastAPI",
+   4
+  ],
+  [
+   "Git",
+   4
+  ],
+  [
+   "Gradio",
+   4
+  ],
+  [
+   "LlamaIndex",
+   4
+  ],
+  [
+   "vLLM",
+   4
+  ],
+  [
+   "ChatGPT",
+   3
+  ],
+  [
+   "GCP",
+   3
+  ],
+  [
+   "Ollama",
+   3
+  ],
+  [
+   "AWS",
+   2
+  ],
+  [
+   "Anthropic API",
+   2
+  ],
+  [
+   "Chroma",
+   2
+  ],
+  [
+   "Cloud Run",
+   2
+  ]
+ ],
+ "missing": [
+  {
+   "section": "fine-tuning-sec",
+   "id": "ml-fundamentals",
+   "label": "Machine Learning Fundamentals",
+   "count": 7,
+   "reason": "회귀·분류·군집, scikit-learn·XGBoost·LightGBM, 평가 지표와 교차 검증. LLM 단원 앞의 공통 선수 과목이며 skeleton 에 ML 일반 노드 없음"
+  },
+  {
+   "section": "fine-tuning-sec",
+   "id": "neural-networks",
+   "label": "Neural Networks, CNN/RNN",
+   "count": 5,
+   "reason": "퍼셉트론, 역전파, CNN/RNN/LSTM. pytorch-basics 는 프레임워크와 학습 루프 단위라 신경망 구조 자체는 범위 밖"
+  },
+  {
+   "section": "llm-basics",
+   "id": "classic-nlp",
+   "label": "Classical NLP, BERT",
+   "count": 4,
+   "reason": "텍스트 전처리, BERT 계열 인코더, 분류·NER 같은 고전 NLP 과제. how-llms-work 는 디코더 LLM 원리 중심"
+  },
+  {
+   "section": "fine-tuning-sec",
+   "id": "computer-vision",
+   "label": "Computer Vision, YOLO",
+   "count": 4,
+   "reason": "이미지 분류·탐지(CNN, YOLO, OpenCV). multimodal 노드는 API 로 비전 입력을 쓰는 범위라 모델 학습형 CV 와 다름"
+  },
+  {
+   "section": "ai-security",
+   "id": "ai-ethics",
+   "label": "AI Ethics, Regulation",
+   "count": 3,
+   "reason": "AI 윤리, 규제·거버넌스. pii 는 개인정보 처리, guardrails 는 런타임 차단이라 규범과 규제 범위는 없음"
+  },
+  {
+   "section": "agents",
+   "id": "agent-skills",
+   "label": "Agent Skills",
+   "count": 3,
+   "reason": "SKILL.md 단위로 절차를 패키징해 에이전트가 필요할 때 로드하는 방식. context-engineering 과 coding-agents 에 걸치지만 독립 노드 없음"
+  },
+  {
+   "section": "python",
+   "id": "data-analysis",
+   "label": "pandas, EDA",
+   "count": 3,
+   "reason": "pandas 전처리, 탐색적 분석, 시각화. Python 섹션에 데이터 처리 노드 없음"
+  }
+ ]
+}

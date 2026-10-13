@@ -91,6 +91,10 @@ const resCount = await page.locator('[data-modal-res] a').count();
 check('모달 목표, 할 일, 강의 표시', goalLength > 5 && todoCount >= 1 && resCount >= 1, `할 일 ${todoCount}, 강의 ${resCount}`);
 check('모달 참고 로드맵 링크', (await page.locator('[data-modal-refs] a[href^="https://roadmap.sh/"]').count()) >= 1);
 check('해시 갱신', page.url().endsWith('#fastapi'));
+const trendText = (await page.locator('[data-modal-trend]').textContent()) ?? '';
+check('모달 교육 과정 동향', trendText.includes('곳 중'), trendText);
+check('노드 과정 수 표시', (await page.locator('.rm-node__trend').count()) >= 1, `${await page.locator('.rm-node__trend').count()}개`);
+check('동향 요약 도구와 과정 목록', (await page.locator('.rm-tools__item').count()) >= 1 && (await page.locator('.rm-programs a').count()) >= 1);
 
 const doneBefore = Number(await page.locator('[data-progress-done]').textContent());
 await page.locator('[data-set-status="done"]').click();
