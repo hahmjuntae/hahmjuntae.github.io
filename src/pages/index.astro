@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import NodeButton from '../components/NodeButton.astro';
+import RoadmapRuntime from '../components/RoadmapRuntime.astro';
+import RoadmapHeader from '../components/RoadmapHeader.astro';
 import { sections, parts, endNode, statusMeta, trendOf, trendTotal, type Status, type RoadmapSection, type RoadmapNode } from '../data/roadmap';
 
 type Side = 'left' | 'right';
@@ -13,7 +15,6 @@ interface Row {
 }
 
 const order: Status[] = ['done', 'learning', 'pending', 'skip'];
-const partTitle = Object.fromEntries(parts.map((part) => [part.id, part.title]));
 const total = sections.reduce((sum, section) => sum + section.nodes.length, 0);
 const totalHours = parts.reduce((sum, part) => sum + part.hours, 0);
 
@@ -40,56 +41,12 @@ const boxes = parts.map((part) => {
   return { part, rows };
 });
 
-const nodeData = Object.fromEntries([
-  ...sections.flatMap((section) =>
-    section.nodes.map((node) => [
-      node.id,
-      {
-        label: node.label,
-        where: `${partTitle[section.part]} · ${section.title}`,
-        status: node.status,
-        goal: node.goal,
-        todo: node.todo,
-        resources: node.resources,
-        refs: section.refs,
-        part: section.part,
-        trend: trendOf(node.id),
-      },
-    ]),
-  ),
-  [
-    endNode.id,
-    { label: endNode.label, where: 'Goal', status: endNode.status, goal: endNode.goal, todo: endNode.todo, resources: endNode.resources, refs: endNode.refs, part: 'ai', trend: trendOf(endNode.id), end: true },
-  ],
-]);
 const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로드맵입니다.';
 ---
 
 <Base title="Applied AI Engineer 로드맵" description={description}>
   <div class="ds-page rm">
-    <header class="ds-article__header rm-head">
-      <h1 class="ds-article__title">Applied AI Engineer 로드맵</h1>
-    </header>
-
-    <div class="rm-progress" aria-live="polite">
-      <p class="rm-progress__text ds-tabular"><span data-progress-done>0</span> / {total} 완료 · <span data-progress-pct>0</span>%</p>
-      <div class="rm-progress__bar" aria-hidden="true"><span data-progress-bar></span></div>
-      <ul class="rm-legend" aria-label="상태 범례">
-        {
-          order.map((status) => (
-            <li class="rm-legend__item">
-              <span class="rm-icon" data-status={status} aria-hidden="true" />
-              <span>{statusMeta[status].label}</span>
-              <span class="rm-legend__count ds-tabular" data-count={status}>0</span>
-            </li>
-          ))
-        }
-      </ul>
-      <ul class="rm-legend rm-legend--keys" aria-label="섹션 범례">
-        <li class="rm-legend__item"><span class="rm-key" data-kind="spine" aria-hidden="true"></span><span>핵심 경로</span></li>
-        <li class="rm-legend__item"><span class="rm-key" data-kind="branch" aria-hidden="true"></span><span>곁가지</span></li>
-      </ul>
-    </div>
+    <RoadmapHeader keys />
 
     <div class="rm-map">
       <svg class="rm-lines" aria-hidden="true"></svg>
@@ -140,171 +97,9 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
     </div>
   </div>
 
-  <div class="ds-modal" id="node-modal" data-backdrop="fade" role="dialog" aria-modal="true" aria-labelledby="node-modal-title">
-    <div class="ds-modal__backdrop" data-close></div>
-    <div class="ds-modal__panel" tabindex="-1">
-      <div class="ds-modal__header">
-        <h2 class="ds-modal__title" id="node-modal-title"></h2>
-        <button type="button" class="ds-btn" data-variant="ghost" data-size="sm" data-uniform data-close aria-label="닫기">
-          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" stroke-linecap="round" /></svg>
-        </button>
-      </div>
-      <div class="ds-modal__body rm-detail">
-        <p class="rm-detail__where" data-modal-where></p>
-        <div class="rm-status" role="group" aria-label="진행 상태" data-modal-status>
-          <button type="button" class="ds-btn" data-variant="outline" data-size="sm" data-set-status="learning" aria-pressed="false">
-            <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5h4.5A1.5 1.5 0 0 1 8 5v8a1.5 1.5 0 0 0-1.5-1.5H2zM14 3.5H9.5A1.5 1.5 0 0 0 8 5v8a1.5 1.5 0 0 1 1.5-1.5H14z" stroke-linejoin="round" /></svg>
-            진행
-          </button>
-          <button type="button" class="ds-btn" data-variant="outline" data-size="sm" data-set-status="done" aria-pressed="false">
-            <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m3 8.5 3 3 7-7" stroke-linecap="round" stroke-linejoin="round" /></svg>
-            완료
-          </button>
-          <button type="button" class="ds-btn" data-variant="outline" data-size="sm" data-set-status="skip" aria-pressed="false">
-            <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" stroke-linecap="round" /></svg>
-            건너뜀
-          </button>
-        </div>
-        <h3 class="rm-detail__label">목표</h3>
-        <p class="rm-detail__goal" data-modal-goal></p>
-        <h3 class="rm-detail__label">할 일</h3>
-        <ol class="rm-detail__todo" data-modal-todo></ol>
-        <h3 class="rm-detail__label">무료 강의</h3>
-        <ul class="rm-detail__res" data-modal-res></ul>
-        <div data-modal-trend-wrap>
-          <h3 class="rm-detail__label">교육 과정 동향</h3>
-          <p data-modal-trend></p>
-        </div>
-        <h3 class="rm-detail__label">참고 로드맵</h3>
-        <ul class="rm-refs" data-modal-refs></ul>
-      </div>
-    </div>
-  </div>
-
-  <script is:inline type="application/json" id="node-data" data-total={trendTotal} set:html={JSON.stringify(nodeData)} />
-  <script is:inline type="application/json" id="status-meta" set:html={JSON.stringify(statusMeta)} />
+  <RoadmapRuntime />
   <script is:inline>
     (function () {
-      var KEY = 'roadmap-progress-v1';
-      var TOTAL = Number(document.getElementById('node-data').getAttribute('data-total'));
-      var data = JSON.parse(document.getElementById('node-data').textContent);
-      var meta = JSON.parse(document.getElementById('status-meta').textContent);
-      var modal = document.getElementById('node-modal');
-      var panel = modal.querySelector('.ds-modal__panel');
-      var current = null;
-      var opener = null;
-      var overrides = {};
-      try { overrides = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { overrides = {}; }
-
-      function statusOf(id) { return overrides[id] || data[id].status; }
-
-      function save() {
-        try { localStorage.setItem(KEY, JSON.stringify(overrides)); } catch (e) {}
-      }
-
-      function paint(id) {
-        var button = document.getElementById(id);
-        if (!button || data[id].end) return;
-        var status = statusOf(id);
-        button.setAttribute('data-status', status);
-        var icon = button.querySelector('.rm-icon');
-        icon.setAttribute('data-status', status);
-        icon.setAttribute('aria-label', meta[status].label);
-      }
-
-      function summarize() {
-        var counts = { done: 0, learning: 0, pending: 0, skip: 0 };
-        var total = 0;
-        Object.keys(data).forEach(function (id) {
-          if (data[id].end) return;
-          counts[statusOf(id)] += 1;
-          total += 1;
-        });
-        Object.keys(counts).forEach(function (status) {
-          var el = document.querySelector('[data-count="' + status + '"]');
-          if (el) el.textContent = counts[status];
-        });
-        var pct = total ? Math.round((counts.done / total) * 100) : 0;
-        document.querySelector('[data-progress-done]').textContent = counts.done;
-        document.querySelector('[data-progress-pct]').textContent = pct;
-        document.querySelector('[data-progress-bar]').style.width = pct + '%';
-      }
-
-      function paintStatusButtons() {
-        var status = current ? statusOf(current) : null;
-        modal.querySelectorAll('[data-set-status]').forEach(function (btn) {
-          var on = btn.getAttribute('data-set-status') === status;
-          btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-          if (on) btn.setAttribute('data-selected', ''); else btn.removeAttribute('data-selected');
-        });
-      }
-
-      function el(tag, text, attrs) {
-        var node = document.createElement(tag);
-        if (text) node.textContent = text;
-        if (attrs) Object.keys(attrs).forEach(function (k) { node.setAttribute(k, attrs[k]); });
-        return node;
-      }
-
-      function open(id) {
-        var node = data[id];
-        if (!node) return;
-        current = id;
-        opener = document.getElementById(id);
-        modal.querySelector('#node-modal-title').textContent = node.label;
-        modal.querySelector('[data-modal-where]').textContent = node.where;
-        modal.querySelector('[data-modal-status]').hidden = !!node.end;
-        modal.querySelector('[data-modal-goal]').textContent = node.goal;
-        var todo = modal.querySelector('[data-modal-todo]');
-        todo.textContent = '';
-        node.todo.forEach(function (item) { todo.appendChild(el('li', item)); });
-        var res = modal.querySelector('[data-modal-res]');
-        res.textContent = '';
-        node.resources.forEach(function (r) {
-          var li = el('li');
-          li.appendChild(el('a', r.title, { href: r.url, target: '_blank', rel: 'noopener' }));
-          li.appendChild(el('span', r.kind + ' · ' + (r.lang === 'ko' ? '한국어' : '영어'), { class: 'rm-detail__res-meta' }));
-          res.appendChild(li);
-        });
-        var trend = node.trend || { count: 0, tools: [] };
-        modal.querySelector('[data-modal-trend-wrap]').hidden = trend.count === 0 && node.part !== 'ai';
-        modal.querySelector('[data-modal-trend]').textContent = trend.count === 0
-          ? '조사한 ' + TOTAL + '곳 중 다루는 곳이 없습니다.'
-          : TOTAL + '곳 중 ' + trend.count + '곳에서 다룹니다.' + (trend.tools.length ? ' 주요 스택: ' + trend.tools.join(', ') : '');
-        var refs = modal.querySelector('[data-modal-refs]');
-        refs.textContent = '';
-        node.refs.forEach(function (ref) {
-          var li = el('li');
-          li.appendChild(el('a', ref.name, { href: ref.url, target: '_blank', rel: 'noopener', class: 'ds-badge', 'data-variant': 'outline' }));
-          refs.appendChild(li);
-        });
-        paintStatusButtons();
-        modal.classList.remove('is-closing');
-        modal.classList.add('is-open');
-        modal.querySelector('.ds-modal__body').scrollTop = 0;
-        panel.focus();
-        if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
-      }
-
-      function close() {
-        if (!modal.classList.contains('is-open')) return;
-        modal.classList.add('is-closing');
-        setTimeout(function () { modal.classList.remove('is-open', 'is-closing'); }, 300);
-        history.replaceState(null, '', location.pathname);
-        current = null;
-        if (opener) opener.focus();
-      }
-
-      function setStatus(status) {
-        if (!current) return;
-        var next = statusOf(current) === status ? 'pending' : status;
-        if (next === data[current].status) delete overrides[current]; else overrides[current] = next;
-        save();
-        paint(current);
-        paintStatusButtons();
-        summarize();
-      }
-
       var map = document.querySelector('.rm-map');
       var svg = map.querySelector('.rm-lines');
 
@@ -363,118 +158,10 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
         requestAnimationFrame(function () { pending = false; route(); });
       }
 
-      document.addEventListener('click', function (event) {
-        var set = event.target.closest('[data-set-status]');
-        if (set) { setStatus(set.getAttribute('data-set-status')); return; }
-        var trigger = event.target.closest('[data-node]');
-        if (trigger) { event.preventDefault(); open(trigger.getAttribute('data-node')); return; }
-        if (event.target.closest('[data-close]')) close();
-      });
-      document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') close();
-      });
-      function openFromHash() {
-        var id = decodeURIComponent(location.hash.slice(1));
-        if (data[id] && !modal.classList.contains('is-open')) open(id);
-      }
-      window.addEventListener('hashchange', openFromHash);
       if ('ResizeObserver' in window) new ResizeObserver(scheduleRoute).observe(map);
       window.addEventListener('resize', scheduleRoute);
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleRoute);
-
-      Object.keys(data).forEach(paint);
-      summarize();
       route();
-      openFromHash();
     })();
   </script>
 </Base>
-
-<style is:global>
-  .rm { max-width: 1240px; }
-  .rm-head { padding-top: 32px; }
-
-  .rm-progress { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-  .rm-progress__text { color: var(--color-text-emphasis); font-size: 14px; line-height: 20px; font-weight: 600; }
-  .rm-progress__bar { height: 6px; overflow: hidden; border-radius: var(--radius-full); background: var(--color-background-primary-soft); }
-  .rm-progress__bar span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--color-text-success-soft); transition: width .3s var(--cubic-enter); }
-
-  .rm-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 4px 0 0; padding: 0; list-style: none; font-size: 14px; line-height: 20px; color: var(--color-text-secondary); }
-  .rm-legend__item { display: inline-flex; align-items: center; gap: 6px; }
-  .rm-key { display: inline-block; width: 22px; height: 12px; border-radius: 3px; }
-  .rm-key[data-kind='spine'] { background: var(--color-background-primary-solid); }
-  .rm-key[data-kind='branch'] { box-shadow: inset 0 0 0 2px var(--color-background-primary-solid); }
-  .rm-legend__count { color: var(--color-text-emphasis); font-weight: 600; }
-
-  .rm-icon { position: relative; display: inline-block; width: 16px; height: 16px; flex-shrink: 0; border-radius: var(--radius-full); }
-  .rm-icon[data-status='pending'] { border: 2px solid var(--color-border-strong); }
-  .rm-icon[data-status='done'] { background: var(--color-text-success-soft); }
-  .rm-icon[data-status='done']::after { content: ''; position: absolute; left: 5px; top: 3px; width: 4px; height: 7px; border: solid var(--color-text-inverse); border-width: 0 2px 2px 0; transform: rotate(45deg); }
-  .rm-icon[data-status='learning'] { border: 2px solid var(--color-text-info-soft); background: linear-gradient(90deg, var(--color-text-info-soft) 50%, transparent 50%); }
-  .rm-icon[data-status='skip'] { border: 2px dashed var(--color-border-strong); }
-
-  .rm-map { position: relative; margin-top: 48px; padding-bottom: 64px; }
-  .rm-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; fill: none; }
-  .rm-lines__solid { stroke: var(--color-text-tertiary); stroke-width: 2; }
-  .rm-lines__dotted { stroke: var(--color-text-tertiary); stroke-opacity: .55; stroke-width: 1.5; stroke-dasharray: 3 3; }
-
-  .rm-box { position: relative; padding: 36px 16px 24px; border: 2px dashed var(--color-border-strong); border-radius: var(--radius-3xl); }
-  .rm-box + .rm-box { margin-top: 56px; }
-  .rm-box__label { position: absolute; top: -14px; left: 20px; z-index: 1; display: flex; align-items: baseline; gap: 8px; margin: 0; padding: 0 10px; background: var(--page-bg); color: var(--color-text-emphasis); font-size: 18px; line-height: 24px; font-weight: 600; }
-  .rm-box__hours { color: var(--color-text-tertiary); font-size: 12px; line-height: 18px; font-weight: 500; }
-  .rm-box__grid { position: relative; display: flex; flex-direction: column; gap: 24px; }
-
-  .rm-spine, .rm-branch { position: relative; display: flex; flex-direction: column; gap: 12px; }
-  .rm-main { position: relative; z-index: 1; margin: 0; padding: 10px 16px; border-radius: var(--radius-md); background: var(--color-background-primary-solid); color: var(--color-text-inverse); font-size: 16px; line-height: 24px; font-weight: 600; text-align: center; }
-  .rm-branch .rm-main { background: var(--color-surface); color: var(--color-text-emphasis); box-shadow: inset 0 0 0 2px var(--color-background-primary-solid); }
-  .rm-subs { position: relative; display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0 0 0 32px; list-style: none; }
-  .rm-subs::before { content: ''; position: absolute; top: -12px; bottom: 20px; left: 12px; border-left: 2px dotted var(--color-border-strong); }
-  .rm-subs > li { position: relative; }
-  .rm-subs > li::before { content: ''; position: absolute; top: 50%; left: -20px; width: 20px; border-top: 2px dotted var(--color-border-strong); }
-  .rm-node { display: flex; width: 100%; min-height: 40px; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); font-size: 14px; line-height: 20px; text-align: left; cursor: pointer; transition: background-color var(--transition-duration-basic) var(--transition-ease-basic), border-color var(--transition-duration-basic) var(--transition-ease-basic); }
-  .rm-node:hover { background: var(--color-surface-secondary); border-color: var(--color-border-strong); }
-  .rm-node[data-status='done'] { border-color: var(--color-border-success-surface); }
-  .rm-node[data-status='done'] .rm-node__label { color: var(--color-text-secondary); }
-  .rm-node[data-status='skip'] { border-style: dashed; color: var(--color-text-tertiary); }
-  .rm-node[data-status='skip'] .rm-node__label { text-decoration: line-through; }
-  .rm-node__trend { margin-left: auto; color: var(--color-text-tertiary); font-size: 12px; line-height: 18px; }
-  .rm-node:focus-visible, .rm-end__node:focus-visible { outline: 2px solid var(--color-ring); outline-offset: 2px; }
-
-  .rm-end { position: relative; z-index: 1; display: flex; justify-content: center; margin-top: 56px; }
-  .rm-end__node { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 240px; padding: 16px 32px; border-radius: var(--radius-lg); background: var(--color-background-primary-solid); color: var(--color-text-inverse); cursor: pointer; box-shadow: 0 0 0 4px var(--page-bg), 0 0 0 6px var(--color-border-strong); }
-  .rm-end__eyebrow { font-size: 12px; line-height: 18px; opacity: .7; }
-  .rm-end__label { font-size: 20px; line-height: 26px; font-weight: 600; }
-
-  @media (width >= 1024px) {
-    .rm-box { padding: 48px 32px 40px; }
-    .rm-box__grid { display: grid; grid-template-columns: minmax(0, 1fr) 240px minmax(0, 1fr); column-gap: 56px; row-gap: 48px; align-items: start; }
-    .rm-spine { display: contents; }
-    .rm-spine > .rm-main { grid-row: var(--r); grid-column: 2; }
-    .rm-subs--fan { grid-row: var(--r); padding: 0; }
-    .rm-subs--fan[data-pos='left'] { grid-column: 1; }
-    .rm-subs--fan[data-pos='right'] { grid-column: 3; }
-    .rm-subs::before, .rm-subs > li::before { display: none; }
-    .rm-branch { grid-row: var(--r); }
-    .rm-branch[data-pos='left'] { grid-column: 1; }
-    .rm-branch[data-pos='right'] { grid-column: 3; }
-    .rm-end__node { min-width: 280px; }
-  }
-
-  .rm-detail { display: flex; flex-direction: column; gap: 4px; }
-  .rm-detail p { margin: 0; color: var(--color-text); font-size: 14px; line-height: 22px; }
-  .rm-detail__where { color: var(--color-text-secondary) !important; }
-  .rm-detail [hidden] { display: none; }
-  .rm-status { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 4px; }
-  .rm-status .ds-btn svg { margin-right: 4px; }
-  .rm-status .ds-btn[aria-pressed='true'] { color: var(--color-text-emphasis); font-weight: 600; }
-  .rm-detail__label { margin: 16px 0 4px; color: var(--color-text-secondary); font-size: 12px; line-height: 18px; font-weight: 600; }
-  .rm-detail__todo, .rm-detail__res { display: flex; flex-direction: column; gap: 6px; margin: 0; padding-left: 20px; color: var(--color-text); font-size: 14px; line-height: 22px; }
-  .rm-detail__todo { list-style: decimal; }
-  .rm-detail__todo li::marker { color: var(--color-text-tertiary); font-variant-numeric: tabular-nums; }
-  .rm-detail__res { padding-left: 18px; list-style: disc; }
-  .rm-detail__res li::marker { color: var(--color-text-tertiary); }
-  .rm-detail__res a { color: var(--color-text-emphasis); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--color-border-strong); }
-  .rm-detail__res-meta { margin-left: 8px; color: var(--color-text-tertiary); font-size: 12px; white-space: nowrap; }
-  .rm-refs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
-  .rm-refs .ds-badge { text-decoration: none; font-weight: 500; }
-</style>

@@ -1,0 +1,47 @@
+---
+import { sections, statusMeta, type Status } from '../data/roadmap';
+
+interface Props {
+  keys?: boolean;
+  current?: string;
+}
+
+const { keys = false, current = 'map' } = Astro.props;
+const variants = [
+  { id: 'map', label: '현재 지도', href: '/' },
+  { id: 'a', label: 'A 섹션 지도', href: '/layouts/a/' },
+  { id: 'b', label: 'B 체크리스트', href: '/layouts/b/' },
+  { id: 'c', label: 'C 3열 보드', href: '/layouts/c/' },
+];
+const order: Status[] = ['done', 'learning', 'pending', 'skip'];
+const total = sections.reduce((sum, section) => sum + section.nodes.length, 0);
+---
+
+<nav class="rm-switch" aria-label="레이아웃 시안">
+  {variants.map((v) => <a class="ds-btn" data-variant="outline" data-size="sm" href={v.href} aria-current={v.id === current ? 'page' : undefined} data-selected={v.id === current ? '' : undefined}>{v.label}</a>)}
+</nav>
+
+<header class="ds-article__header rm-head">
+  <h1 class="ds-article__title">Applied AI Engineer 로드맵</h1>
+</header>
+
+<div class="rm-progress" aria-live="polite">
+  <p class="rm-progress__text ds-tabular"><span data-progress-done>0</span> / {total} 완료 · <span data-progress-pct>0</span>%</p>
+  <div class="rm-progress__bar" aria-hidden="true"><span data-progress-bar></span></div>
+  <ul class="rm-legend" aria-label="상태 범례">
+    {
+      order.map((status) => (
+        <li class="rm-legend__item">
+          <span class="rm-icon" data-status={status} aria-hidden="true" />
+          <span>{statusMeta[status].label}</span>
+          <span class="rm-legend__count ds-tabular" data-count={status}>0</span>
+        </li>
+      ))
+    }
+  </ul>
+  {keys && (<ul class="rm-legend rm-legend--keys" aria-label="섹션 범례">
+    <li class="rm-legend__item"><span class="rm-key" data-kind="spine" aria-hidden="true"></span><span>핵심 경로</span></li>
+    <li class="rm-legend__item"><span class="rm-key" data-kind="branch" aria-hidden="true"></span><span>곁가지</span></li>
+  </ul>)}
+</div>
+

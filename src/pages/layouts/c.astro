@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro';
+import NodeButton from '../../components/NodeButton.astro';
+import RoadmapRuntime from '../../components/RoadmapRuntime.astro';
+import RoadmapHeader from '../../components/RoadmapHeader.astro';
+import { sections, parts, endNode } from '../../data/roadmap';
+---
+
+<Base title="시안 C 3열 보드" description="파트별 3열 보드 로드맵 시안입니다.">
+  <div class="ds-page rm">
+    <RoadmapHeader current="c" />
+    <div class="rmC-board">
+      {
+        parts.map((part) => (
+          <section class="rmC-col" aria-labelledby={`c-${part.id}`}>
+            <h2 class="rmC-col__head" id={`c-${part.id}`}>
+              {part.title}<span class="rm-count" data-part-progress={part.id}></span>
+              <span class="rm-box__hours ds-tabular">{part.hours}h</span>
+            </h2>
+            {sections
+              .filter((section) => section.part === part.id)
+              .map((section) => (
+                <div class="rmC-sec">
+                  <h3 class="rmC-sec__title" id={`${section.id}-title`}>{section.title}<span class="rm-count" data-section-progress={section.id}></span></h3>
+                  <ul class="rmC-chips">{section.nodes.map((node) => <li><NodeButton node={node} chip /></li>)}</ul>
+                </div>
+              ))}
+          </section>
+        ))
+      }
+    </div>
+    <div class="rm-end">
+      <button type="button" class="rm-end__node" id={endNode.id} data-node={endNode.id} aria-haspopup="dialog">
+        <span class="rm-end__eyebrow">Goal</span>
+        <span class="rm-end__label">{endNode.label}</span>
+      </button>
+    </div>
+  </div>
+  <RoadmapRuntime />
+</Base>

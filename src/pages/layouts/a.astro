@@ -1,0 +1,120 @@
+---
+import Base from '../../layouts/Base.astro';
+import NodeButton from '../../components/NodeButton.astro';
+import RoadmapRuntime from '../../components/RoadmapRuntime.astro';
+import RoadmapHeader from '../../components/RoadmapHeader.astro';
+import { sections, parts, endNode, type RoadmapSection } from '../../data/roadmap';
+
+interface Row {
+  spine: RoadmapSection;
+  branch?: RoadmapSection;
+}
+
+const totalHours = parts.reduce((sum, part) => sum + part.hours, 0);
+const boxes = parts.map((part) => {
+  const rows: Row[] = [];
+  for (const section of sections.filter((item) => item.part === part.id)) {
+    const last = rows[rows.length - 1];
+    if (section.branch && last && !last.branch) last.branch = section;
+    else rows.push({ spine: section });
+  }
+  return { part, rows };
+});
+---
+
+<Base title="시안 A 섹션 지도" description="섹션만 보이는 로드맵 지도 시안입니다.">
+  <div class="ds-page rm">
+    <RoadmapHeader keys current="a" />
+    <div class="rmA-tools">
+      <button type="button" class="ds-btn" data-variant="ghost" data-size="sm" data-expand="open">모두 펼치기</button>
+      <button type="button" class="ds-btn" data-variant="ghost" data-size="sm" data-expand="close">모두 접기</button>
+    </div>
+    <div class="rm-map">
+      <svg class="rm-lines" aria-hidden="true"></svg>
+      {
+        boxes.map(({ part, rows }) => (
+          <div class="rm-box" role="group" aria-labelledby={`a-${part.id}-label`}>
+            <p class="rm-box__label" id={`a-${part.id}-label`}>
+              <span>{part.title}</span>
+              <span class="rm-box__hours ds-tabular">{part.hours}h · {Math.round((part.hours / totalHours) * 100)}%</span>
+            </p>
+            <div class="rmA-grid">
+              {rows.map((row, index) => (
+                <>
+                  <details class="rmA-sec" data-a-spine style={`--r:${index + 1}`}>
+                    <summary class="rm-main" id={`${row.spine.id}-title`} data-branch-to={row.branch ? `${row.branch.id}-title` : undefined}>
+                      {row.spine.title}<span class="rm-count" data-section-progress={row.spine.id}></span>
+                    </summary>
+                    <ul class="rm-subs">{row.spine.nodes.map((node) => <li><NodeButton node={node} /></li>)}</ul>
+                  </details>
+                  {row.branch && (
+                    <details class="rmA-sec rm-branch" data-pos={index % 2 === 0 ? 'right' : 'left'} style={`--r:${index + 1}`}>
+                      <summary class="rm-main" id={`${row.branch.id}-title`}>
+                        {row.branch.title}<span class="rm-count" data-section-progress={row.branch.id}></span>
+                      </summary>
+                      <ul class="rm-subs">{row.branch.nodes.map((node) => <li><NodeButton node={node} /></li>)}</ul>
+                    </details>
+                  )}
+                </>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+      <div class="rm-end">
+        <button type="button" class="rm-end__node" id={endNode.id} data-node={endNode.id} data-a-spine aria-haspopup="dialog">
+          <span class="rm-end__eyebrow">Goal</span>
+          <span class="rm-end__label">{endNode.label}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <RoadmapRuntime />
+  <script is:inline>
+    (function () {
+      var map = document.querySelector('.rm-map');
+      var svg = map.querySelector('.rm-lines');
+      function route() {
+        if (!matchMedia('(min-width: 1024px)').matches) { svg.textContent = ''; return; }
+        var m = map.getBoundingClientRect();
+        function box(node) {
+          var r = node.getBoundingClientRect();
+          return { l: r.left - m.left, r: r.right - m.left, t: r.top - m.top, b: r.bottom - m.top, cx: (r.left + r.right) / 2 - m.left, cy: (r.top + r.bottom) / 2 - m.top };
+        }
+        function n(v) { return Math.round(v); }
+        var solid = [];
+        var spine = Array.prototype.slice.call(map.querySelectorAll('[data-a-spine]'));
+        for (var i = 0; i < spine.length - 1; i += 1) {
+          var a = box(spine[i]);
+          var b = box(spine[i + 1].tagName === 'DETAILS' ? spine[i + 1].querySelector('summary') : spine[i + 1]);
+          solid.push('M' + n(a.cx) + ' ' + n(a.b) + 'V' + n(b.t));
+        }
+        map.querySelectorAll('[data-branch-to]').forEach(function (main) {
+          var a = box(main);
+          var b = box(document.getElementById(main.getAttribute('data-branch-to')));
+          var toRight = b.l >= a.r;
+          solid.push('M' + n(toRight ? a.r : a.l) + ' ' + n(a.cy) + 'H' + n(toRight ? b.l : b.r));
+        });
+        svg.setAttribute('viewBox', '0 0 ' + n(m.width) + ' ' + n(m.height));
+        svg.innerHTML = solid.map(function (d) { return '<path class="rm-lines__solid" d="' + d + '"/>'; }).join('');
+      }
+      var pending = false;
+      function schedule() {
+        if (pending) return;
+        pending = true;
+        requestAnimationFrame(function () { pending = false; route(); });
+      }
+      document.addEventListener('click', function (event) {
+        var btn = event.target.closest('[data-expand]');
+        if (!btn) return;
+        var openAll = btn.getAttribute('data-expand') === 'open';
+        document.querySelectorAll('.rmA-sec').forEach(function (d) { d.open = openAll; });
+      });
+      if ('ResizeObserver' in window) new ResizeObserver(schedule).observe(map);
+      window.addEventListener('resize', schedule);
+      document.addEventListener('toggle', schedule, true);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+      route();
+    })();
+  </script>
+</Base>
