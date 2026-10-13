@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { formatDate } from '../lib/format';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+const lead = 'Applied AI Engineer 로 가는 과정을 기록합니다.';
+---
+
+<Base title="hahmjuntae" description={lead} current="posts">
+  <div class="ds-blog ds-container">
+    <header class="ds-blog__header">
+      <div class="ds-blog__title-row"><h1 class="ds-blog__title">글</h1></div>
+      <p class="ds-blog__lead">{lead}</p>
+    </header>
+    <div class="ds-blog__list-wrap">
+      <div class="ds-blog__list">
+        {
+          posts.map((post) => (
+            <a class="ds-blog-post" href={`/posts/${post.id}/`}>
+              <p class="ds-blog-post__date ds-tabular">{formatDate(post.data.date)}</p>
+              <h2 class="ds-blog-post__title">
+                <span class="ds-blog-post__title-text">{post.data.title}</span>
+              </h2>
+              <p class="ds-blog-post__desc">{post.data.description}</p>
+              <p class="ds-blog-post__topic">{post.data.topic}</p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</Base>
