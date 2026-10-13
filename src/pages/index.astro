@@ -1,37 +1,44 @@
 ---
 import Base from '../layouts/Base.astro';
-import { sections, parts, endNode, statusMeta, trendOf, trendTotal, type Status, type RoadmapSection } from '../data/roadmap';
+import NodeButton from '../components/NodeButton.astro';
+import { sections, parts, endNode, statusMeta, trendOf, trendTotal, type Status, type RoadmapSection, type RoadmapNode } from '../data/roadmap';
 
-const COLS = 3;
+type Side = 'left' | 'right';
+interface Row {
+  spine: RoadmapSection;
+  branch?: RoadmapSection;
+  branchSide: Side;
+  left: RoadmapNode[];
+  right: RoadmapNode[];
+}
+
 const order: Status[] = ['done', 'learning', 'pending', 'skip'];
 const partTitle = Object.fromEntries(parts.map((part) => [part.id, part.title]));
 const total = sections.reduce((sum, section) => sum + section.nodes.length, 0);
 const totalHours = parts.reduce((sum, part) => sum + part.hours, 0);
 
-type Cell =
-  | { kind: 'part'; part: (typeof parts)[number]; row: number; col: number }
-  | { kind: 'section'; section: RoadmapSection; row: number; col: number }
-  | { kind: 'end'; row: number; col: number };
-
-// 데스크톱 3열 지그재그 배치 기준, 행 끝에서 같은 열로 내려가 방향 반전
-const cells: Cell[] = [];
-let row = 1;
-let col = 0;
-for (const part of parts) {
-  cells.push({ kind: 'part', part, row, col });
-  row += 1;
-  const list = sections.filter((section) => section.part === part.id);
-  let index = 0;
-  while (index < list.length) {
-    const size = list.length - index >= COLS ? COLS : 1;
-    const dir = col === 0 ? 1 : -1;
-    list.slice(index, index + size).forEach((section, k) => cells.push({ kind: 'section', section, row, col: col + k * dir }));
-    col += (size - 1) * dir;
-    index += size;
-    row += 1;
+// 척추 섹션 1개와 곁가지 섹션 최대 1개를 한 행으로 묶는 기준
+const boxes = parts.map((part) => {
+  const rows: Row[] = [];
+  for (const section of sections.filter((item) => item.part === part.id)) {
+    const last = rows[rows.length - 1];
+    if (section.branch && last && !last.branch) last.branch = section;
+    else rows.push({ spine: section, branchSide: 'right', left: [], right: [] });
   }
-}
-cells.push({ kind: 'end', row, col });
+  rows.forEach((row, index) => {
+    row.branchSide = index % 2 === 0 ? 'right' : 'left';
+    const nodes = row.spine.nodes;
+    if (row.branch) {
+      if (row.branchSide === 'right') row.left = nodes;
+      else row.right = nodes;
+    } else {
+      const half = Math.ceil(nodes.length / 2);
+      row.left = nodes.slice(0, half);
+      row.right = nodes.slice(half);
+    }
+  });
+  return { part, rows };
+});
 
 const nodeData = Object.fromEntries([
   ...sections.flatMap((section) =>
@@ -82,52 +89,49 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
 
     <div class="rm-map">
       <svg class="rm-lines" aria-hidden="true"></svg>
-      <div class="rm-grid">
-        {
-          cells.map((cell) => {
-            const style = `--r:${cell.row};--c:${cell.col + 1}`;
-            if (cell.kind === 'part') {
-              return (
-                <div class="rm-cell rm-cell--pin" style={style} data-col={cell.col}>
-                  <p class="rm-part" id={`part-${cell.part.id}`} data-anchor data-row={cell.row} data-col={cell.col}>
-                    <span>{cell.part.title}</span>
-                    <span class="rm-part__hours ds-tabular">{cell.part.hours}h · {Math.round((cell.part.hours / totalHours) * 100)}%</span>
-                  </p>
-                </div>
-              );
-            }
-            if (cell.kind === 'end') {
-              return (
-                <div class="rm-cell rm-cell--pin" style={style} data-col={cell.col}>
-                  <button type="button" class="rm-end__node" id={endNode.id} data-node={endNode.id} data-anchor data-row={cell.row} data-col={cell.col} aria-haspopup="dialog">
-                    <span class="rm-end__eyebrow">Goal</span>
-                    <span class="rm-end__label">{endNode.label}</span>
-                  </button>
-                </div>
-              );
-            }
-            const section = cell.section;
-            return (
-              <section class="rm-cell rm-section" id={section.id} style={style} aria-labelledby={`${section.id}-title`}>
-                <h2 class="rm-main" id={`${section.id}-title`} data-anchor data-row={cell.row} data-col={cell.col}>{section.title}</h2>
-                <ul class="rm-subs">
-                  {section.nodes.map((node) => {
-                    const trend = trendOf(node.id);
-                    return (
-                      <li>
-                        <button type="button" class="rm-node" id={node.id} data-node={node.id} data-status={node.status} aria-haspopup="dialog">
-                          <span class="rm-node__label">{node.label}</span>
-                          {trend.count > 0 && <span class="rm-node__trend ds-tabular" title={`교육 과정 ${trendTotal}곳 중 ${trend.count}곳`} aria-label={`교육 과정 ${trend.count}곳`}>{trend.count}</span>}
-                          <span class="rm-icon" data-status={node.status} role="img" aria-label={statusMeta[node.status].label} />
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </section>
-            );
-          })
-        }
+      {
+        boxes.map(({ part, rows }) => (
+          <div class="rm-box" id={`part-${part.id}`} role="group" aria-labelledby={`part-${part.id}-label`}>
+            <p class="rm-box__label" id={`part-${part.id}-label`}>
+              <span>{part.title}</span>
+              <span class="rm-box__hours ds-tabular">{part.hours}h · {Math.round((part.hours / totalHours) * 100)}%</span>
+            </p>
+            <div class="rm-box__grid">
+              {rows.map((row, index) => {
+                const r = index + 1;
+                const lists: [Side, RoadmapNode[]][] = [['left', row.left], ['right', row.right]];
+                return (
+                  <>
+                    <section class="rm-spine" id={row.spine.id} aria-labelledby={`${row.spine.id}-title`}>
+                      <h2 class="rm-main" id={`${row.spine.id}-title`} style={`--r:${r}`} data-spine data-branch-to={row.branch ? `${row.branch.id}-title` : undefined}>{row.spine.title}</h2>
+                      {lists
+                        .filter(([, nodes]) => nodes.length > 0)
+                        .map(([side, nodes]) => (
+                          <ul class="rm-subs rm-subs--fan" data-pos={side} style={`--r:${r}`} data-fan-from={`${row.spine.id}-title`}>
+                            {nodes.map((node) => <li><NodeButton node={node} /></li>)}
+                          </ul>
+                        ))}
+                    </section>
+                    {row.branch && (
+                      <section class="rm-branch" id={row.branch.id} data-pos={row.branchSide} style={`--r:${r}`} aria-labelledby={`${row.branch.id}-title`}>
+                        <h2 class="rm-main" id={`${row.branch.id}-title`}>{row.branch.title}</h2>
+                        <ul class="rm-subs">
+                          {row.branch.nodes.map((node) => <li><NodeButton node={node} /></li>)}
+                        </ul>
+                      </section>
+                    )}
+                  </>
+                );
+              })}
+            </div>
+          </div>
+        ))
+      }
+      <div class="rm-end">
+        <button type="button" class="rm-end__node" id={endNode.id} data-node={endNode.id} data-spine aria-haspopup="dialog">
+          <span class="rm-end__eyebrow">Goal</span>
+          <span class="rm-end__label">{endNode.label}</span>
+        </button>
       </div>
     </div>
   </div>
@@ -299,38 +303,45 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
 
       var map = document.querySelector('.rm-map');
       var svg = map.querySelector('.rm-lines');
-      var COLS = 3;
-      var GUTTER = 22;
 
       function route() {
         if (!matchMedia('(min-width: 1024px)').matches) { svg.textContent = ''; return; }
         var m = map.getBoundingClientRect();
-        var anchors = Array.prototype.slice.call(map.querySelectorAll('[data-anchor]'));
-        var paths = [];
-        for (var i = 0; i < anchors.length - 1; i += 1) {
-          var a = anchors[i];
-          var b = anchors[i + 1];
-          var ra = a.getBoundingClientRect();
-          var rb = b.getBoundingClientRect();
-          var ac = Number(a.dataset.col);
-          var bc = Number(b.dataset.col);
-          var ay = Math.round(ra.top - m.top + ra.height / 2);
-          var by = Math.round(rb.top - m.top + rb.height / 2);
-          if (a.dataset.row === b.dataset.row) {
-            var x1 = Math.round((bc > ac ? ra.right : ra.left) - m.left);
-            var x2 = Math.round((bc > ac ? rb.left : rb.right) - m.left);
-            paths.push('M' + x1 + ' ' + ay + 'H' + x2);
-          } else if (ac === bc && ac === 0) {
-            var gl = Math.round(Math.min(ra.left, rb.left) - m.left - GUTTER);
-            paths.push('M' + Math.round(ra.left - m.left) + ' ' + ay + 'H' + gl + 'V' + by + 'H' + Math.round(rb.left - m.left));
-          } else {
-            var gr = Math.round(Math.max(ra.right, rb.right) - m.left + GUTTER);
-            paths.push('M' + Math.round(ra.right - m.left) + ' ' + ay + 'H' + gr + 'V' + by + 'H' + Math.round(rb.right - m.left));
-          }
+        function box(node) {
+          var r = node.getBoundingClientRect();
+          return { l: r.left - m.left, r: r.right - m.left, t: r.top - m.top, b: r.bottom - m.top, cx: (r.left + r.right) / 2 - m.left, cy: (r.top + r.bottom) / 2 - m.top };
         }
-        svg.setAttribute('viewBox', '0 0 ' + Math.round(m.width) + ' ' + Math.round(m.height));
-        var marker = '<defs><marker id="rm-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 8 4 0 8z" class="rm-lines__head"/></marker></defs>';
-        svg.innerHTML = marker + paths.map(function (d) { return '<path d="' + d + '" marker-end="url(#rm-arrow)"/>'; }).join('');
+        function n(v) { return Math.round(v); }
+        var solid = [];
+        var dotted = [];
+        var spine = Array.prototype.slice.call(map.querySelectorAll('[data-spine]'));
+        for (var i = 0; i < spine.length - 1; i += 1) {
+          var a = box(spine[i]);
+          var b = box(spine[i + 1]);
+          solid.push('M' + n(a.cx) + ' ' + n(a.b) + 'V' + n(b.t));
+        }
+        map.querySelectorAll('[data-branch-to]').forEach(function (main) {
+          var a = box(main);
+          var b = box(document.getElementById(main.getAttribute('data-branch-to')));
+          var toRight = b.l >= a.r;
+          solid.push('M' + n(toRight ? a.r : a.l) + ' ' + n(a.cy) + 'H' + n(toRight ? b.l : b.r));
+        });
+        map.querySelectorAll('[data-fan-from]').forEach(function (list) {
+          var a = box(document.getElementById(list.getAttribute('data-fan-from')));
+          var items = Array.prototype.slice.call(list.querySelectorAll('.rm-node')).map(box);
+          if (!items.length) return;
+          var left = list.getAttribute('data-pos') === 'left';
+          var edge = left ? a.l : a.r;
+          var near = left ? Math.max.apply(null, items.map(function (x) { return x.r; })) : Math.min.apply(null, items.map(function (x) { return x.l; }));
+          var x = (edge + near) / 2;
+          var ys = items.map(function (it) { return it.cy; }).concat([a.cy]);
+          dotted.push('M' + n(edge) + ' ' + n(a.cy) + 'H' + n(x));
+          dotted.push('M' + n(x) + ' ' + n(Math.min.apply(null, ys)) + 'V' + n(Math.max.apply(null, ys)));
+          items.forEach(function (it) { dotted.push('M' + n(x) + ' ' + n(it.cy) + 'H' + n(left ? it.r : it.l)); });
+        });
+        svg.setAttribute('viewBox', '0 0 ' + n(m.width) + ' ' + n(m.height));
+        function paths(list, cls) { return list.map(function (d) { return '<path class="' + cls + '" d="' + d + '"/>'; }).join(''); }
+        svg.innerHTML = paths(solid, 'rm-lines__solid') + paths(dotted, 'rm-lines__dotted');
       }
 
       var pending = false;
@@ -387,18 +398,20 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
   .rm-icon[data-status='learning'] { border: 2px solid var(--color-text-info-soft); background: linear-gradient(90deg, var(--color-text-info-soft) 50%, transparent 50%); }
   .rm-icon[data-status='skip'] { border: 2px dashed var(--color-border-strong); }
 
-  .rm-map { position: relative; margin-top: 40px; padding-bottom: 64px; }
-  .rm-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; fill: none; stroke: var(--color-text-tertiary); stroke-width: 2; stroke-linejoin: round; }
-  .rm-lines__head { fill: var(--color-text-tertiary); stroke: none; }
-  .rm-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
-  .rm-cell { min-width: 0; }
-  .rm-cell--pin { display: flex; justify-content: center; }
+  .rm-map { position: relative; margin-top: 48px; padding-bottom: 64px; }
+  .rm-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; fill: none; }
+  .rm-lines__solid { stroke: var(--color-text-tertiary); stroke-width: 2; }
+  .rm-lines__dotted { stroke: var(--color-border-strong); stroke-width: 2; stroke-dasharray: 2 4; }
 
-  .rm-part { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 0; padding: 8px 20px; border-radius: var(--radius-full); background: var(--color-background-primary-soft); color: var(--color-text-emphasis); font-size: 16px; line-height: 24px; font-weight: 600; }
-  .rm-part__hours { color: var(--color-text-secondary); font-size: 12px; line-height: 18px; font-weight: 500; }
+  .rm-box { position: relative; padding: 36px 16px 24px; border: 2px dashed var(--color-border-strong); border-radius: var(--radius-3xl); }
+  .rm-box + .rm-box { margin-top: 56px; }
+  .rm-box__label { position: absolute; top: -14px; left: 20px; z-index: 1; display: flex; align-items: baseline; gap: 8px; margin: 0; padding: 0 10px; background: var(--page-bg); color: var(--color-text-emphasis); font-size: 18px; line-height: 24px; font-weight: 600; }
+  .rm-box__hours { color: var(--color-text-tertiary); font-size: 12px; line-height: 18px; font-weight: 500; }
+  .rm-box__grid { position: relative; display: flex; flex-direction: column; gap: 24px; }
 
-  .rm-section { position: relative; display: flex; flex-direction: column; gap: 12px; }
+  .rm-spine, .rm-branch { position: relative; display: flex; flex-direction: column; gap: 12px; }
   .rm-main { position: relative; z-index: 1; margin: 0; padding: 10px 16px; border-radius: var(--radius-md); background: var(--color-background-primary-solid); color: var(--color-text-inverse); font-size: 16px; line-height: 24px; font-weight: 600; text-align: center; }
+  .rm-branch .rm-main { background: var(--color-surface); color: var(--color-text-emphasis); box-shadow: inset 0 0 0 2px var(--color-background-primary-solid); }
   .rm-subs { position: relative; display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0 0 0 32px; list-style: none; }
   .rm-subs::before { content: ''; position: absolute; top: -12px; bottom: 20px; left: 12px; border-left: 2px dotted var(--color-border-strong); }
   .rm-subs > li { position: relative; }
@@ -412,17 +425,24 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
   .rm-node__trend { margin-left: auto; color: var(--color-text-tertiary); font-size: 12px; line-height: 18px; }
   .rm-node:focus-visible, .rm-end__node:focus-visible { outline: 2px solid var(--color-ring); outline-offset: 2px; }
 
-  .rm-end__node { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 240px; padding: 16px 32px; border-radius: var(--radius-lg); background: var(--color-background-primary-solid); color: var(--color-text-inverse); cursor: pointer; box-shadow: 0 0 0 4px var(--page-bg), 0 0 0 6px var(--color-border-strong); }
+  .rm-end { position: relative; z-index: 1; display: flex; justify-content: center; margin-top: 56px; }
+  .rm-end__node { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 240px; padding: 16px 32px; border-radius: var(--radius-lg); background: var(--color-background-primary-solid); color: var(--color-text-inverse); cursor: pointer; box-shadow: 0 0 0 4px var(--page-bg), 0 0 0 6px var(--color-border-strong); }
   .rm-end__eyebrow { font-size: 12px; line-height: 18px; opacity: .7; }
   .rm-end__label { font-size: 20px; line-height: 26px; font-weight: 600; }
 
   @media (width >= 1024px) {
-    .rm-map { padding: 8px 32px 64px; }
-    .rm-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 56px; row-gap: 40px; align-items: start; }
-    .rm-cell { grid-row: var(--r); grid-column: var(--c); }
-    .rm-cell--pin[data-col='0'] { justify-content: flex-start; }
-    .rm-cell--pin[data-col='2'] { justify-content: flex-end; }
-    .rm-end__node { width: 100%; }
+    .rm-box { padding: 48px 32px 40px; }
+    .rm-box__grid { display: grid; grid-template-columns: minmax(0, 1fr) 240px minmax(0, 1fr); column-gap: 56px; row-gap: 48px; align-items: start; }
+    .rm-spine { display: contents; }
+    .rm-spine > .rm-main { grid-row: var(--r); grid-column: 2; }
+    .rm-subs--fan { grid-row: var(--r); padding: 0; }
+    .rm-subs--fan[data-pos='left'] { grid-column: 1; }
+    .rm-subs--fan[data-pos='right'] { grid-column: 3; }
+    .rm-subs--fan::before, .rm-subs--fan > li::before { display: none; }
+    .rm-branch { grid-row: var(--r); }
+    .rm-branch[data-pos='left'] { grid-column: 1; }
+    .rm-branch[data-pos='right'] { grid-column: 3; }
+    .rm-end__node { min-width: 280px; }
   }
 
   .rm-detail { display: flex; flex-direction: column; gap: 4px; }

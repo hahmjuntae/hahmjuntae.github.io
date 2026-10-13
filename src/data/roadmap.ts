@@ -37,6 +37,7 @@ export interface RoadmapSection {
   id: string;
   part: string;
   title: string;
+  branch: boolean;
   refs: RoadmapRef[];
   nodes: RoadmapNode[];
 }
@@ -81,6 +82,7 @@ export const sections: RoadmapSection[] = skeleton.sections.map((section) => ({
   id: section.id,
   part: section.part,
   title: section.title,
+  branch: (section as { branch?: boolean }).branch === true,
   refs: section.refs.map(refOf),
   nodes: section.nodes.map(([id, label, status]) => ({ id, label, status: status as Status, ...contentOf(id) })),
 }));

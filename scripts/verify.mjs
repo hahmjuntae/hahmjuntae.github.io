@@ -71,17 +71,18 @@ const page = await context.newPage();
 await page.goto(base + '/', { waitUntil: 'networkidle' });
 const nodeCount = await page.locator('.rm-node').count();
 check('노드 렌더', nodeCount >= 120, `${nodeCount}개`);
-check('파트 3개', (await page.locator('.rm-part').count()) === 3);
+check('파트 경계 박스 3개', (await page.locator('.rm-box').count()) === 3);
 check('종착 노드', (await page.locator('.rm-end__node').count()) === 1);
-const mapText = await page.evaluate(() => [...document.querySelectorAll('.rm-main, .rm-part, .rm-end__node, .rm-node__label')].map((el) => el.textContent).join(' '));
+const mapText = await page.evaluate(() => [...document.querySelectorAll('.rm-main, .rm-box__label, .rm-end__node, .rm-node__label')].map((el) => el.textContent).join(' '));
 check('맵 라벨 영어', !/[가-힣]/.test(mapText));
 check('상단 설명과 하단 영역 제거', (await page.locator('.ds-article__lead, .rm-foot, .site-footer, [data-reset-progress]').count()) === 0);
-const lines = await page.evaluate(() => [...document.querySelectorAll('.rm-lines > path')].map((p) => p.getAttribute('d')));
-const anchors = await page.locator('[data-anchor]').count();
-check('연결선 수', lines.length === anchors - 1, `${lines.length}/${anchors - 1}`);
-check('옆으로 이어지는 연결선', lines.filter((d) => /^M[-\d.]+ [-\d.]+H[-\d.]+$/.test(d)).length >= 10, `${lines.filter((d) => /^M[-\d.]+ [-\d.]+H[-\d.]+$/.test(d)).length}개`);
+const solid = await page.locator('.rm-lines__solid').count();
+const spineCount = await page.locator('[data-spine]').count();
+const branchCount = await page.locator('[data-branch-to]').count();
+check('척추와 곁가지 연결선', solid === spineCount - 1 + branchCount && branchCount >= 9, `실선 ${solid}, 척추 ${spineCount}, 곁가지 ${branchCount}`);
+check('하위 노드 점선', (await page.locator('.rm-lines__dotted').count()) > 50, `${await page.locator('.rm-lines__dotted').count()}개`);
 const overlap = await page.evaluate(() => {
-  const boxes = [...document.querySelectorAll('.rm-section, .rm-cell--pin')].map((el) => el.getBoundingClientRect());
+  const boxes = [...document.querySelectorAll('.rm-node, .rm-main, .rm-end__node')].map((el) => el.getBoundingClientRect());
   let hits = 0;
   for (let i = 0; i < boxes.length; i += 1) for (let j = i + 1; j < boxes.length; j += 1) {
     const a = boxes[i], b = boxes[j];
@@ -89,7 +90,7 @@ const overlap = await page.evaluate(() => {
   }
   return hits;
 });
-check('섹션 겹침 없음', overlap === 0, `${overlap}건`);
+check('노드 겹침 없음', overlap === 0, `${overlap}건`);
 
 const contentGaps = await page.evaluate(() => {
   const data = JSON.parse(document.getElementById('node-data').textContent);

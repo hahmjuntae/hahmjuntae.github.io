@@ -188,7 +188,8 @@
           "pnpm",
           "learning"
         ]
-      ]
+      ],
+      "branch": true
     },
     {
       "id": "frameworks",
@@ -245,7 +246,8 @@
           "Playwright",
           "learning"
         ]
-      ]
+      ],
+      "branch": true
     },
     {
       "id": "rendering",
@@ -291,7 +293,8 @@
           "PWA, Service Worker",
           "pending"
         ]
-      ]
+      ],
+      "branch": true
     },
     {
       "id": "python",
@@ -441,7 +444,8 @@
           "Password Hashing",
           "pending"
         ]
-      ]
+      ],
+      "branch": true
     },
     {
       "id": "cache-messaging",
@@ -487,7 +491,8 @@
           "WebSockets",
           "pending"
         ]
-      ]
+      ],
+      "branch": true
     },
     {
       "id": "be-testing",
@@ -618,7 +623,8 @@
           "Coding Interview",
           "pending"
         ]
-      ]
+      ],
+      "branch": true
     },
     {
       "id": "ml-dl",
@@ -850,7 +856,8 @@
           "Ontology-based Agents",
           "pending"
         ]
-      ]
+      ],
+      "branch": true
     },
     {
       "id": "agents",
@@ -1053,7 +1060,8 @@
           "Red Teaming",
           "pending"
         ]
-      ]
+      ],
+      "branch": true
     },
     {
       "id": "model-serving",
@@ -1150,7 +1158,8 @@
           "Pretraining",
           "skip"
         ]
-      ]
+      ],
+      "branch": true
     }
   ],
   "end": [
