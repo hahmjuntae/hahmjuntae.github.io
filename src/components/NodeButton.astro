@@ -3,15 +3,14 @@ import { statusMeta, trendOf, trendTotal, type RoadmapNode } from '../data/roadm
 
 interface Props {
   node: RoadmapNode;
-  chip?: boolean;
 }
 
-const { node, chip = false } = Astro.props;
+const { node } = Astro.props;
 const trend = trendOf(node.id);
 ---
 
-<button type="button" class:list={['rm-node', { 'rm-node--chip': chip }]} id={node.id} data-node={node.id} data-status={node.status} aria-haspopup="dialog">
+<button type="button" class="rm-node" id={node.id} data-node={node.id} data-status={node.status} aria-haspopup="dialog">
   <span class="rm-node__label">{node.label}</span>
-  {!chip && trend.count > 0 && <span class="rm-node__trend ds-tabular" title={`교육 과정 ${trendTotal}곳 중 ${trend.count}곳`} aria-label={`교육 과정 ${trend.count}곳`}>{trend.count}</span>}
+  {trend.count > 0 && <span class="rm-node__trend ds-tabular" title={`교육 과정 ${trendTotal}곳 중 ${trend.count}곳`} aria-label={`교육 과정 ${trend.count}곳`}>{trend.count}</span>}
   <span class="rm-icon" data-status={node.status} role="img" aria-label={statusMeta[node.status].label}></span>
 </button>

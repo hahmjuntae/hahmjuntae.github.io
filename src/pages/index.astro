@@ -6,13 +6,21 @@ import RoadmapHeader from '../components/RoadmapHeader.astro';
 import { sections, parts, endNode, statusMeta, trendOf, trendTotal, type Status, type RoadmapSection, type RoadmapNode } from '../data/roadmap';
 
 type Side = 'left' | 'right';
+type Lane = 'center' | Side;
+interface FanList {
+  pos: Side;
+  col: number;
+  nodes: RoadmapNode[];
+}
 interface Row {
   spine: RoadmapSection;
   branch?: RoadmapSection;
   branchSide: Side;
-  left: RoadmapNode[];
-  right: RoadmapNode[];
+  lane: Lane;
+  lists: FanList[];
 }
+
+const colOf: Record<Lane, number> = { left: 1, center: 2, right: 3 };
 
 const order: Status[] = ['done', 'learning', 'pending', 'skip'];
 const total = sections.reduce((sum, section) => sum + section.nodes.length, 0);
@@ -23,19 +31,27 @@ const boxes = parts.map((part) => {
   const rows: Row[] = [];
   for (const section of sections.filter((item) => item.part === part.id)) {
     const last = rows[rows.length - 1];
-    if (section.branch && last && !last.branch) last.branch = section;
-    else rows.push({ spine: section, branchSide: 'right', left: [], right: [] });
+    if (section.branch && last && !last.branch && last.lane === 'center') last.branch = section;
+    else rows.push({ spine: section, branchSide: 'right', lane: section.lane, lists: [] });
   }
   rows.forEach((row, index) => {
-    row.branchSide = index % 2 === 0 ? 'right' : 'left';
     const nodes = row.spine.nodes;
+    if (row.branch) row.lane = 'center';
+    // 옆으로 꺾인 섹션은 비어 있는 가운데 열로 하위 노드를 펼침
+    if (row.lane !== 'center') {
+      row.lists = [{ pos: row.lane === 'right' ? 'left' : 'right', col: 2, nodes }];
+      return;
+    }
+    row.branchSide = row.branch?.side ?? (index % 2 === 0 ? 'right' : 'left');
     if (row.branch) {
-      if (row.branchSide === 'right') row.left = nodes;
-      else row.right = nodes;
+      const pos: Side = row.branchSide === 'right' ? 'left' : 'right';
+      row.lists = [{ pos, col: colOf[pos], nodes }];
     } else {
       const half = Math.ceil(nodes.length / 2);
-      row.left = nodes.slice(0, half);
-      row.right = nodes.slice(half);
+      row.lists = [
+        { pos: 'left', col: 1, nodes: nodes.slice(0, half) },
+        { pos: 'right', col: 3, nodes: nodes.slice(half) },
+      ];
     }
   });
   return { part, rows };
@@ -60,21 +76,20 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
             <div class="rm-box__grid">
               {rows.map((row, index) => {
                 const r = index + 1;
-                const lists: [Side, RoadmapNode[]][] = [['left', row.left], ['right', row.right]];
                 return (
                   <>
                     <section class="rm-spine" id={row.spine.id} aria-labelledby={`${row.spine.id}-title`}>
-                      <h2 class="rm-main" id={`${row.spine.id}-title`} style={`--r:${r}`} data-spine data-branch-to={row.branch ? `${row.branch.id}-title` : undefined}>{row.spine.title}</h2>
-                      {lists
-                        .filter(([, nodes]) => nodes.length > 0)
-                        .map(([side, nodes]) => (
-                          <ul class="rm-subs rm-subs--fan" data-pos={side} style={`--r:${r}`} data-fan-from={`${row.spine.id}-title`}>
-                            {nodes.map((node) => <li><NodeButton node={node} /></li>)}
+                      <h2 class="rm-main" id={`${row.spine.id}-title`} style={`--r:${r};--c:${colOf[row.lane]}`} data-spine data-branch-to={row.branch ? `${row.branch.id}-title` : undefined}>{row.spine.title}</h2>
+                      {row.lists
+                        .filter((list) => list.nodes.length > 0)
+                        .map((list) => (
+                          <ul class="rm-subs rm-subs--fan" data-pos={list.pos} style={`--r:${r};--c:${list.col}`} data-fan-from={`${row.spine.id}-title`}>
+                            {list.nodes.map((node) => <li><NodeButton node={node} /></li>)}
                           </ul>
                         ))}
                     </section>
                     {row.branch && (
-                      <section class="rm-branch" id={row.branch.id} data-pos={row.branchSide} style={`--r:${r}`} aria-labelledby={`${row.branch.id}-title`}>
+                      <section class="rm-branch" id={row.branch.id} data-pos={row.branchSide} style={`--r:${r};--c:${colOf[row.branchSide]}`} aria-labelledby={`${row.branch.id}-title`}>
                         <h2 class="rm-main" id={`${row.branch.id}-title`}>{row.branch.title}</h2>
                         <ul class="rm-subs" data-tree-from={`${row.branch.id}-title`}>
                           {row.branch.nodes.map((node) => <li><NodeButton node={node} /></li>)}
@@ -117,7 +132,8 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
         for (var i = 0; i < spine.length - 1; i += 1) {
           var a = box(spine[i]);
           var b = box(spine[i + 1]);
-          solid.push('M' + n(a.cx) + ' ' + n(a.b) + 'V' + n(b.t));
+          if (Math.abs(a.cx - b.cx) < 2) solid.push('M' + n(a.cx) + ' ' + n(a.b) + 'V' + n(b.t));
+          else solid.push('M' + n(a.cx) + ' ' + n(a.b) + 'V' + n(b.t - 24) + 'H' + n(b.cx) + 'V' + n(b.t));
         }
         map.querySelectorAll('[data-branch-to]').forEach(function (main) {
           var a = box(main);

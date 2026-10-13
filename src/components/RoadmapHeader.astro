@@ -3,23 +3,12 @@ import { sections, statusMeta, type Status } from '../data/roadmap';
 
 interface Props {
   keys?: boolean;
-  current?: string;
 }
 
-const { keys = false, current = 'map' } = Astro.props;
-const variants = [
-  { id: 'map', label: '현재 지도', href: '/' },
-  { id: 'a', label: 'A 섹션 지도', href: '/layouts/a/' },
-  { id: 'b', label: 'B 체크리스트', href: '/layouts/b/' },
-  { id: 'c', label: 'C 3열 보드', href: '/layouts/c/' },
-];
+const { keys = false } = Astro.props;
 const order: Status[] = ['done', 'learning', 'pending', 'skip'];
 const total = sections.reduce((sum, section) => sum + section.nodes.length, 0);
 ---
-
-<nav class="rm-switch" aria-label="레이아웃 시안">
-  {variants.map((v) => <a class="ds-btn" data-variant="outline" data-size="sm" href={v.href} aria-current={v.id === current ? 'page' : undefined} data-selected={v.id === current ? '' : undefined}>{v.label}</a>)}
-</nav>
 
 <header class="ds-article__header rm-head">
   <h1 class="ds-article__title">Applied AI Engineer 로드맵</h1>
