@@ -81,7 +81,7 @@ const spineCount = await page.locator('[data-spine]').count();
 const branchCount = await page.locator('[data-branch-to]').count();
 check('척추와 곁가지 연결선', solid === spineCount - 1 + branchCount && branchCount >= 9, `실선 ${solid}, 척추 ${spineCount}, 곁가지 ${branchCount}`);
 const bends = await page.evaluate(() => [...document.querySelectorAll('.rm-lines__solid')].filter((p) => /V.*H.*V/.test(p.getAttribute('d'))).length);
-check('옆으로 꺾였다 돌아오는 경로', bends >= 8, `${bends}곳`);
+check('척추 일직선', bends === 0, `꺾임 ${bends}곳`);
 check('하위 노드 점선', (await page.locator('.rm-lines__dotted').count()) > 50, `${await page.locator('.rm-lines__dotted').count()}개`);
 const overlap = await page.evaluate(() => {
   const boxes = [...document.querySelectorAll('.rm-node, .rm-main, .rm-end__node')].map((el) => el.getBoundingClientRect());

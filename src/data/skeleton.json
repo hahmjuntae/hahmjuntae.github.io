@@ -117,8 +117,7 @@
           "Tailwind CSS",
           "pending"
         ]
-      ],
-      "lane": "right"
+      ]
     },
     {
       "id": "javascript",
@@ -149,8 +148,7 @@
           "Fetch API",
           "learning"
         ]
-      ],
-      "lane": "right"
+      ]
     },
     {
       "id": "git",
@@ -377,8 +375,7 @@
           "N+1 Problem",
           "pending"
         ]
-      ],
-      "lane": "left"
+      ]
     },
     {
       "id": "apis",
@@ -521,8 +518,7 @@
           "Integration Testing",
           "pending"
         ]
-      ],
-      "lane": "right"
+      ]
     },
     {
       "id": "infra",
@@ -564,8 +560,7 @@
           "Cloud Basics",
           "pending"
         ]
-      ],
-      "lane": "right"
+      ]
     },
     {
       "id": "architecture",
@@ -751,8 +746,7 @@
           "Voice Agents, Realtime API",
           "pending"
         ]
-      ],
-      "lane": "left"
+      ]
     },
     {
       "id": "prompting",
@@ -788,8 +782,7 @@
           "Compaction, Isolation",
           "done"
         ]
-      ],
-      "lane": "left"
+      ]
     },
     {
       "id": "rag",
@@ -992,8 +985,7 @@
           "lm-eval-harness, Benchmarks",
           "pending"
         ]
-      ],
-      "lane": "right"
+      ]
     },
     {
       "id": "llmops",
