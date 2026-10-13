@@ -20,8 +20,10 @@ const server = createServer(async (req, res) => {
     res.end('not found');
   }
 });
-await new Promise((resolve) => server.listen(4399, resolve));
-const base = 'http://localhost:4399';
+// VERIFY_BASE 지정 시 운영 주소 검사, 미지정 시 dist 로컬 서버 기준
+const remote = process.env.VERIFY_BASE;
+if (!remote) await new Promise((resolve) => server.listen(4399, resolve));
+const base = remote ?? 'http://localhost:4399';
 
 await mkdir(out, { recursive: true });
 const browser = await chromium.launch({ executablePath: chrome });
@@ -123,7 +125,7 @@ check('/roadmap/ 리다이렉트 페이지', redirect?.status() === 200);
 await context.close();
 
 await browser.close();
-server.close();
+if (!remote) server.close();
 
 let failed = 0;
 for (const { name, ok, detail } of results) {
