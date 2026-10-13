@@ -85,6 +85,10 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
           ))
         }
       </ul>
+      <ul class="rm-legend rm-legend--keys" aria-label="섹션 범례">
+        <li class="rm-legend__item"><span class="rm-key" data-kind="spine" aria-hidden="true"></span><span>핵심 경로</span></li>
+        <li class="rm-legend__item"><span class="rm-key" data-kind="branch" aria-hidden="true"></span><span>곁가지</span></li>
+      </ul>
     </div>
 
     <div class="rm-map">
@@ -115,7 +119,7 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
                     {row.branch && (
                       <section class="rm-branch" id={row.branch.id} data-pos={row.branchSide} style={`--r:${r}`} aria-labelledby={`${row.branch.id}-title`}>
                         <h2 class="rm-main" id={`${row.branch.id}-title`}>{row.branch.title}</h2>
-                        <ul class="rm-subs">
+                        <ul class="rm-subs" data-tree-from={`${row.branch.id}-title`}>
                           {row.branch.nodes.map((node) => <li><NodeButton node={node} /></li>)}
                         </ul>
                       </section>
@@ -333,11 +337,19 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
           var left = list.getAttribute('data-pos') === 'left';
           var edge = left ? a.l : a.r;
           var near = left ? Math.max.apply(null, items.map(function (x) { return x.r; })) : Math.min.apply(null, items.map(function (x) { return x.l; }));
-          var x = (edge + near) / 2;
-          var ys = items.map(function (it) { return it.cy; }).concat([a.cy]);
-          dotted.push('M' + n(edge) + ' ' + n(a.cy) + 'H' + n(x));
-          dotted.push('M' + n(x) + ' ' + n(Math.min.apply(null, ys)) + 'V' + n(Math.max.apply(null, ys)));
-          items.forEach(function (it) { dotted.push('M' + n(x) + ' ' + n(it.cy) + 'H' + n(left ? it.r : it.l)); });
+          var x = n((edge + near) / 2);
+          var y0 = n(items[0].cy);
+          dotted.push('M' + n(edge) + ' ' + y0 + 'H' + n(left ? items[0].r : items[0].l));
+          if (items.length > 1) dotted.push('M' + x + ' ' + y0 + 'V' + n(items[items.length - 1].cy));
+          items.slice(1).forEach(function (it) { dotted.push('M' + x + ' ' + n(it.cy) + 'H' + n(left ? it.r : it.l)); });
+        });
+        map.querySelectorAll('[data-tree-from]').forEach(function (list) {
+          var a = box(document.getElementById(list.getAttribute('data-tree-from')));
+          var items = Array.prototype.slice.call(list.querySelectorAll('.rm-node')).map(box);
+          if (!items.length) return;
+          var x = n(a.l + 16);
+          dotted.push('M' + x + ' ' + n(a.b) + 'V' + n(items[items.length - 1].cy));
+          items.forEach(function (it) { dotted.push('M' + x + ' ' + n(it.cy) + 'H' + n(it.l)); });
         });
         svg.setAttribute('viewBox', '0 0 ' + n(m.width) + ' ' + n(m.height));
         function paths(list, cls) { return list.map(function (d) { return '<path class="' + cls + '" d="' + d + '"/>'; }).join(''); }
@@ -389,6 +401,9 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
 
   .rm-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 4px 0 0; padding: 0; list-style: none; font-size: 14px; line-height: 20px; color: var(--color-text-secondary); }
   .rm-legend__item { display: inline-flex; align-items: center; gap: 6px; }
+  .rm-key { display: inline-block; width: 22px; height: 12px; border-radius: 3px; }
+  .rm-key[data-kind='spine'] { background: var(--color-background-primary-solid); }
+  .rm-key[data-kind='branch'] { box-shadow: inset 0 0 0 2px var(--color-background-primary-solid); }
   .rm-legend__count { color: var(--color-text-emphasis); font-weight: 600; }
 
   .rm-icon { position: relative; display: inline-block; width: 16px; height: 16px; flex-shrink: 0; border-radius: var(--radius-full); }
@@ -401,7 +416,7 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
   .rm-map { position: relative; margin-top: 48px; padding-bottom: 64px; }
   .rm-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; fill: none; }
   .rm-lines__solid { stroke: var(--color-text-tertiary); stroke-width: 2; }
-  .rm-lines__dotted { stroke: var(--color-border-strong); stroke-width: 2; stroke-dasharray: 2 4; }
+  .rm-lines__dotted { stroke: var(--color-text-tertiary); stroke-opacity: .55; stroke-width: 1.5; stroke-dasharray: 3 3; }
 
   .rm-box { position: relative; padding: 36px 16px 24px; border: 2px dashed var(--color-border-strong); border-radius: var(--radius-3xl); }
   .rm-box + .rm-box { margin-top: 56px; }
@@ -438,7 +453,7 @@ const description = 'Front-end 에서 Applied AI Engineer 까지의 학습 로�
     .rm-subs--fan { grid-row: var(--r); padding: 0; }
     .rm-subs--fan[data-pos='left'] { grid-column: 1; }
     .rm-subs--fan[data-pos='right'] { grid-column: 3; }
-    .rm-subs--fan::before, .rm-subs--fan > li::before { display: none; }
+    .rm-subs::before, .rm-subs > li::before { display: none; }
     .rm-branch { grid-row: var(--r); }
     .rm-branch[data-pos='left'] { grid-column: 1; }
     .rm-branch[data-pos='right'] { grid-column: 3; }
