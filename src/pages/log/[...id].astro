@@ -1,0 +1,48 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { sections } from '../../data/roadmap';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('log', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const typeColor: Record<string, string> = { 공부: 'info', 성장: 'discovery', 성과: 'success' };
+const allNodes = sections.flatMap((section) => section.nodes);
+const linked = post.data.nodes.map((id) => allNodes.find((node) => node.id === id)).filter((node) => node !== undefined);
+---
+
+<Base title={post.data.title} description={post.data.summary} current="log">
+  <div class="ds-page rm log">
+    <article class="ds-article ds-blog-article log-post">
+      <header class="ds-blog-article__header ds-article__header">
+        <div class="ds-blog-article__meta">
+          <time class="ds-blog-article__date ds-tabular" datetime={post.data.date.toISOString()}>{post.data.date.toISOString().slice(0, 10)}</time>
+          <span class="ds-badge" data-variant="soft" data-color={typeColor[post.data.type]}>{post.data.type}</span>
+        </div>
+        <h1 class="ds-article__title">{post.data.title}</h1>
+        <p class="ds-article__lead">{post.data.summary}</p>
+      </header>
+      {post.data.metrics.length > 0 && (
+        <div class="log-metrics log-metrics--post">
+          {post.data.metrics.map((metric) => (
+            <span class="log-metric"><span class="log-metric__value ds-tabular">{metric.value}</span><span class="log-metric__label">{metric.label}</span></span>
+          ))}
+        </div>
+      )}
+      <div class="ds-prose ds-blog-prose log-prose">
+        <Content />
+      </div>
+      {linked.length > 0 && (
+        <div class="log-nodes">
+          <span class="log-form__label">관련 노드</span>
+          <div class="rm-refs">{linked.map((node) => <a class="ds-badge" data-variant="outline" href={`/#${node.id}`}>{node.label}</a>)}</div>
+        </div>
+      )}
+      <p class="log-back"><a href="/log/">기록 목록</a></p>
+    </article>
+  </div>
+</Base>

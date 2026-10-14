@@ -1,0 +1,160 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { sections } from '../../data/roadmap';
+
+const posts = (await getCollection('log', ({ data }) => !data.draft)).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const typeColor: Record<string, string> = { 공부: 'info', 성장: 'discovery', 성과: 'success' };
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+const nodeOptions = sections.flatMap((section) => section.nodes.map((node) => ({ id: node.id, label: `${node.label} · ${section.title}` })));
+const template = '## 목표\n\n## 한 일\n\n## 결과\n\n## 다음\n';
+---
+
+<Base title="기록" description="공부, 성장, 성과 기록입니다." current="log">
+  <div class="ds-page rm log">
+    <header class="ds-article__header rm-head">
+      <h1 class="ds-article__title">기록</h1>
+    </header>
+
+    <div class="log-tools">
+      <button type="button" class="ds-btn" data-variant="solid" data-size="sm" data-log-new>새 기록</button>
+      <span class="log-tools__state" data-log-state></span>
+    </div>
+
+    <form class="log-form" data-log-form hidden>
+      <div class="log-form__row" data-log-token-row hidden>
+        <label class="log-form__label" for="log-token">GitHub 토큰</label>
+        <input class="ds-input" id="log-token" type="password" autocomplete="off" data-log-token />
+      </div>
+      <div class="log-form__row">
+        <label class="log-form__label" for="log-title">제목</label>
+        <input class="ds-input" id="log-title" required data-log-field="title" />
+      </div>
+      <div class="log-form__grid">
+        <div class="log-form__row">
+          <label class="log-form__label" for="log-date">날짜</label>
+          <input class="ds-input" id="log-date" type="date" required data-log-field="date" />
+        </div>
+        <div class="log-form__row">
+          <span class="log-form__label">종류</span>
+          <div class="log-types" role="group" aria-label="종류">
+            {['공부', '성장', '성과'].map((type, index) => (
+              <button type="button" class="ds-btn" data-variant="outline" data-size="sm" data-log-type={type} aria-pressed={index === 0 ? 'true' : 'false'} data-selected={index === 0 ? '' : undefined}>{type}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div class="log-form__row">
+        <label class="log-form__label" for="log-summary">요약</label>
+        <input class="ds-input" id="log-summary" required data-log-field="summary" />
+      </div>
+      <div class="log-form__row">
+        <label class="log-form__label" for="log-metrics">성과 지표</label>
+        <textarea class="ds-textarea" id="log-metrics" rows="3" placeholder="응답 시간: -40%" data-log-field="metrics"></textarea>
+      </div>
+      <div class="log-form__row">
+        <label class="log-form__label" for="log-nodes">관련 노드</label>
+        <input class="ds-input" id="log-nodes" list="log-node-list" placeholder="fastapi, python-basics" data-log-field="nodes" />
+        <datalist id="log-node-list">{nodeOptions.map((option) => <option value={option.id}>{option.label}</option>)}</datalist>
+      </div>
+      <div class="log-form__row">
+        <label class="log-form__label" for="log-body">본문</label>
+        <textarea class="ds-textarea log-form__body" id="log-body" rows="12" data-log-field="body">{template}</textarea>
+      </div>
+      <div class="log-form__actions">
+        <button type="submit" class="ds-btn" data-variant="solid" data-size="md">저장소에 커밋</button>
+        <button type="button" class="ds-btn" data-variant="ghost" data-size="md" data-log-cancel>취소</button>
+      </div>
+    </form>
+
+    <ul class="log-list">
+      {
+        posts.map((post) => (
+          <li>
+            <a class="log-item" href={`/log/${post.id}/`}>
+              <span class="log-item__meta">
+                <time class="ds-tabular" datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+                <span class="ds-badge" data-variant="soft" data-color={typeColor[post.data.type]}>{post.data.type}</span>
+              </span>
+              <span class="log-item__title">{post.data.title}</span>
+              <span class="log-item__summary">{post.data.summary}</span>
+              {post.data.metrics.length > 0 && (
+                <span class="log-metrics">
+                  {post.data.metrics.map((metric) => (
+                    <span class="log-metric"><span class="log-metric__value ds-tabular">{metric.value}</span><span class="log-metric__label">{metric.label}</span></span>
+                  ))}
+                </span>
+              )}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var TOKEN_KEY = 'roadmap-github-token';
+      var API = 'https://api.github.com/repos/hahmjuntae/hahmjuntae.github.io/contents/';
+      var form = document.querySelector('[data-log-form]');
+      var state = document.querySelector('[data-log-state]');
+      var type = '공부';
+      function token() { try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; } }
+      function field(name) { return form.querySelector('[data-log-field="' + name + '"]'); }
+      function encode(text) { return btoa(unescape(encodeURIComponent(text))); }
+      function q(text) { return JSON.stringify(text); }
+
+      document.addEventListener('click', function (event) {
+        if (event.target.closest('[data-log-new]')) {
+          form.hidden = false;
+          form.querySelector('[data-log-token-row]').hidden = !!token();
+          if (!field('date').value) field('date').value = new Date().toLocaleDateString('sv-SE');
+          field('title').focus();
+          return;
+        }
+        if (event.target.closest('[data-log-cancel]')) { form.hidden = true; return; }
+        var typeBtn = event.target.closest('[data-log-type]');
+        if (typeBtn) {
+          type = typeBtn.getAttribute('data-log-type');
+          form.querySelectorAll('[data-log-type]').forEach(function (btn) {
+            var on = btn === typeBtn;
+            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            if (on) btn.setAttribute('data-selected', ''); else btn.removeAttribute('data-selected');
+          });
+        }
+      });
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var tokenInput = form.querySelector('[data-log-token]');
+        if (!token() && tokenInput.value.trim()) { try { localStorage.setItem(TOKEN_KEY, tokenInput.value.trim()); } catch (e) {} }
+        if (!token()) { state.textContent = '토큰 필요'; form.querySelector('[data-log-token-row]').hidden = false; return; }
+        var date = field('date').value;
+        var nodes = field('nodes').value.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+        var metrics = field('metrics').value.split('\n').map(function (line) {
+          var i = line.indexOf(':');
+          return i > 0 ? { label: line.slice(0, i).trim(), value: line.slice(i + 1).trim() } : null;
+        }).filter(function (m) { return m && m.label && m.value; });
+        var lines = ['---', 'title: ' + q(field('title').value.trim()), 'date: ' + date, 'type: ' + q(type), 'summary: ' + q(field('summary').value.trim()), 'nodes: ' + JSON.stringify(nodes)];
+        if (metrics.length) {
+          lines.push('metrics:');
+          metrics.forEach(function (m) { lines.push('  - label: ' + q(m.label)); lines.push('    value: ' + q(m.value)); });
+        }
+        lines.push('---', '', field('body').value.trim(), '');
+        var stamp = new Date().toTimeString().slice(0, 8).replace(/:/g, '');
+        var path = 'src/content/log/' + date + '-' + stamp + '.md';
+        state.textContent = '커밋 중…';
+        fetch(API + path, {
+          method: 'PUT',
+          headers: { Authorization: 'Bearer ' + token(), Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: 'docs(log): ' + field('title').value.trim(), content: encode(lines.join('\n')), branch: 'main' }),
+        }).then(function (res) {
+          if (!res.ok) throw new Error(String(res.status));
+          state.textContent = '커밋됨 · 1~2분 뒤 목록에 반영';
+          form.reset();
+          form.hidden = true;
+        }).catch(function () { state.textContent = '커밋 실패 · 토큰 권한 확인 필요'; });
+      });
+    })();
+  </script>
+</Base>

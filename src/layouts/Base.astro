@@ -1,10 +1,12 @@
 ---
+import '../styles/roadmap.css';
 interface Props {
   title: string;
   description: string;
+  current?: 'roadmap' | 'log';
 }
 
-const { title, description } = Astro.props;
+const { title, description, current = 'roadmap' } = Astro.props;
 const siteName = 'hahmjuntae';
 const fullTitle = title === siteName ? siteName : `${title} · ${siteName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -38,6 +40,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="stylesheet" href="/ds/ds-pages.css" />
     <style is:global>
       .site-main { padding-top: var(--header-height); min-height: 100vh; background: var(--page-bg); }
+      .site-nav { display: flex; align-items: center; gap: 4px; }
     </style>
   </head>
   <body>
@@ -45,6 +48,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <div class="ds-header__inner">
         <a class="ds-header__logo" href="/"><span class="ds-header__wordmark">{siteName}</span></a>
         <div class="ds-header__actions">
+          <nav class="site-nav" aria-label="주 메뉴">
+            <a class="ds-btn" data-variant="ghost" data-size="sm" href="/" aria-current={current === 'roadmap' ? 'page' : undefined} data-selected={current === 'roadmap' ? '' : undefined}>로드맵</a>
+            <a class="ds-btn" data-variant="ghost" data-size="sm" href="/log/" aria-current={current === 'log' ? 'page' : undefined} data-selected={current === 'log' ? '' : undefined}>기록</a>
+          </nav>
           <button type="button" class="ds-header__icon-btn" data-theme-toggle aria-label="테마 전환">
             <svg data-icon="sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="3" /><path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" stroke-linecap="round" /></svg>
             <svg data-icon="moon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7Z" stroke-linejoin="round" /></svg>

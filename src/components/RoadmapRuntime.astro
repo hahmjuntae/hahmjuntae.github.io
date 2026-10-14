@@ -1,8 +1,12 @@
 ---
 import { sections, parts, endNode, statusMeta, trendOf, trendTotal } from '../data/roadmap';
-import '../styles/roadmap.css';
+import { getCollection } from 'astro:content';
 
 const partTitle = Object.fromEntries(parts.map((part) => [part.id, part.title]));
+const postsByNode: Record<string, { title: string; href: string }[]> = {};
+for (const post of await getCollection('log', ({ data }) => !data.draft)) {
+  for (const id of post.data.nodes) (postsByNode[id] ??= []).push({ title: post.data.title, href: `/log/${post.id}/` });
+}
 const nodeData = Object.fromEntries([
   ...sections.flatMap((section) =>
     section.nodes.map((node) => [
@@ -18,13 +22,14 @@ const nodeData = Object.fromEntries([
         refs: section.refs,
         part: section.part,
         section: section.id,
+        posts: postsByNode[node.id] ?? [],
         trend: trendOf(node.id),
       },
     ]),
   ),
   [
     endNode.id,
-    { label: endNode.label, where: 'Goal', status: endNode.status, base: endNode.base, goal: endNode.goal, todo: endNode.todo, resources: endNode.resources, refs: endNode.refs, part: 'ai', section: '', trend: trendOf(endNode.id), end: true },
+    { label: endNode.label, where: 'Goal', status: endNode.status, base: endNode.base, goal: endNode.goal, todo: endNode.todo, resources: endNode.resources, refs: endNode.refs, part: 'ai', section: '', posts: [], trend: trendOf(endNode.id), end: true },
   ],
 ]);
 ---
@@ -69,6 +74,10 @@ const nodeData = Object.fromEntries([
         <ol class="rm-detail__todo" data-modal-todo></ol>
         <h3 class="rm-detail__label">무료 강의</h3>
         <ul class="rm-detail__res" data-modal-res></ul>
+        <div data-modal-posts-wrap>
+          <h3 class="rm-detail__label">관련 기록</h3>
+          <ul class="rm-detail__res" data-modal-posts></ul>
+        </div>
         <div data-modal-trend-wrap>
           <h3 class="rm-detail__label">교육 과정 동향</h3>
           <p data-modal-trend></p>
@@ -181,6 +190,14 @@ const nodeData = Object.fromEntries([
           li.appendChild(el('span', r.kind + ' · ' + (r.lang === 'ko' ? '한국어' : '영어'), { class: 'rm-detail__res-meta' }));
           res.appendChild(li);
         });
+        var postList = modal.querySelector('[data-modal-posts]');
+        postList.textContent = '';
+        (node.posts || []).forEach(function (post) {
+          var li = el('li');
+          li.appendChild(el('a', post.title, { href: post.href }));
+          postList.appendChild(li);
+        });
+        modal.querySelector('[data-modal-posts-wrap]').hidden = !(node.posts && node.posts.length);
         var trend = node.trend || { count: 0, tools: [] };
         modal.querySelector('[data-modal-trend-wrap]').hidden = trend.count === 0 && node.part !== 'ai';
         modal.querySelector('[data-modal-trend]').textContent = trend.count === 0

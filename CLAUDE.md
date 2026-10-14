@@ -10,6 +10,7 @@ Front-end 에서 시작해 Applied AI Engineer 로 끝나는 학습 로드맵 �
 | `src/data/content/*.json` | 노드별 `goal` `todo` `resources`. `fe` `be` `ai` 파트별 파일, `extra` `future` `trend` 는 추가 노드 |
 | `src/data/bootcamps.json`, `src/data/trends.json` | 교육 과정 13곳의 커리큘럼 매핑과 노드별 과정 수, 도구 빈도. 노드 옆 숫자와 모달 동향의 원천 |
 | `src/data/progress.json` | 사이트에서 바꾼 진행 상태. 브라우저가 GitHub API 로 직접 커밋(`chore(progress): …`)하고, 빌드 때 skeleton 기본 상태보다 우선 |
+| `src/content/log/*.md` | 커리어 기록. frontmatter 는 `title` `date` `type`(공부, 성장, 성과) `summary` `nodes` `metrics` `draft`. `/log/` 의 새 기록 폼이 같은 토큰으로 직접 커밋(`docs(log): …`). `_template.md` 는 빌드 제외 |
 | `src/data/roadmap.ts` | 뼈대와 콘텐츠 병합. 콘텐츠가 빠진 노드가 있으면 빌드 실패 |
 | `src/pages/index.astro` | 노드 맵(1024px 이상 가운데 척추와 곁가지, 파트별 점선 경계 박스, SVG 연결선. 미만은 세로 목록), 노드 상세 모달, 진행 상태 버튼, 진행률. 진행 상태는 `localStorage` 의 `roadmap-progress-v1` 에 바로 저장하고, 토큰(`roadmap-github-token`)이 있으면 2.5초 모아 `progress.json` 에 커밋 |
 | `public/ds/` | `~/.claude/design-system` 사본. `npm run ds:sync` 로 갱신 |

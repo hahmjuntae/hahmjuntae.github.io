@@ -185,6 +185,41 @@ await context.close();
   await ctx.close();
 }
 
+{
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const puts = [];
+  await ctx.route('https://api.github.com/**', async (route) => {
+    puts.push({ url: route.request().url(), body: JSON.parse(route.request().postData() || '{}') });
+    return route.fulfill({ status: 201, contentType: 'application/json', body: '{"content":{"sha":"x"}}' });
+  });
+  const pg = await ctx.newPage();
+  const errors = [];
+  pg.on('pageerror', (err) => errors.push(err.message));
+  const res = await pg.goto(base + '/log/', { waitUntil: 'networkidle' });
+  check('기록 목록 페이지', res?.status() === 200 && (await pg.locator('.log-item').count()) >= 1, `${await pg.locator('.log-item').count()}건`);
+  check('기록 목록 콘솔 오류 없음', errors.length === 0, errors.join(' | '));
+  await pg.locator('.log-item').first().click();
+  await pg.waitForLoadState('networkidle');
+  check('기록 상세 페이지', (await pg.locator('.log-post .ds-article__title').count()) === 1 && (await pg.locator('.log-metric').count()) >= 1);
+  await pg.goto(base + '/#ssg', { waitUntil: 'networkidle' });
+  await pg.waitForTimeout(500);
+  check('노드 모달 관련 기록', (await pg.locator('[data-modal-posts] a').count()) >= 1);
+  await pg.evaluate(() => localStorage.setItem('roadmap-github-token', 'test-token'));
+  await pg.goto(base + '/log/', { waitUntil: 'networkidle' });
+  await pg.locator('[data-log-new]').click();
+  await pg.locator('[data-log-field="title"]').fill('테스트 기록');
+  await pg.locator('[data-log-field="summary"]').fill('요약 문장입니다.');
+  await pg.locator('[data-log-field="metrics"]').fill('응답 시간: -40%');
+  await pg.locator('[data-log-type="성과"]').click();
+  await pg.locator('[data-log-form] button[type="submit"]').click();
+  await pg.waitForTimeout(800);
+  const put = puts[0];
+  const md = put ? Buffer.from(put.body.content, 'base64').toString('utf8') : '';
+  check('새 기록 커밋 요청', !!put && /src\/content\/log\/\d{4}-\d{2}-\d{2}-\d{6}\.md$/.test(put.url) && put.body.message === 'docs(log): 테스트 기록', put?.url ?? '없음');
+  check('새 기록 frontmatter', md.includes('type: "성과"') && md.includes('value: "-40%"') && md.includes('## 목표'), md.slice(0, 80));
+  await ctx.close();
+}
+
 await browser.close();
 if (!remote) server.close();
 
