@@ -148,6 +148,43 @@ const redirect = await page.goto(base + '/roadmap/');
 check('/roadmap/ 리다이렉트 페이지', redirect?.status() === 200);
 await context.close();
 
+{
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const remoteMap = {};
+  let sha = 1;
+  const puts = [];
+  await ctx.route('https://api.github.com/**', async (route) => {
+    const req = route.request();
+    if (req.method() === 'GET') {
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ sha: String(sha), content: Buffer.from(JSON.stringify(remoteMap)).toString('base64') }) });
+    }
+    const body = JSON.parse(req.postData() || '{}');
+    puts.push(body);
+    Object.keys(remoteMap).forEach((k) => delete remoteMap[k]);
+    Object.assign(remoteMap, JSON.parse(Buffer.from(body.content, 'base64').toString('utf8')));
+    sha += 1;
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ content: { sha: String(sha) } }) });
+  });
+  const pg = await ctx.newPage();
+  await pg.goto(base + '/#fastapi', { waitUntil: 'networkidle' });
+  await pg.waitForTimeout(600);
+  check('토큰 없을 때 로컬 저장 표시', ((await pg.locator('[data-sync-state]').textContent()) ?? '').includes('로컬'));
+  await pg.locator('[data-set-status="done"]').click();
+  await pg.waitForTimeout(3000);
+  check('토큰 없을 때 커밋 요청 없음', puts.length === 0, `${puts.length}건`);
+  await pg.locator('[data-sync-toggle]').click();
+  await pg.locator('[data-sync-input]').fill('test-token');
+  await pg.locator('[data-sync-form] button[type="submit"]').click();
+  await pg.waitForTimeout(3500);
+  check('토큰 입력 후 저장소 커밋', puts.length === 1 && remoteMap.fastapi === 'done', `${puts.length}건 ${JSON.stringify(remoteMap)}`);
+  check('커밋 메시지 형식', puts.length > 0 && /^chore\(progress\): FastAPI 완료$/.test(puts[0].message), puts[0]?.message ?? '');
+  check('동기화 상태 표시', ((await pg.locator('[data-sync-state]').textContent()) ?? '').includes('저장됨'));
+  await pg.locator('[data-set-status="done"]').click();
+  await pg.waitForTimeout(3500);
+  check('기본값으로 되돌리면 저장소에서 삭제', puts.length === 2 && !('fastapi' in remoteMap), JSON.stringify(remoteMap));
+  await ctx.close();
+}
+
 await browser.close();
 if (!remote) server.close();
 

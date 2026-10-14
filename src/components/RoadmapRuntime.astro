@@ -11,6 +11,7 @@ const nodeData = Object.fromEntries([
         label: node.label,
         where: `${partTitle[section.part]} · ${section.title}`,
         status: node.status,
+        base: node.base,
         goal: node.goal,
         todo: node.todo,
         resources: node.resources,
@@ -23,7 +24,7 @@ const nodeData = Object.fromEntries([
   ),
   [
     endNode.id,
-    { label: endNode.label, where: 'Goal', status: endNode.status, goal: endNode.goal, todo: endNode.todo, resources: endNode.resources, refs: endNode.refs, part: 'ai', section: '', trend: trendOf(endNode.id), end: true },
+    { label: endNode.label, where: 'Goal', status: endNode.status, base: endNode.base, goal: endNode.goal, todo: endNode.todo, resources: endNode.resources, refs: endNode.refs, part: 'ai', section: '', trend: trendOf(endNode.id), end: true },
   ],
 ]);
 ---
@@ -52,6 +53,15 @@ const nodeData = Object.fromEntries([
             <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" stroke-linecap="round" /></svg>
             건너뜀
           </button>
+        </div>
+        <div class="rm-sync" data-sync>
+          <span class="rm-sync__state" data-sync-state></span>
+          <button type="button" class="ds-btn" data-variant="ghost" data-size="2xs" data-sync-toggle>토큰 설정</button>
+          <form class="rm-sync__form" data-sync-form hidden>
+            <input class="ds-input" data-size="sm" type="password" autocomplete="off" placeholder="GitHub 토큰" aria-label="GitHub 토큰" data-sync-input />
+            <button type="submit" class="ds-btn" data-variant="solid" data-size="sm">저장</button>
+            <button type="button" class="ds-btn" data-variant="ghost" data-size="sm" data-sync-clear>삭제</button>
+          </form>
         </div>
         <h3 class="rm-detail__label">목표</h3>
         <p class="rm-detail__goal" data-modal-goal></p>
@@ -156,6 +166,9 @@ const nodeData = Object.fromEntries([
         modal.querySelector('#node-modal-title').textContent = node.label;
         modal.querySelector('[data-modal-where]').textContent = node.where;
         modal.querySelector('[data-modal-status]').hidden = !!node.end;
+        modal.querySelector('[data-sync]').hidden = !!node.end;
+        modal.querySelector('[data-sync-form]').hidden = true;
+        setSync(syncState);
         modal.querySelector('[data-modal-goal]').textContent = node.goal;
         var todo = modal.querySelector('[data-modal-todo]');
         todo.textContent = '';
@@ -202,9 +215,95 @@ const nodeData = Object.fromEntries([
         var next = statusOf(current) === status ? 'pending' : status;
         if (next === data[current].status) delete overrides[current]; else overrides[current] = next;
         save();
+        queue(current);
         paint(current);
         paintStatusButtons();
         summarize();
+      }
+
+      var TOKEN_KEY = 'roadmap-github-token';
+      var FILE_API = 'https://api.github.com/repos/hahmjuntae/hahmjuntae.github.io/contents/src/data/progress.json';
+      var dirty = {};
+      var timer = null;
+      var syncState = '';
+
+      function token() {
+        try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; }
+      }
+
+      function setSync(text) {
+        syncState = text || '';
+        var el = modal.querySelector('[data-sync-state]');
+        if (el) el.textContent = syncState || (token() ? '저장소 동기화 켜짐' : '로컬에만 저장');
+      }
+
+      function decode(b64) { return decodeURIComponent(escape(atob(b64.replace(/\n/g, '')))); }
+      function encode(text) { return btoa(unescape(encodeURIComponent(text))); }
+
+      function gh(method, body) {
+        return fetch(FILE_API + (method === 'GET' ? '?ref=main' : ''), {
+          method: method,
+          cache: 'no-store',
+          headers: { Authorization: 'Bearer ' + token(), Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'Content-Type': 'application/json' },
+          body: body ? JSON.stringify(body) : undefined,
+        });
+      }
+
+      function pull() {
+        return gh('GET').then(function (res) {
+          if (!res.ok) throw new Error(String(res.status));
+          return res.json();
+        }).then(function (file) {
+          return { sha: file.sha, map: JSON.parse(decode(file.content) || '{}') };
+        });
+      }
+
+      function sync(attempt) {
+        var ids = Object.keys(dirty);
+        if (!token() || !ids.length) { setSync(''); return; }
+        dirty = {};
+        setSync('저장소 동기화 중…');
+        pull().then(function (file) {
+          var map = file.map;
+          var changed = [];
+          ids.forEach(function (id) {
+            var want = statusOf(id);
+            if (want === (map[id] || data[id].base)) return;
+            if (want === data[id].base) delete map[id]; else map[id] = want;
+            changed.push(id);
+          });
+          if (!changed.length) { setSync('저장소에 저장됨'); return; }
+          var sorted = {};
+          Object.keys(map).sort().forEach(function (k) { sorted[k] = map[k]; });
+          var message = changed.length === 1
+            ? 'chore(progress): ' + data[changed[0]].label + ' ' + meta[statusOf(changed[0])].label
+            : 'chore(progress): 노드 ' + changed.length + '개 상태 변경';
+          return gh('PUT', { message: message, content: encode(JSON.stringify(sorted, null, 2) + '\n'), sha: file.sha, branch: 'main' }).then(function (res) {
+            if (res.status === 409 && !attempt) { ids.forEach(function (id) { dirty[id] = true; }); return sync(1); }
+            if (!res.ok) throw new Error(String(res.status));
+            setSync('저장소에 저장됨');
+          });
+        }).catch(function () {
+          ids.forEach(function (id) { dirty[id] = true; });
+          setSync('저장 실패 · 토큰 권한 확인 필요');
+        });
+      }
+
+      function queue(id) {
+        dirty[id] = true;
+        if (!token()) { setSync(''); return; }
+        clearTimeout(timer);
+        timer = setTimeout(function () { sync(0); }, 2500);
+      }
+
+      // 저장소 값과 같아진 로컬 변경은 정리, 다른 값은 다시 동기화 대상
+      function reconcile(remote) {
+        Object.keys(data).forEach(function (id) {
+          if (data[id].end) return;
+          if (remote) data[id].status = remote[id] || data[id].base;
+          if (overrides[id] === data[id].status) delete overrides[id];
+        });
+        save();
       }
 
       document.addEventListener('click', function (event) {
@@ -223,6 +322,37 @@ const nodeData = Object.fromEntries([
       }
       window.addEventListener('hashchange', openFromHash);
 
+      reconcile(null);
+      if (token()) {
+        pull().then(function (file) {
+          reconcile(file.map);
+          Object.keys(overrides).forEach(queue);
+          Object.keys(data).forEach(paint);
+          summarize();
+          paintStatusButtons();
+        }).catch(function () { setSync('저장 실패 · 토큰 권한 확인 필요'); });
+      }
+      modal.querySelector('[data-sync-form]').addEventListener('submit', function (event) {
+        event.preventDefault();
+        var value = modal.querySelector('[data-sync-input]').value.trim();
+        if (!value) return;
+        try { localStorage.setItem(TOKEN_KEY, value); } catch (e) {}
+        modal.querySelector('[data-sync-input]').value = '';
+        modal.querySelector('[data-sync-form]').hidden = true;
+        Object.keys(overrides).forEach(queue);
+        setSync('');
+      });
+      document.addEventListener('click', function (event) {
+        if (event.target.closest('[data-sync-toggle]')) {
+          var form = modal.querySelector('[data-sync-form]');
+          form.hidden = !form.hidden;
+          if (!form.hidden) modal.querySelector('[data-sync-input]').focus();
+        } else if (event.target.closest('[data-sync-clear]')) {
+          try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+          modal.querySelector('[data-sync-form]').hidden = true;
+          setSync('');
+        }
+      });
       Object.keys(data).forEach(paint);
       summarize();
       openFromHash();

@@ -6,6 +6,7 @@ import extra from './content/extra.json';
 import future from './content/future.json';
 import trendContent from './content/trend.json';
 import trends from './trends.json';
+import progress from './progress.json';
 
 export type Status = 'pending' | 'learning' | 'done' | 'skip';
 
@@ -31,6 +32,7 @@ export interface RoadmapNode extends NodeContent {
   id: string;
   label: string;
   status: Status;
+  base: Status;
 }
 
 export interface RoadmapSection {
@@ -78,6 +80,12 @@ function refOf(id: string): RoadmapRef {
   return { name, url: `https://roadmap.sh/${id}` };
 }
 
+// 저장소에 커밋된 진행 상태가 skeleton 기본값보다 우선
+const committed = progress as Record<string, Status>;
+function progressOf(id: string): Status | undefined {
+  return committed[id];
+}
+
 export const parts = skeleton.parts;
 
 export const sections: RoadmapSection[] = skeleton.sections.map((section) => ({
@@ -88,13 +96,14 @@ export const sections: RoadmapSection[] = skeleton.sections.map((section) => ({
   lane: ((section as { lane?: 'left' | 'right' }).lane ?? 'center'),
   side: ((section as { side?: 'left' | 'right' }).side ?? null),
   refs: section.refs.map(refOf),
-  nodes: section.nodes.map(([id, label, status]) => ({ id, label, status: status as Status, ...contentOf(id) })),
+  nodes: section.nodes.map(([id, label, status]) => ({ id, label, status: progressOf(id) ?? (status as Status), base: status as Status, ...contentOf(id) })),
 }));
 
 export const endNode: RoadmapNode & { refs: RoadmapRef[] } = {
   id: skeleton.end[0],
   label: skeleton.end[1],
   status: 'pending',
+  base: 'pending',
   refs: ['ai-engineer', 'ai-agents'].map(refOf),
   ...contentOf(skeleton.end[0]),
 };
