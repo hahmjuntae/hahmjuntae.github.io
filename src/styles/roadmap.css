@@ -8,10 +8,7 @@
 
   .rm-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 4px 0 0; padding: 0; list-style: none; font-size: 14px; line-height: 20px; color: var(--color-text-secondary); }
   .rm-legend__item { display: inline-flex; align-items: center; gap: 6px; }
-  .rm-key { display: inline-block; width: 22px; height: 12px; border-radius: 3px; }
-  .rm-key[data-kind='spine'] { background: var(--color-background-primary-solid); }
-  .rm-key[data-kind='branch'] { box-shadow: inset 0 0 0 2px var(--color-background-primary-solid); }
-  .rm-legend__count { color: var(--color-text-emphasis); font-weight: 600; }
+        .rm-legend__count { color: var(--color-text-emphasis); font-weight: 600; }
 
   .rm-icon { position: relative; display: inline-block; width: 16px; height: 16px; flex-shrink: 0; border-radius: var(--radius-full); }
   .rm-icon[data-status='pending'] { border: 2px solid var(--color-border-strong); }

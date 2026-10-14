@@ -1,11 +1,6 @@
 ---
 import { sections, statusMeta, type Status } from '../data/roadmap';
 
-interface Props {
-  keys?: boolean;
-}
-
-const { keys = false } = Astro.props;
 const order: Status[] = ['done', 'learning', 'pending', 'skip'];
 const total = sections.reduce((sum, section) => sum + section.nodes.length, 0);
 ---
@@ -28,9 +23,5 @@ const total = sections.reduce((sum, section) => sum + section.nodes.length, 0);
       ))
     }
   </ul>
-  {keys && (<ul class="rm-legend rm-legend--keys" aria-label="섹션 범례">
-    <li class="rm-legend__item"><span class="rm-key" data-kind="spine" aria-hidden="true"></span><span>핵심 경로</span></li>
-    <li class="rm-legend__item"><span class="rm-key" data-kind="branch" aria-hidden="true"></span><span>곁가지</span></li>
-  </ul>)}
 </div>
 
